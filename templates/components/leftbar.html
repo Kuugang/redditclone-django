@@ -1,0 +1,59 @@
+{% load static %}
+<div
+    class="flex flex-col gap-2 w-[15vw] h-screen overflow-auto fixed border-r border-[#ffffff33] p-4 left-0 text-sm border border-red-500 top-[10vh]">
+    <div>
+        <a href="{% url 'dashboard' %}"
+            class="flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full hover:bg-[#1a282d]">
+            <!-- <img src="{% static 'icons/house.svg' %}" class="w-4 h-4" alt="Home Icon"> -->
+            <p>Home</p>
+        </a>
+
+        <button class="flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full hover:bg-[#1a282d]">
+            <!-- <img src="{% static 'icons/like.svg' %}" class="w-4 h-4" alt="Popular Icon"> -->
+            <p>Popular</p>
+        </button>
+    </div>
+
+    <hr class="border-r border-[#ffffff33]" />
+
+    {% if user.is_authenticated%}
+    <div>
+        <button class="flex flex-row justify-between items-center px-3 py-2 rounded-lg w-full hover:bg-[#1a282d]"
+            onclick="toggleCommunities()">
+            <p>Communities</p>
+            <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"
+                class="{% if showCommunities %}rotate-180{% else %}rotate-0{% endif %} transition-all">
+                <path
+                    d="M10 13.125a.624.624 0 0 1-.442-.183l-5-5 .884-.884L10 11.616l4.558-4.558.884.884-5 5a.624.624 0 0 1-.442.183Z">
+                </path>
+            </svg>
+        </button>
+
+        <div
+            class="overflow-hidden transition-all duration-200 {% if showCommunities %}opacity-100 max-h-content{% else %}h-full opacity-100{% endif %} flex flex-col gap-2">
+            <button
+                class="flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full hover:bg-[#1a282d]"
+                onclick="openModal('createCommunityModal')">
+                <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
+                </svg>
+                <p>Create Community</p>
+            </button>
+            {% include 'components/create_community.html'%}
+
+            <!-- {% for community in userCommunities %}
+            <a href="{% url 'community_detail' community.name %}"
+                class="flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full hover:bg-[#1a282d]">
+                <div class="rounded-full w-[30px] h-[30px] bg-gray-200 border border-black">
+                    {% if community.communityimage %}
+                    <img src="{{ community.communityimage }}" class="w-full h-full rounded-full object-cover"
+                        alt="Community {{ community.name }}">
+                    {% endif %}
+                </div>
+                <p>r/{{ community.name }}</p>
+            </a>
+            {% endfor %} -->
+        </div>
+    </div>
+    {%endif%}
+</div>

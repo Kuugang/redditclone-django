@@ -1,0 +1,47 @@
+<script src="https://accounts.google.com/gsi/client" async></script>
+<div id="loginModal" class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-[#0F1A1C] text-white rounded-lg p-6 w-[500px]">
+        <div class="flex flex-row justify-between">
+            <h1 class="font-bold text-2xl">Login</h1>
+            <button type="button" onclick="closeModal('loginModal')">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 transition duration-300 ease-in-out hover:text-red-500" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <p class="mb-10 ml-10 mr-10 mt-5 text-sm">By continuing, you agree to our User Agreement and acknowledge that
+            you understand the Privacy Policy.</p>
+        <form method="POST" action="{% url 'sign_in' %}" class="flex flex-col gap-1">
+            {% csrf_token %}
+            <div class="flex flex-col justify-center items-center">
+                <input name="email_or_username" class="h-10 px-4 rounded-xl mb-5 w-8/12 text-black" type="text"
+                    placeholder="Email or Username" required>
+                <input name="password" class="border h-10 px-4 rounded-xl mb-3 w-8/12 text-black" type="password"
+                    placeholder="Password" required>
+                <div class="flex flex-row gap-2 mt-10">
+                    <p class="text-sm">Don't have an account?</p>
+                    <a class="text-sm text-blue-500 cursor-pointer"
+                        onclick="closeModal('loginModal'); openModal('registerModal');">Sign up now</a>
+                </div>
+            </div>
+            <button type="submit"
+                class="mt-10 ml-20 mr-20 rounded-3xl border px-3 py-2 bg-blue-500 text-white transition-all duration-300 ease-in-out hover:bg-blue-800 hover:text-white">
+                Login
+            </button>
+        </form>
+
+        <div>
+            <div id="g_id_onload"
+                data-client_id="245316070777-i13g0d10qdahvm5egq33dhifn3gqesi1.apps.googleusercontent.com"
+                data-context="signin" data-ux_mode="popup" data-login_uri="http://localhost:8000/auth-receiver"
+                data-auto_prompt="false">
+            </div>
+
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"
+                data-text="continue_with" data-size="large" data-logo_alignment="left">
+            </div>
+        </div>
+    </div>
+</div>
