@@ -3,7 +3,7 @@
     {% if is_loading %}
     <div class="spinner"></div>
     {% endif %}
-    <form method="POST" enctype="multipart/form-data" action=""
+    <form method="POST" enctype="multipart/form-data" action="{% url 'create_community' %}"
         class="flex flex-col gap-4 justify-center p-4 px-8 text-sm bg-[#181c1f] relative rounded-lg">
         {% csrf_token %}
         <div class="flex flex-row justify-between">
@@ -52,7 +52,7 @@
                         <p class='text-center'>Drag and drop or browse your device</p>
                     </div>
                 </label>
-                <input id="banner_file_input" name="communityBanner" type="file" accept='image/*' class='hidden' />
+                <input id="banner_file_input" name="banner" type="file" accept='image/*' class='hidden'/>
             </div>
         </div>
         <div class='flex flex-row justify-between'>
@@ -86,7 +86,7 @@
                             <p class='text-center'>Drag and drop or browse your device</p>
                         </div>
                     </label>
-                    <input id="avatar_file_input" name="communityAvatar" type="file" accept="image/*" class="hidden" />
+                    <input id="avatar_file_input" name="avatar" type="file" accept="image/*" class="hidden" required/>
                 </div>
 
             </div>

@@ -41,18 +41,18 @@
             </button>
             {% include 'components/create_community.html'%}
 
-            <!-- {% for community in userCommunities %}
-            <a href="{% url 'community_detail' community.name %}"
+            {% for community in communities%}
+            <a href=""
                 class="flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full hover:bg-[#1a282d]">
                 <div class="rounded-full w-[30px] h-[30px] bg-gray-200 border border-black">
-                    {% if community.communityimage %}
-                    <img src="{{ community.communityimage }}" class="w-full h-full rounded-full object-cover"
-                        alt="Community {{ community.name }}">
+                    {% if community.avatar%}
+                    <img src="{{ community.avatar}}" class="w-full h-full rounded-full object-cover"
+                        alt="{{ community.name }}">
                     {% endif %}
                 </div>
                 <p>r/{{ community.name }}</p>
             </a>
-            {% endfor %} -->
+            {% endfor %}
         </div>
     </div>
     {%endif%}

@@ -63,6 +63,12 @@ class CommunityMember(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Role(models.TextChoices):
+        ADMIN = 'admin', 'Admin'
+        MODERATOR = "moderator", "Moderator"
+        MEMBER = 'member', 'Member'
+    role = models.CharField(max_length=9, choices=Role.choices, null = False, default = Role.MEMBER)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

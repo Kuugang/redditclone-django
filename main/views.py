@@ -5,11 +5,18 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from google.auth.transport import requests as google_requests
+
+from . import models
+
+# Decorators
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+from .utils import upload_image 
 
 User = get_user_model()
 
@@ -49,6 +56,18 @@ def auth_receiver(request):
     return HttpResponseRedirect(reverse('dashboard'))
 
 def dashboard(request):
+    if request.user.is_authenticated:
+        query = """
+            SELECT c.*
+            FROM main_community c
+            LEFT JOIN main_communitymember cm ON cm.community_id = c.id
+            WHERE cm.user_id = %s
+            ORDER BY c.name;
+        """
+        
+        communities = models.Community.objects.raw(query, [request.user.id])
+        print(list(communities))
+        return render(request, 'dashboard.html', {'communities' : communities})
     return render(request, 'dashboard.html')
 
 def sign_in(request):
@@ -69,4 +88,27 @@ def register(request):
 
 def handle_logout(request):
     logout(request)
+    return redirect('dashboard')
+
+@require_http_methods(["POST"])
+def create_community(request):
+    data = dict(request.POST.items())
+    files = dict(request.FILES.items())
+
+    name = data.get('name')
+    about = data.get('about')
+    visibility = data.get('visibility')
+    banner = files.get('banner')
+    avatar = files.get('avatar')
+
+    avatar_public_URL = upload_image(avatar, "communityAvatar")
+    banner_public_URL = upload_image(banner, "communityBanner")
+    
+    if avatar_public_URL and banner_public_URL:
+        community = models.Community(name = name, visibility = visibility, about = about, avatar = avatar_public_URL, banner = banner_public_URL)
+        community.save()
+        member = models.CommunityMember(community = community, user = request.user, role = 'admin')
+        member.save()
+    
+        return redirect('dashboard')
     return redirect('dashboard')
