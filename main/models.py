@@ -20,6 +20,11 @@ class Topic(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+    # topics = ["Anime & Cosplay", "Art", "Business & Finance", "Collectibles & Other Hobbies", "Education & Career", "Fashion & Beauty", "Food & Drinks", "Games","Home & Garden","Humanities & Law", "Internet Culture", "Movies & TV", "Music", "Nature & Outdoors", "News & Politics", "Places & Travel", "Pop Culture", "Q&As & Stories", "Reading & Writing", "Sciences", "Spooky", "Sports", "Technology", "Vehicles", "Wellness", "Mature Topics"]
+
+    # TODO init for this/ automatically add topics
+
+
 class Community(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class Visibility(models.TextChoices):
@@ -35,6 +40,9 @@ class Community(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Communities"
 
 class CommunityTopic(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

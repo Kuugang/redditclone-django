@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from google.oauth2 import id_token
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from google.auth.transport import requests as google_requests
 
@@ -56,18 +56,6 @@ def auth_receiver(request):
     return HttpResponseRedirect(reverse('dashboard'))
 
 def dashboard(request):
-    if request.user.is_authenticated:
-        query = """
-            SELECT c.*
-            FROM main_community c
-            LEFT JOIN main_communitymember cm ON cm.community_id = c.id
-            WHERE cm.user_id = %s
-            ORDER BY c.name;
-        """
-        
-        communities = models.Community.objects.raw(query, [request.user.id])
-        print(list(communities))
-        return render(request, 'dashboard.html', {'communities' : communities})
     return render(request, 'dashboard.html')
 
 def sign_in(request):
@@ -98,6 +86,7 @@ def create_community(request):
     name = data.get('name')
     about = data.get('about')
     visibility = data.get('visibility')
+    topics = request.POST.getlist("topics")
     banner = files.get('banner')
     avatar = files.get('avatar')
 
@@ -107,8 +96,18 @@ def create_community(request):
     if avatar_public_URL and banner_public_URL:
         community = models.Community(name = name, visibility = visibility, about = about, avatar = avatar_public_URL, banner = banner_public_URL)
         community.save()
+
         member = models.CommunityMember(community = community, user = request.user, role = 'admin')
         member.save()
-    
+        
+        for topic in topics:
+            communityTopic = models.CommunityTopic(topic = models.Topic.objects.get(id=topic), community = community)
+            communityTopic.save()
+
         return redirect('dashboard')
     return redirect('dashboard')
+
+
+def community(request, community_name):
+    community = get_object_or_404(models.Community, name=community_name)
+    return render(request, 'community.html', {'community': community})

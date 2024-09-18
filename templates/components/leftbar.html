@@ -1,6 +1,5 @@
 {% load static %}
-<div
-    class="flex flex-col gap-2 w-[15vw] h-screen overflow-auto fixed border-r border-[#ffffff33] p-4 left-0 text-sm border border-red-500 top-[10vh]">
+<div class="flex flex-col gap-2 overflow-auto border-r border-[#ffffff33] p-6 left-0 text-sm top-[10vh] h-[90vh]">
     <div>
         <a href="{% url 'dashboard' %}"
             class="flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full hover:bg-[#1a282d]">
@@ -41,8 +40,7 @@
             </button>
             {% include 'components/create_community.html'%}
 
-            {% for community in communities%}
-            <a href=""
+            {% for community in user_communities%} <a href="{% url 'community' community.name %}"
                 class="flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full hover:bg-[#1a282d]">
                 <div class="rounded-full w-[30px] h-[30px] bg-gray-200 border border-black">
                     {% if community.avatar%}
