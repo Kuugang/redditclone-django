@@ -233,36 +233,6 @@
         }
     }
 
-    function setupRemoveFilePreview(button, previewElement, previewContainer, fileInput, fileInputContainer) {
-        button.addEventListener("click", () => {
-            if (previewContainer) {
-                previewContainer.classList.add('hidden');
-            }
-            if (fileInputContainer) {
-                fileInputContainer.classList.remove('hidden');
-            }
-            if (previewElement) {
-                previewElement.src = '';
-            }
-            fileInput.value = "";
-        })
-    }
-
-    function setupFileInput(previewElement, previewContainer, fileInput, fileInputContainer) {
-        fileInput.addEventListener("change", function (event) {
-            var file = event.target.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    previewElement.src = e.target.result;
-                    fileInputContainer.classList.add("hidden");
-                    previewContainer.classList.remove("hidden");
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
     var avatar_preview = document.getElementById('avatar_preview');
     var avatar_preview_container = document.getElementById('avatar_preview_container');
     var avatar_file_input_container = document.getElementById('avatar_file_input_container');

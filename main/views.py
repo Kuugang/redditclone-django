@@ -1,14 +1,16 @@
 import os
-import requests
+from datetime import datetime
 
+from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from google.oauth2 import id_token
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from google.auth.transport import requests as google_requests
+from django.db import IntegrityError
 
 from . import models
 
@@ -58,21 +60,72 @@ def auth_receiver(request):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+@require_http_methods(["POST"])
 def sign_in(request):
-    if request.method == 'POST':
-        email_or_username = request.POST.get('email_or_username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=email_or_username, email=email_or_username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('dashboard')
-        else:
-            messages.error(request, 'Invalid email or password')
-            return redirect('dashboard')
-    return redirect('dashbord')
+    email_or_username = request.POST.get('email_or_username')
+    password = request.POST.get('password')
+    user = authenticate(request, username=email_or_username, email=email_or_username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('dashboard')
+    else:
+        messages.error(request, 'Invalid email or password')
+        return redirect('dashboard')
 
-def register(request):
-    return render(request, 'dashboard.html')
+@require_http_methods(["POST"])
+def sign_up(request):
+    data = dict(request.POST.items())
+    email = data.get("email")
+    username = data.get("username")
+    password = data.get("password")
+
+    # OPTIONAL FIELDS
+    bio = data.get("bio")
+    birth_date = data.get("birth_date")
+    avatar = request.FILES.get("avatar")
+
+    if User.objects.filter(username=username).exists():
+        # messages.error(request, "Username is already taken.")
+        return redirect('dashboard')
+    if User.objects.filter(email=email).exists():
+        # messages.error(request, "Email is already taken.")
+        return redirect('dashboard')
+    try:
+
+        if birth_date:
+            try:
+                birth_date = datetime.strptime(birth_date, "%m/%d/%Y").date()
+            except ValueError:
+                raise ValidationError("Invalid date format. Please use MM/DD/YYYY.")
+        user = User.objects.create_user(username, email, password)
+        user.bio = bio if bio else None 
+        user.birth_date = birth_date if birth_date else None
+
+        if avatar:
+            avatar_public_URL = upload_image(avatar, "userAvatar")
+            user.avatar = avatar_public_URL
+
+        user.save()
+        # messages.success(request, "Account successfully created!")
+        return redirect('dashboard')
+    except IntegrityError:
+        # messages.error(request, "An error occurred while creating your account. Please try again.")
+        return redirect('dashboard')
+    
+@require_http_methods(["GET"])
+def check_availability(request):
+    username = request.GET.get('username')
+    email = request.GET.get('email')
+
+    print(username)
+    print(email)
+
+    response_data = {
+        'username_available': not User.objects.filter(username=username).exists(),
+        'email_available': not User.objects.filter(email=email).exists(),
+    }
+
+    return JsonResponse(response_data)
 
 def handle_logout(request):
     logout(request)

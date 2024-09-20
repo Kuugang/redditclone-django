@@ -1,5 +1,5 @@
 <nav
-    class="shadow-2xl text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 items-center border-b border-b-[#ffffff33] bg-[#0B1416] z-50 h-[10vh]">
+    class="shadow-2xl text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 px-6 items-center border-b border-b-[#ffffff33] bg-[#0B1416] z-50 h-[10vh]">
     <div class="flex flex-row items-center gap-2">
         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -12,6 +12,8 @@
         <input type="text" name="query" placeholder="Search..." class="p-2 rounded-md" />
         <button type="submit" class="p-2 rounded-md bg-blue-500 text-white">Search</button>
     </form>
+
+
 
     <div class="flex flex-row gap-5 items-center">
         {% if user.is_authenticated %}
@@ -85,10 +87,11 @@
             </div>
         </div>
 
-
         {% else %}
-        <button class="text-white" onclick="openModal('loginModal')">Login</button>
+        <button class="font-semibold text-lg px-3 py-2 bg-[#FF5700] rounded-2xl" onclick="openModal('loginModal')">Log
+            in</button>
         {%include 'components/sign_in.html'%}
+        {%include 'components/sign_up.html'%}
         {% endif %}
     </div>
 </nav>
