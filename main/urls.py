@@ -10,4 +10,7 @@ urlpatterns = [
     path('auth-receiver', views.auth_receiver, name='auth_receiver'),
     path('create_community/', views.create_community, name='create_community'),
     path('r/<str:community_name>/', views.community, name='community'),
+    path('submit/', views.submit, name='submit'),
+    path('upload_post_image/', views.upload_post_image, name='upload_post_image'),
+    path('create_post/', views.create_post, name='create_post'),
 ]

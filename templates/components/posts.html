@@ -1,0 +1,24 @@
+<div class="flex flex-col gap-4 border-b border-t"></div>
+{% for post in posts %}
+<div class="flex flex-col gap-3 border-b border-t p-3">
+    <div class="flex flex-row items-end">
+        <img src="{{ post.community.avatar }}" class="w-8 h-8 mr-2 rounded-full" alt="">
+        <p>r/{{ post.community.name }}</p>
+        *
+        <p>{{ post.created_at }}</p>
+    </div>
+    <h1 class="font-bold text-xl">{{ post.title }}</h1>
+
+    <span class="post-content">{{ post.content }}</span>
+</div>
+{% endfor %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const postContents = document.querySelectorAll('.post-content');
+        postContents.forEach(postContent => {
+            postContent.innerHTML = postContent.textContent;
+        });
+    });
+</script>

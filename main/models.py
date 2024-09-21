@@ -91,8 +91,8 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
-    title = models.TextField(max_length = 64)
-    content = models.TextField(max_length = 2048)
+    title = models.TextField(max_length = 300)
+    content = models.TextField(max_length = 40000)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

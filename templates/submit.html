@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block quill %}
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" />
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="flex flex-row relative top-[10vh]">
+    {% include 'components/leftbar.html'%}
+    <div class="p-10 relative left-[15%]">
+        <form method="POST" action="{% url 'create_post' %}" class="flex flex-col gap-3 relative">
+            {% csrf_token %}
+            <h1 class="font-bold text-xl">Create Post</h1>
+
+            <div class="relative max-w-fit" id="custom-dropdown">
+                <div id="selected-community"
+                    class="bg-[#1A1A1B] text-white p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
+                    <img id="selected-avatar" src="" alt="Selected Community Avatar"
+                        class="inline-block w-8 h-8 mr-2 rounded-full hidden" />
+                    <span id="selected-name">Choose a community</span>
+                    <svg rpl="" class="ml-xs" fill="currentColor" height="20" icon-name="caret-down-outline"
+                        viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10 13.125a.624.624 0 0 1-.442-.183l-5-5 .884-.884L10 11.616l4.558-4.558.884.884-5 5a.624.624 0 0 1-.442.183Z">
+                        </path>
+                    </svg>
+                </div>
+
+                <div id="dropdown-options" class="absolute bg-[#1A1A1B] w-full mt-1 hidden z-10">
+                    {% for community in user_communities %}
+                    <div class="dropdown-item flex items-center p-2 hover:bg-[#333] cursor-pointer"
+                        data-value="{{ community.id }}" data-avatar="{{ community.avatar }}">
+                        <img src="{{ community.avatar }}" alt="Community Avatar" class="w-8 h-8 mr-2 rounded-full" />
+                        <span>r/{{ community.name }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <select name="community" id="hidden-select" class="hidden">
+                <option value="">Choose a community</option>
+                {% for community in user_communities %}
+                <option value="{{ community.id }}">r/{{ community.name }}</option>
+                {% endfor %}
+            </select>
+
+            <input name="title" type="text" placeholder="Title"
+                class="border border-[#ffffff33] bg-[#1A1A1B] px-3 py-2 rounded-md " required />
+            <div class="">
+                {% include 'components/editor.html' %}
+            </div>
+            <input type="hidden" name="content" id="hidden_content">
+
+            <div class="flex justify-end">
+                <button id="submit-button" type="submit"
+                    class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const customDropdown = document.getElementById('custom-dropdown');
+    const selectedCommunity = document.getElementById('selected-community');
+    const dropdownOptions = document.getElementById('dropdown-options');
+    const hiddenSelect = document.getElementById('hidden-select');
+    const selectedAvatar = document.getElementById('selected-avatar');
+    const selectedName = document.getElementById('selected-name');
+
+    selectedCommunity.addEventListener('click', function () {
+        dropdownOptions.classList.toggle('hidden');
+    });
+
+    const options = document.querySelectorAll('.dropdown-item');
+    options.forEach(option => {
+        option.addEventListener('click', function () {
+            const value = this.getAttribute('data-value');
+            const avatar = this.getAttribute('data-avatar');
+            const name = this.textContent.trim();
+
+            selectedAvatar.src = avatar;
+            selectedAvatar.classList.remove('hidden');
+            selectedName.textContent = name;
+
+            hiddenSelect.value = value;
+
+            dropdownOptions.classList.add('hidden');
+        });
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!customDropdown.contains(event.target)) {
+            dropdownOptions.classList.add('hidden');
+        }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const quill = new Quill('#editor', {
+            modules: {
+                toolbar: '#toolbar-container',
+            },
+            placeholder: 'Compose an epic...',
+            theme: 'snow',
+        });
+        const Delta = Quill.import('delta');
+        let ongoingUploads = 0;
+
+        quill.on('text-change', function (delta, oldDelta, source) {
+            let uploaded = false;
+
+            delta.ops.forEach(op => {
+                if (op.insert && op.insert.image && !uploaded) {
+                    const imageData = op.insert.image;
+                    const image = document.querySelector(`img[src="${imageData}"]`);
+
+                    const base64Pattern = /^data:image\/(png|jpg|jpeg);base64,/;
+                    if (base64Pattern.test(imageData)) {
+                        image.classList.add("blur-sm")
+                        ongoingUploads++;
+                        const byteString = atob(imageData.split(',')[1]);
+                        const mimeString = imageData.split(',')[0].split(':')[1].split(';')[0];
+                        const ab = new ArrayBuffer(byteString.length);
+                        const ia = new Uint8Array(ab);
+                        for (let i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                        }
+
+                        const file = new Blob([ab], { type: mimeString });
+
+                        uploadImage(file).then((res) => {
+                            if (res && res.url) {
+                                if (image) {
+                                    image.src = res.url;
+                                }
+
+                                image.classList.remove("blur-sm")
+                                uploaded = true;
+                            } else {
+                                console.error('Unexpected response structure:', res);
+                            }
+                        }).catch((error) => {
+                            console.error('Upload failed:', error);
+                        }).finally(() => {
+                            ongoingUploads--;
+                            if (ongoingUploads === 0) {
+                                console.log('All uploads complete');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/upload_post_image/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Upload failed');
+            }
+
+            const data = await response.json();
+            return data;
+        }
+
+        document.getElementById('submit-button').addEventListener('click', function () {
+            const editor_content = quill.root.innerHTML
+            document.getElementById('hidden_content').value = editor_content
+            document.querySelector('form').submit()
+        });
+    })
+
+</script>
+{% endblock %}
