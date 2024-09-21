@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  
-<div class = "flex flex-row w-full relative top-[10vh]">
-  {% include 'components/leftbar.html'%}
+
+<div class="flex flex-row w-full relative top-[10vh]">
+    {% include 'components/leftbar.html'%}
+
+    <div class="p-10 w-[85%] relative left-[15%]">
+        {% include 'components/posts.html' %}
+    </div>
 </div>
 {% endblock %}
