@@ -1,14 +1,12 @@
-<form id="edit_community_appearance"
-      action = "{% url 'edit_community_appearance' %}"
-      method = "POST"
-      enctype = "multipart/form-data"
-    class="fixed w-[350px] flex flex-col gap-4 left-[3%] bg-[#0f1a1c] p-5 rounded-lg duration-500 transform top-[100%]">
+<form id="edit_community_appearance" action="{% url 'edit_community_appearance' %}" method="POST"
+    enctype="multipart/form-data"
+    class="fixed w-[350px] flex flex-col gap-4 left-[3%] border shadow-md bg-white p-5 rounded-lg duration-500 transform top-[100%] dark:border-gray_1 dark:bg-dark_2">
     {% csrf_token %}
     <div class="flex flex-row justify-between gap-4 items-center">
-      <input type="hidden" name="community_id" value="{{community.id}}">
+        <input type="hidden" name="community_id" value="{{community.id}}">
         <div class='flex flex-row gap-2 items-center'>
-            <button type = "button"  id="btn_navigate_back" onClick="set_current_edit(null)"
-                class="bg-[#1A282D] rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237] hidden">
+            <button type="button" id="btn_navigate_back" onClick="set_current_edit(null)"
+                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2  rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237] hidden">
                 <svg rpl="" fill="currentColor" height="16" icon-name="left-outline" viewBox="0 0 20 20" width="16"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="m13.058 19.442-9-9a.624.624 0 0 1 0-.884l9-9 .884.884L5.384 10l8.558 8.558-.884.884Z">
@@ -19,17 +17,17 @@
         </div>
 
         <div class="flex flex-row gap-2">
-            <button type = "button"  id="btn_hide_edit_control" onClick="toggle_edit_control()" class="bg-[#1A282D] rounded-full
+            <button type="button" id="btn_hide_edit_control" onClick="toggle_edit_control()" class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2 rounded-full
                 w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]">
-                <svg rpl="" class="transition-all" fill="currentColor" height="20" icon-name="caret-down-outline"
-                    viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                <svg rpl="" class="" fill="currentColor" height="20" icon-name="caret-down-outline" viewBox="0 0 20 20"
+                    width="20" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M10 13.125a.624.624 0 0 1-.442-.183l-5-5 .884-.884L10 11.616l4.558-4.558.884.884-5 5a.624.624 0 0 1-.442.183Z">
                     </path>
                 </svg>
             </button>
 
-            <button type = "button" onClick="set_is_editing(false); set_current_edit(null);" class="bg-[#1A282D] rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center
+            <button type="button" onClick="set_is_editing(false); set_current_edit(null);" class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2  rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center
                 hover:bg-[#223237]">
                 <svg rpl="" fill="currentColor" height="16" icon-name="close-outline" viewBox="0 0 20 20" width="16"
                     xmlns="http://www.w3.org/2000/svg">
@@ -46,10 +44,10 @@
     <div id="edit_control_container"></div>
     <div class="hidden" id="null_edit_container">
         <div onClick="set_current_edit('Avatar')" class="flex justify-between items-center p-3
-                hover:bg-[#1A282D] cursor-pointer">
+                hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2  cursor-pointer">
             <p>Avatar</p>
             <div class='flex flex-row gap-2 items-center'>
-                <p id = "avatar_is_edited" class='text-[8px] text-[#0B1416] p-1 rounded-lg bg-[#B8C5C9]'></p>
+                <p id="avatar_is_edited" class='text-[8px] text-[#0B1416] p-1 rounded-lg bg-[#B8C5C9]'></p>
                 <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20"
                     width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z">
@@ -59,10 +57,10 @@
         </div>
 
         <div onClick='set_current_edit("Banner")' class="flex justify-between items-center p-3
-                hover:bg-[#1A282D] cursor-pointer">
+                hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2  cursor-pointer">
             <p>Banner</p>
             <div class='flex flex-row gap-2 items-center'>
-                <p id = "banner_is_edited" class='text-[8px] text-[#0B1416] p-1 rounded-lg bg-[#B8C5C9]'></p>
+                <p id="banner_is_edited" class='text-[8px] text-[#0B1416] p-1 rounded-lg bg-[#B8C5C9]'></p>
                 <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20"
                     width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z">
@@ -78,7 +76,7 @@
                 ondragenter="event.preventDefault()" ondragleave="event.preventDefault()"
                 ondrop="handle_file_drop(event)">
                 <div
-                    class='bg-[#1a282d] w-full h-full rounded-lg flex flex-col gap-2 items-center justify-center px-20 text-xs text-[#82959B]'>
+                    class='w-full h-full border border-black border-dashed dark:border-gray_1 p-6 rounded-lg flex flex-col gap-2 items-center justify-center px-20 text-xs text-[#82959B]'>
                     <svg rpl="" fill="currentColor" height="20" icon-name="upload-outline" viewBox="0 0 20 20"
                         width="20" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -88,15 +86,16 @@
                     <p class='text-center'>Drag and drop or browse your device</p>
                 </div>
             </label>
-            <input id="file_input" onchange="handle_file_input(event)" type="file" accept="image/*" class="hidden" />
-            <input id = "avatar_input" onchange="handle_file_input(event)" type="file" name="avatar" value="" accept="image/*" class = "hidden">
-            <input id = "banner_input" onchange="handle_file_input(event)" type="file" name="banner" value="" accept="image/*" class = "hidden">
+            <input id="avatar_input" onchange="handle_file_input(event)" type="file" name="avatar" value=""
+                accept="image/*" class="hidden">
+            <input id="banner_input" onchange="handle_file_input(event)" type="file" name="banner" value=""
+                accept="image/*" class="hidden">
         </div>
 
         <div class='hidden flex items-center justify-center h-full bg-[#0b1416] rounded-lg'>
             <img src="">
             <div class='absolute bottom-0 right-0'>
-                <button type = "button" onClick="remove_image()" class='bg-[#1A282D] rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center
+                <button type="button" onClick="remove_image()" class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2  rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center
                     items-center hover:bg-[#223237]'>
                     <svg rpl="" fill="currentColor" height="16" icon-name="delete-outline" viewBox="0 0 20 20"
                         width="16" xmlns="http://www.w3.org/2000/svg">
@@ -110,8 +109,10 @@
     </div>
 
     <div class="w-full h-[1px] bg-[#ffffff33]"></div>
-    <button id = "btn_submit" type = "submit" class="bg-[#0045AC] px-3 py-2 flex rounded-lg justify-center items-center hover:bg-[#1870f4] disabled:opacity-75 enabled:hover:border-gray-400 transition-all" disabled>
-      <p>Save</p>
+    <button id="btn_submit" type="submit"
+        class="bg-button_blue hover:bg-button_blue_hover px-3 py-2 flex rounded-lg justify-center items-center transition-all"
+        disabled>
+        <p class="text-white font-medium">Save</p>
     </button>
 </form>
 
@@ -127,14 +128,15 @@
     const null_edit_container = document.getElementById('null_edit_container')
     const edit_container = document.getElementById('edit_container')
 
-    const file_input = document.getElementById("file_input")
     const community_avatar = document.getElementById('community_avatar')
     const community_banner = document.getElementById('community_banner')
-    const edit_community_appearance = document.getElementById("edit_community_appearance") 
+    const edit_community_appearance = document.getElementById("edit_community_appearance")
     const label = document.getElementById("label_area")
     const btn_submit = document.getElementById("btn_submit")
     const avatar_is_edited = document.getElementById("avatar_is_edited")
     const banner_is_edited = document.getElementById("banner_is_edited")
+    const avatar_input = document.getElementById("avatar_input")
+    const banner_input = document.getElementById("banner_input")
 
     function set_current_edit(value) {
         current_edit = value;
@@ -158,11 +160,11 @@
             if ((current_edit === "Banner" && !banner) || (current_edit === "Avatar" && !avatar)) {
                 second_child.classList.add('hidden');
                 first_child.classList.remove('hidden');
-                if(current_edit === "Banner"){
-                  label_area.setAttribute("for", "banner_input")
+                if (current_edit === "Banner") {
+                    label_area.setAttribute("for", "banner_input")
                 }
-                if(current_edit === "Avatar"){
-                  label_area.setAttribute("for", "avatar_input")
+                if (current_edit === "Avatar") {
+                    label_area.setAttribute("for", "avatar_input")
                 }
 
             } else {
@@ -236,7 +238,6 @@
         image.src = URL.createObjectURL(file);
         first.classList.add('hidden');
         second.classList.remove('hidden');
-        file_input.value = '';
         btn_submit.disabled = false
     }
 
@@ -262,7 +263,6 @@
         image.src = URL.createObjectURL(file);
         first.classList.add('hidden');
         second.classList.remove('hidden');
-        file_input.value = '';
         btn_submit.disabled = false
     }
 
@@ -271,18 +271,20 @@
             avatar = null
             community_avatar.src = "{{community.avatar}}"
             avatar_is_edited.textContent = ""
+            avatar_input.value = ""
         } else {
             banner = null
             community_banner.src = "{{community.banner}}"
             banner_is_edited.textContent = ""
+            banner_input.value = ""
         }
 
         const first = edit_container.children[0];
         const second = edit_container.children[1];
         first.classList.remove('hidden');
         second.classList.add('hidden');
-        if(avatar === null && banner === null){
-          btn_submit.disabled = true
+        if (avatar === null && banner === null) {
+            btn_submit.disabled = true
         }
     }
 

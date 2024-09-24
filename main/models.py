@@ -31,12 +31,13 @@ class Community(models.Model):
         PUBLIC = 'public', 'Public'
         PRIVATE = "private", "Private"
         RESTRICTED = 'restricted', 'Restricted'
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=64)
     visibility = models.CharField(max_length=10, choices=Visibility.choices)
 
-    about = models.TextField(max_length = 64)
+    about = models.TextField(max_length = 255)
     avatar = models.TextField(max_length = 1024)
     banner = models.TextField(max_length = 1024)
+    members_nickname = models.CharField(max_length=64, default="Members")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
