@@ -16,25 +16,45 @@
     {% endblock %}
 
     <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
+                        dark_1: '#101214',
+                        dark_2: '#05090B',
+                        dark_3: '#0E1113',
+                        gray_1: '#3C4244',
+                        gray_2: "#2B3336",
+                        white_1: "#F3F3F2",
+                        white_2: "#717981",
+                        white_3: "#889375",
+                        button_gray: "#E5EBEE",
+                        button_gray_hover: "#DDE3E6",
+                        button_blue: "#0A449B",
+                        button_blue_hover: "#0A2F6C",
+                        txt_color_1: "#131212",
+                        txt_color_2: "#33363B",
+                        txt_color_3: "#697075",
+                        bg_1: "#F5F4F6",
                     }
                 }
-            }
+            },
+            darkMode: 'class',
         }
     </script>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-        }
-    </style>
     {% block extra_head %}{% endblock %}
 </head>
 
-<body>
+<body class="dark:text-white dark:bg-dark_1 transition-colors">
     {% include 'components/navbar.html'%}
     <script>
         function openModal(modalId) {

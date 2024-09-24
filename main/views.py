@@ -1,4 +1,4 @@
-import os
+import os, uuid
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
@@ -163,7 +163,17 @@ def create_community(request):
 
 def community(request, community_name):
     community = get_object_or_404(models.Community, name=community_name)
-    return render(request, 'community.html', {'community': community})
+    community_rules = models.CommunityRule.objects.filter(community=community)
+    community_topics = models.CommunityTopic.objects.filter(community=community)
+
+    context = {
+        'community': community, 
+        'community_rules': community_rules, 
+        'community_topics': community_topics,
+        'topics' : {topic.topic for topic in community_topics}
+    }
+
+    return render(request, 'community.html', context)
 
 def submit(request):
     return render(request, 'submit.html')
@@ -213,4 +223,72 @@ def edit_community_appearance(request):
 
     community.save()
     
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def create_community_rule(request):
+    data = dict(request.POST.items())
+
+    rule_name = data.get("rule_name")
+    rule_description = data.get("rule_description")
+    community_id = data.get("community_id")
+    community = models.Community.objects.get(id=community_id)
+
+    rule = models.CommunityRule(community = community, name = rule_name, description = rule_description)
+    rule.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def edit_community_rule(request):
+    data = dict(request.POST.items())
+
+    rule_name = data.get("rule_name")
+    rule_description = data.get("rule_description")
+    rule_id = data.get("rule_id")
+    community_rule = get_object_or_404(models.CommunityRule, id=rule_id)
+
+    if(rule_name):
+        community_rule.name = rule_name
+    if(rule_description):
+        community_rule.description = rule_description
+    community_rule.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def edit_community_topics(request):
+    data = dict(request.POST.items())
+    topics = request.POST.getlist("topics")
+    community_id = data.get("community_id")
+    
+    existing_topics = set(models.CommunityTopic.objects.filter(community_id=community_id).values_list('topic_id', flat=True))
+    new_topics = set(uuid.UUID(topic_id) for topic_id in topics)
+    
+    topics_to_add = new_topics - existing_topics
+    topics_to_remove = existing_topics - new_topics
+    
+    for topic_id in topics_to_remove:
+        models.CommunityTopic.objects.filter(community_id=community_id, topic_id=topic_id).delete()
+    
+    for topic_id in topics_to_add:
+        topic = models.Topic.objects.get(id=topic_id)
+        community_topic = models.CommunityTopic(topic=topic, community_id=community_id)
+        community_topic.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def delete_community_rule(request):
+    rule_id = request.POST.get("rule_id")
+    models.CommunityRule.objects.filter(id=rule_id).delete()
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def edit_community_details(request):
+    data = dict(request.POST.items())
+    community_id = data.get("community_id")
+    community = models.Community.objects.get(id=community_id)
+    about = data.get("community_about")
+    members_nickname = data.get("community_members_nickname")
+
+    community.about = about
+    community.members_nickname = members_nickname
+    community.save()
+
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
