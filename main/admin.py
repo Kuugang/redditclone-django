@@ -43,8 +43,8 @@ class CommunityTopicAdmin(admin.ModelAdmin):
 
 @admin.register(models.CommunityRule)
 class CommunityRuleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'community', 'rule', 'created_at', 'updated_at')
-    search_fields = ('community', 'rule')
+    list_display = ('id', 'community', 'name', 'description', 'created_at', 'updated_at')
+    search_fields = ('community', 'name', 'description')
     list_filter = ('created_at', 'updated_at')
 
 

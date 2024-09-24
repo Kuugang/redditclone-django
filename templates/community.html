@@ -4,12 +4,13 @@
 {% block content %}
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html' %}
-
-    <div class="p-10 w-[85%] relative left-[15%]">
+    <div class = "p-10 flex flex-col w-[85%] relative left-[15%] min-h-[90vh]">
+    <div>
         {% if community %}
         <div
             class='w-full flex items-stretch justify-center h-[150px] rounded-lg border border-[#ffffff33] relative z-40'>
-            <img src="{{ community.banner }}" alt="Community Banner" class='object-cover w-full h-full rounded-lg' />
+            <img id="community_banner" src="{{ community.banner }}" alt="Community Banner"
+                class='object-cover w-full h-full rounded-lg' />
             <!--TODO-->
             {% if user.is_authenticated and user.id == community.ownerid %}
             <button>
@@ -21,12 +22,26 @@
                 </svg>
             </button>
             {% endif %}
+
+            {% if user_communities|get_community_role:community.id == 'admin' or 'moderator' %}
+            <button onClick='set_is_editing(true); set_current_edit("Banner")' class='absolute right-3
+                top-[70%] rounded-full p-2 bg-black'>
+                <svg rpl="" fill="currentColor" height="16" icon-name="edit-outline" viewBox="0 0 20 20" width="16"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="m18.236 3.158-1.4-1.4a2.615 2.615 0 0 0-3.667-.021L1.336 13.318a1.129 1.129 0 0 0-.336.8v3.757A1.122 1.122 0 0 0 2.121 19h3.757a1.131 1.131 0 0 0 .8-.337L18.256 6.826a2.616 2.616 0 0 0-.02-3.668ZM5.824 17.747H2.25v-3.574l9.644-9.435L15.259 8.1l-9.435 9.647ZM17.363 5.952l-1.23 1.257-3.345-3.345 1.257-1.23a1.362 1.362 0 0 1 1.91.01l1.4 1.4a1.364 1.364 0 0 1 .008 1.908Z">
+                    </path>
+                </svg>
+            </button>
+            {% endif %}
         </div>
         <div class='flex flex-row justify-between w-full relative bottom-6 items-end'>
             <div class='flex flex-row gap-2 items-end'>
-                <div class="relative rounded-full w-[90px] h-[90px] border z-50">
+                <div
+                    class="relative rounded-full w-[90px] h-[90px] border z-50 {% if user_communities|get_community_role:community.id == 'admin' or 'moderator' %}cursor-pointer{%endif%}">
                     {% if community.avatar %}
-                    <img src="{{community.avatar}}" class=" w-full h-full rounded-full object-cover" />
+                    <img id="community_avatar" src="{{community.avatar}}"
+                        class=" w-full h-full rounded-full object-cover" />
                     {%else %}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path
@@ -34,6 +49,18 @@
                         </path>
                     </svg>
                     {%endif%}
+                    {% if user_communities|get_community_role:community.id == 'admin' or 'moderator' %}
+                    <div onClick='set_is_editing(true); set_current_edit("Avatar")' class='group flex
+                        items-center justify-center absolute transform right-1/2 translate-x-1/2 bottom-1/2
+                        translate-y-1/2 w-full h-full border border-white rounded-full hover:bg-[#666666]/50'>
+                        <svg class='opacity-0 group-hover:opacity-100' rpl="" fill="currentColor" height="16"
+                            icon-name="edit-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="m18.236 3.158-1.4-1.4a2.615 2.615 0 0 0-3.667-.021L1.336 13.318a1.129 1.129 0 0 0-.336.8v3.757A1.122 1.122 0 0 0 2.121 19h3.757a1.131 1.131 0 0 0 .8-.337L18.256 6.826a2.616 2.616 0 0 0-.02-3.668ZM5.824 17.747H2.25v-3.574l9.644-9.435L15.259 8.1l-9.435 9.647ZM17.363 5.952l-1.23 1.257-3.345-3.345 1.257-1.23a1.362 1.362 0 0 1 1.91.01l1.4 1.4a1.364 1.364 0 0 1 .008 1.908Z">
+                            </path>
+                        </svg>
+                    </div>
+                    {% endif %}
                 </div>
                 <p class='font-bold text-2xl'>r/{{community.name}}</p>
             </div>
@@ -55,12 +82,25 @@
                 {% if user_communities|get_community_role:community.id == 'admin' or 'moderator' %}
                 <p>ADMIN OR MODERATOR</p>
                 {%endif%}
-
             </div>
 
         </div>
         {% endif %}
     </div>
+    <div class = "flex flex-row gap-2">
+      <div class = "w-[70%] border">
+        
+      </div>
+
+
+      <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-[30%]">
+        <h5 class="mb-2 text-md font-bold tracking-tight text-gray-900 dark:text-white">{{community.name}} on Reddit</h5>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{community.about}}</p>
+        
+      </div>
+    </div>
+</div>
 </div>
 
+{% include 'components/edit_community_appearance.html' %}
 {% endblock %}

@@ -20,7 +20,6 @@
             theme: {
                 extend: {
                     colors: {
-                        clifford: '#da373d',
                     }
                 }
             }
@@ -29,7 +28,7 @@
     <style>
         body {
             background-color: black;
-            color: white
+            color: white;
         }
     </style>
     {% block extra_head %}{% endblock %}
@@ -88,6 +87,15 @@
         function getCSRFToken() {
             return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         }
+
+        function remove_class(document, class_name) {
+            document.classList.remove(class_name);
+        }
+
+        function add_class(document, class_name) {
+            document.classList.add(class_name);
+        }
+
     </script>
 
     {% block content %}

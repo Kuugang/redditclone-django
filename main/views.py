@@ -196,3 +196,21 @@ def upload_post_image(request):
     }
 
     return JsonResponse(response_data)
+
+def edit_community_appearance(request):
+    avatar = request.FILES.get("avatar")
+    banner = request.FILES.get("banner") 
+    community_id = request.POST.get("community_id")
+    community = models.Community.objects.get(id=community_id)
+
+    banner_url = upload_image(banner, "communityBanner") if banner else None 
+    avatar_url = upload_image(avatar, "communityAvatar") if avatar else None
+
+    if banner_url:
+        community.banner = banner_url
+    if avatar_url:
+        community.avatar = avatar_url
+
+    community.save()
+    
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))

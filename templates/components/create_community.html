@@ -1,8 +1,8 @@
 {% load topics %}
-<div id="createCommunityModal"
-    class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+<div id="createCommunityModal" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     {% if is_loading %}
-    <div class="spinner"></div>
+    <div class=" spinner"></div>
     {% endif %}
     <form method="POST" enctype="multipart/form-data" action="{% url 'create_community' %}"
         class="flex flex-col gap-4 justify-center p-4 px-8 text-sm bg-[#181c1f] relative rounded-lg">

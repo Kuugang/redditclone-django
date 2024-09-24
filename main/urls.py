@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.handle_logout, name='logout'),
     path('auth-receiver', views.auth_receiver, name='auth_receiver'),
     path('create_community/', views.create_community, name='create_community'),
+    path('edit_community_appearance/', views.edit_community_appearance, name = 'edit_community_appearance'),
     path('r/<str:community_name>/', views.community, name='community'),
     path('submit/', views.submit, name='submit'),
     path('upload_post_image/', views.upload_post_image, name='upload_post_image'),
