@@ -170,7 +170,6 @@ def submit(request):
 
 def create_post(request):
     data = dict(request.POST.items())
-    print(data)
     title = data.get("title")
     content = data.get("content")
     community = data.get("community")
