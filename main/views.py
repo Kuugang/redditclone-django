@@ -82,35 +82,23 @@ def sign_up(request):
 
     # OPTIONAL FIELDS
     bio = data.get("bio")
-    birth_date = data.get("birth_date")
     avatar = request.FILES.get("avatar")
 
     if User.objects.filter(username=username).exists():
-        # messages.error(request, "Username is already taken.")
         return redirect('dashboard')
     if User.objects.filter(email=email).exists():
-        # messages.error(request, "Email is already taken.")
         return redirect('dashboard')
     try:
-
-        if birth_date:
-            try:
-                birth_date = datetime.strptime(birth_date, "%m/%d/%Y").date()
-            except ValueError:
-                raise ValidationError("Invalid date format. Please use MM/DD/YYYY.")
         user = User.objects.create_user(username, email, password)
         user.bio = bio if bio else None 
-        user.birth_date = birth_date if birth_date else None
 
         if avatar:
             avatar_public_URL = upload_image(avatar, "userAvatar")
             user.avatar = avatar_public_URL
 
         user.save()
-        # messages.success(request, "Account successfully created!")
         return redirect('dashboard')
     except IntegrityError:
-        # messages.error(request, "An error occurred while creating your account. Please try again.")
         return redirect('dashboard')
     
 @require_http_methods(["GET"])

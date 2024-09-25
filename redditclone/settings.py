@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'redditclone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DATABASE_NAME"),
-        'USER': os.getenv("DATABASE_USER"),
-        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
-        'HOST': os.getenv("DATABASE_HOST"),
-        'PORT': os.getenv("DATABASE_PORT"),
+        'NAME': os.getenv("DATABASE_NAME") if os.getenv("ENV") == 'production' else "redditclone-django",
+        'USER': os.getenv("DATABASE_USER") if os.getenv("ENV") == 'production' else "postgres",
+        'PASSWORD': os.getenv("DATABASE_PASSWORD") if os.getenv("ENV") == 'production' else "020104",
+        'HOST': os.getenv("DATABASE_HOST") if os.getenv("ENV") == 'production' else "localhost",
+        'PORT': os.getenv("DATABASE_PORT") if os.getenv("ENV") == 'production' else "5432",
     }
 }
 
@@ -125,10 +125,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_URL = 'static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

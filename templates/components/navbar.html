@@ -1,21 +1,34 @@
 <nav
-    class="shadow-2xl text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 px-6 items-center bg-white_1 border  border-b-dark_3 z-50 h-[10vh] dark:bg-dark_3 dark:border-gray_1">
+    class="shadow-md text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 px-6 items-center bg-white_1 border-b border-zinc-800 z-50 h-[10vh] dark:bg-dark_3 dark:border-gray_1">
     <div class="flex flex-row items-center gap-2">
-        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M11.61 19.872a10.013 10.013 0 0 0 6.51-4.035A9.999 9.999 0 0 0 12.275.264c-1.28-.3-2.606-.345-3.903-.132a10.05 10.05 0 0 0-8.25 8.311 9.877 9.877 0 0 0 1.202 6.491l-1.24 4.078a.727.727 0 0 0 .178.721.72.72 0 0 0 .72.19l4.17-1.193A9.87 9.87 0 0 0 9.998 20c.54 0 1.079-.043 1.612-.128ZM1.558 18.458l1.118-3.69-.145-.24A8.647 8.647 0 0 1 1.36 8.634a8.778 8.778 0 0 1 7.21-7.27 8.765 8.765 0 0 1 8.916 3.995 8.748 8.748 0 0 1-2.849 12.09 8.763 8.763 0 0 1-3.22 1.188 8.68 8.68 0 0 1-5.862-1.118l-.232-.138-3.764 1.076ZM6.006 9a1.001 1.001 0 0 0-.708 1.707A1 1 0 1 0 6.006 9Zm4.002 0a1.001 1.001 0 0 0-.195 1.981 1 1 0 1 0 .195-1.98Zm4.003 0a1.001 1.001 0 1 0 0 2.003 1.001 1.001 0 0 0 0-2.003Z">
-            </path>
-        </svg>
-        <a href="" class="text-white font-bold text-2xl">RedditClone</a>
+        <a href="{% url 'dashboard' %}" class="font-bold text-2xl flex flex-row gap-1 items-center">
+            <svg class="text-black" width="35" height="28" viewBox="0 0 37 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M34.4627 6H30.8523V19.5H7.38474V22.5C7.38474 23.325 8.19708 24 9.18994 24H29.0471L36.2679 30V7.5C36.2679 6.675 35.4556 6 34.4627 6ZM27.2419 15V1.5C27.2419 0.675 26.4296 0 25.4367 0H1.96914C0.976281 0 0.16394 0.675 0.16394 1.5V22.5L7.38474 16.5H25.4367C26.4296 16.5 27.2419 15.825 27.2419 15Z"
+                    class="fill-black dark:fill-white" />
+            </svg>
+            RedditClone</a>
     </div>
-    <form method="get" action="" class="flex flex-row items-center gap-2">
-        <input type="text" name="query" placeholder="Search..." class="p-2 rounded-md" />
-        <button type="submit" class="p-2 rounded-md bg-blue-500 text-white">Search</button>
+    <form class="max-w-md mx-auto w-[40%]">
+        <label for="default-search"
+            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M22.5556 21.6453L17.3328 16.4213C19.0013 14.4881 19.8551 11.9832 19.7147 9.43341C19.5742 6.8836 18.4505 4.48761 16.5798 2.74933C14.7091 1.01105 12.2371 0.0659417 9.68389 0.112776C7.13065 0.159609 4.69506 1.19473 2.88934 3.00045C1.08362 4.80617 0.0484949 7.24176 0.00166105 9.795C-0.0451728 12.3482 0.899934 14.8202 2.63821 16.6909C4.3765 18.5616 6.77249 19.6854 9.3223 19.8258C11.8721 19.9662 14.377 19.1124 16.3102 17.4439L21.533 22.6667L22.5556 21.6453ZM1.50377 10.0048C1.50377 8.3454 1.99586 6.72325 2.91781 5.3435C3.83976 3.96376 5.15016 2.8884 6.68329 2.25342C8.21642 1.61844 9.90341 1.45236 11.5309 1.77618C13.1585 2.1 14.6534 2.89918 15.8267 4.07265C17 5.24612 17.799 6.74117 18.1226 8.36874C18.4462 9.9963 18.2799 11.6833 17.6447 13.2163C17.0095 14.7494 15.9339 16.0596 14.5541 16.9814C13.1742 17.9031 11.552 18.395 9.89256 18.3948C7.66836 18.392 5.53606 17.5072 3.96342 15.9343C2.39078 14.3614 1.50622 12.229 1.50377 10.0048Z"
+                        class="fill-black dark:fill-white_1" />
+                </svg>
+            </div>
+            <input
+                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                placeholder="Search" required />
+        </div>
     </form>
 
 
-
-    <div class="flex flex-row gap-5 items-center">
+    <div class="flex flex-row gap-5 items-center relative">
         {% if user.is_authenticated %}
         <button>
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -41,38 +54,41 @@
             </svg>
         </button>
 
-        <button onclick="toggleProfileOptions()">
-            <div class="w-[30px] h-[30px] rounded-full border border-white">
-                {% if user.avatar%}
-                <img src="{{ user.avatar}}" alt="" class="object-contain rounded-full">
-                {% else %}
-                <div class="w-full h-full bg-black rounded-full"></div>
-                {% endif %}
-                <div class="relative w-[8px] h-[8px] bg-green-400 rounded-full bottom-2 left-6"></div>
-            </div>
+
+        <button id="btn_drop_down_profile" class="w-[30px] h-[30px] rounded-full" type="button"
+            data-dropdown-toggle="drop_down_profile">
+            {% if user.avatar%}
+            <img src="{{ user.avatar}}" alt="" class="object-contain rounded-full">
+            {% else %}
+            <div class="w-full h-full bg-black rounded-full"></div>
+            {% endif %}
+            <div class="relative w-[8px] h-[8px] bg-green-400 rounded-full bottom-2 left-6"></div>
         </button>
 
-        <div class="relative">
-            <div id="profileOptions"
-                class="flex flex-col absolute w-[200px] right-2 top-[66px] bg-[#0F1A1C] rounded-lg text-xs opacity-0 hidden duration-200">
-                <button class="flex flex-row gap-2 items-center py-2 px-3 hover:bg-[#131f23] rounded-lg">
-                    <div class="w-[35px] h-[35px] rounded-full border border-white">
-                        {% if user.avatar%}
-                        <img src="{{ user.avatar }}" alt="Profile image" class="object-contain rounded-full">
-                        {% else %}
-                        <div class="w-full h-full bg-black rounded-full"></div>
-                        {% endif %}
-                        <div class="relative w-[8px] h-[8px] bg-green-400 rounded-full bottom-2 left-6"></div>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <p class="text-sm">View Profile</p>
-                        <p>u/{{ user.username }}</p>
-                    </div>
-                </button>
+        <div id="drop_down_profile" class="z-10 w-56 hidden bg-white rounded-md shadow dark:bg-dark_6">
+            <ul class="divide-y divide-gray-400 pt-3 px-3 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="btn_drop_down_profile">
+                <li class="h-10 ">
+                    <a href="" class="flex flex-row gap-2 items-center">
+                        <div class="w-[30px] h-[30px] rounded-full">
+                            {% if user.avatar%}
+                            <img src="{{ user.avatar }}" alt="Profile image" class="object-contain rounded-full">
+                            {% else %}
+                            <div class="w-full h-full bg-black rounded-full"></div>
+                            {% endif %}
+                            <div class="relative w-[8px] h-[8px] bg-green-400 rounded-full bottom-2 left-6"></div>
+                        </div>
 
-                <div>
+                        <div class="flex flex-col justify-center text-[11px]">
+                            <p>View Profile</p>
+                            <p>u/{{ user.username }}</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="h-10">
                     <button id="theme-toggle" type="button"
-                        class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                        class="w-full h-full flex flex-row justify-between items-center">
+                        <p>Theme</p>
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -84,12 +100,9 @@
                                 fill-rule="evenodd" clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                </div>
-
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit"
-                        class="flex flex-row gap-2 items-center py-2 px-3 hover:bg-[#131f23] rounded-lg">
+                </li>
+                <li class="h-10">
+                    <a class="h-full flex flex-row gap-2 items-center" href="{% url 'logout' %}" method="post">
                         <svg fill="currentColor" height="20" icon-name="logout-outline" viewBox="0 0 20 20" width="20"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -97,14 +110,18 @@
                             </path>
                         </svg>
                         <p>Logout</p>
-                    </button>
-                </form>
-            </div>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         {% else %}
-        <button class="font-semibold text-lg px-3 py-2 bg-[#FF5700] rounded-2xl" onclick="openModal('loginModal')">Log
-            in</button>
+        <button data-modal-target="sign_in_modal" data-modal-toggle="sign_in_modal"
+            class="text-sm font-medium rounded-2xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white"
+            type="button">
+            Log in
+        </button>
+
         {%include 'components/sign_in.html'%}
         {%include 'components/sign_up.html'%}
         {% endif %}
@@ -130,19 +147,17 @@
 
     // Change the icons inside the button based on previous settings
     if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        themeToggleLightIcon.classList.remove('hidden');
-    } else {
         themeToggleDarkIcon.classList.remove('hidden');
+    } else {
+        themeToggleLightIcon.classList.remove('hidden');
     }
 
     var themeToggleBtn = document.getElementById('theme-toggle');
 
     themeToggleBtn.addEventListener('click', function () {
-
         // toggle icons inside button
         themeToggleDarkIcon.classList.toggle('hidden');
         themeToggleLightIcon.classList.toggle('hidden');
-
         // if set via local storage previously
         if (localStorage.getItem('color-theme')) {
             if (localStorage.getItem('color-theme') === 'light') {

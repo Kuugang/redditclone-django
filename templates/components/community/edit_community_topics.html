@@ -32,7 +32,7 @@
                         <input type="checkbox" id="t-{{ topic.id }}" name="topics" value="{{ topic.id }}"
                             class="peer hidden edit_topic_checkbox" {% if topic in topics %} checked {% endif %} />
                         <label for="t-{{ topic.id }}"
-                            class="bg-button_gray rounded-xl ml-2 px-2 py-1 peer-checked:bg-blue-500 transition-colors cursor-pointer border-xl">
+                            class="bg-button_gray dark:text-dark_1 rounded-xl ml-2 px-2 py-1 peer-checked:bg-blue-500 transition-colors cursor-pointer border-xl">
                             {{ topic.name }}
                         </label>
                     </div>
