@@ -6,7 +6,7 @@
             action="{% url 'community:create_community' %}"
             class="text-dark_1 dark:text-white_1 bg-white dark:bg-dark_2 flex flex-col gap-4 justify-center p-4 px-8 text-sm relative rounded-lg">
             {% csrf_token %}
-            <button type="button" id="btn_create_community_prev" class="hidden relative left-[-10%]">
+            <button type="button" id="btn_create_community_prev" class="hidden relative left-[0%]">
                 <svg width="29" height="30" viewBox="0 0 29 30" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M28.4999 14.0625H3.76493L15.6629 2.163L14.3369 0.836998L0.836931 14.337C0.74985 14.4241 0.680772 14.5274 0.633642 14.6412C0.586513 14.7549 0.562256 14.8769 0.562256 15C0.562256 15.1231 0.586513 15.2451 0.633642 15.3588C0.680772 15.4726 0.74985 15.5759 0.836931 15.663L14.3369 29.163L15.6629 27.837L3.76343 15.9375H28.4999V14.0625Z"
@@ -24,7 +24,7 @@
                         </p>
                     </div>
                     <button type="button" data-modal-hide="create_community_modal"
-                        class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_6 rounded-full w-[30px] h-[30px] py-2 px-2 flex justify-center items-center text-black relative left-5">
+                        class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-gray_2  rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]">
                         <svg fill="currentColor" height="16" viewBox="0 0 20 20" width="16"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -121,7 +121,7 @@
                     <div class="relative bottom-8">
                         <div class="relative w-full min-w-[200px]">
                             <textarea name="about" id="create_community_community_description_input"
-                                class="bg-white_1 dark:bg-dark_6 border dark:border-[#ffffff33] text-gray-900 text-sm rounded-lg block w-full p-2.5 pt-4 peer"
+                                class="bg-white_1 dark:text-white_1 dark:bg-dark_6 border dark:border-[#ffffff33] text-gray-900 text-sm rounded-lg block w-full p-2.5 pt-4 peer"
                                 placeholder="" rows="4" maxlength="255"></textarea>
 
                             <label for="create_community_community_description_input"
@@ -192,12 +192,16 @@
             </div>
 
             <div class="create_community_tab hidden">
-                <div class="flex flex-col max-h-[100px] overflow-auto">
-                    {% get_global_topics as topics %} {% for topic in topics%}
-                    <div class="flex items-center">
+                <h1 class="text-xl font-bold">Choose topics for your community. (Optional)</h1>
+                <div class="flex flex-wrap max-h-[300px] overflow-auto">
+                    {% get_global_topics as topics %}
+                    {% for topic in topics%}
+                    <div class="flex items-center mr-4 mb-2">
                         <input type="checkbox" id="topic-{{ topic.id }}" name="topics" value="{{ topic.id }}"
-                            class="topic-checkbox" />
-                        <label for="topic-{{ topic.id }}" class="ml-2">{{ topic.name }}</label>
+                            class="create_community_topic_checkbox peer hidden optional"/>
+                        <label for="topic-{{ topic.id }}"
+                            class="bg-button_gray dark:text-dark_1 rounded-xl ml-2 px-2 py-1 peer-checked:bg-blue-500 transition-colors cursor-pointer border-xl">
+                            {{ topic.name }}</label>
                     </div>
                     {% endfor %}
                 </div>
@@ -217,9 +221,6 @@
                 </svg>
                 <p>Continue</p>
             </button>
-            <!-- <button type="submit" class="hidden create_community_step_2 w-full bg-[#006C7F] p-2 rounded-lg text-white">
-                Create Community
-            </button> -->
         </form>
     </div>
 </div>
@@ -303,13 +304,13 @@
         banner_file_input_container
     );
 
-    const checkboxes = document.querySelectorAll(".topic-checkbox");
+    const checkboxes = document.querySelectorAll(".create_community_topic_checkbox");
     const maxChecks = 3;
 
     checkboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", () => {
             const checkedCount = document.querySelectorAll(
-                ".topic-checkbox:checked"
+                ".create_community_topic_checkbox:checked"
             ).length;
             if (checkedCount > maxChecks) {
                 checkbox.checked = false;
