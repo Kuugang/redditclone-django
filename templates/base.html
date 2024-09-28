@@ -129,7 +129,9 @@
             } else {
                 nextBtn.innerHTML = "Next";
             }
-            fixStepIndicator(n, step_class_name)
+            if (step_class_name != null) {
+                fixStepIndicator(n, step_class_name)
+            }
         }
 
         // OPTIONAL
@@ -141,7 +143,7 @@
             x[n].className += " active";
         }
 
-        async function validate_form(tab_class_name, form_specific_validation_function, current_tab) {
+        async function validate_form(tab_class_name, form_specific_validation_function, current_tab, step_class_name) {
             var x, y, i, valid = true;
             x = document.getElementsByClassName(tab_class_name);
             y = x[current_tab].getElementsByTagName("input");
@@ -156,17 +158,19 @@
                     current_valid = false
                 }
 
-                const result = await form_specific_validation_function(valid, current_valid, y, i)
-                valid = result[0]
-                current_valid = result[1]
+                if (form_specific_validation_function != null) {
+                    const result = await form_specific_validation_function(valid, current_valid, y, i)
+                    valid = result[0]
+                    current_valid = result[1]
+                }
 
                 if (current_valid) {
                     y[i].classList.remove("ring-1", "ring-red-500", "ring-inset")
                 }
             }
 
-            if (valid) {
-                document.getElementsByClassName("step")[current_tab].className += " finish";
+            if (valid && step_class_name != null) {
+                document.getElementsByClassName(step_class_name)[current_tab].className += " finish";
             }
             return valid;
         }
@@ -175,7 +179,7 @@
 
         async function nextPrev(n, form_specific_validation_function, tab_class_name, form_id, prev_button_id, next_button_id, step_class_name, current_tab) {
             var x = document.getElementsByClassName(tab_class_name);
-            if (n == 1 && !await validate_form(tab_class_name, form_specific_validation_function, current_tab)) return current_tab;
+            if (n == 1 && !await validate_form(tab_class_name, form_specific_validation_function, current_tab, step_class_name)) return current_tab;
 
             x[current_tab].classList.add("hidden")
             current_tab = current_tab + n;

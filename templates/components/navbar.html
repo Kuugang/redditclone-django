@@ -1,7 +1,7 @@
 <nav
     class="shadow-md text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 px-6 items-center bg-white_1 border-b border-zinc-800 z-50 h-[10vh] dark:bg-dark_3 dark:border-gray_1">
     <div class="flex flex-row items-center gap-2">
-        <a href="{% url 'dashboard' %}" class="font-bold text-2xl flex flex-row gap-1 items-center">
+        <a href="{% url 'account:dashboard' %}" class="font-bold text-2xl flex flex-row gap-1 items-center">
             <svg class="text-black" width="35" height="28" viewBox="0 0 37 30" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -39,7 +39,7 @@
         </button>
 
 
-        <a href="{% url 'submit' %}" class="flex flex-row gap-1 items-center">
+        <a href="{% url 'post:submit' %}" class="flex flex-row gap-1 items-center">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
             </svg>
@@ -102,15 +102,19 @@
                     </button>
                 </li>
                 <li class="h-10">
-                    <a class="h-full flex flex-row gap-2 items-center" href="{% url 'logout' %}" method="post">
-                        <svg fill="currentColor" height="20" icon-name="logout-outline" viewBox="0 0 20 20" width="20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M11.991 10.625H1v-1.25h10.991l-1.933-1.933.884-.884 3 3a.624.624 0 0 1 0 .884l-3 3-.884-.884 1.933-1.933ZM15.375 1h-9.75A2.629 2.629 0 0 0 3 3.625v.792h1.25v-.792A1.377 1.377 0 0 1 5.625 2.25h9.75a1.377 1.377 0 0 1 1.375 1.375v12.75a1.377 1.377 0 0 1-1.375 1.375h-9.75a1.377 1.377 0 0 1-1.375-1.375v-.792H3v.792A2.63 2.63 0 0 0 5.625 19h9.75A2.63 2.63 0 0 0 18 16.375V3.625A2.63 2.63 0 0 0 15.375 1Z">
-                            </path>
-                        </svg>
-                        <p>Logout</p>
-                    </a>
+                    <form method="POST" action="{% url 'account:logout' %}"
+                        class=" h-full flex flex-row gap-2 items-center">
+                        {% csrf_token %}
+                        <button class=" h-full flex flex-row gap-2 items-center" method="post">
+                            <svg fill="currentColor" height="20" icon-name="logout-outline" viewBox="0 0 20 20"
+                                width="20" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.991 10.625H1v-1.25h10.991l-1.933-1.933.884-.884 3 3a.624.624 0 0 1 0 .884l-3 3-.884-.884 1.933-1.933ZM15.375 1h-9.75A2.629 2.629 0 0 0 3 3.625v.792h1.25v-.792A1.377 1.377 0 0 1 5.625 2.25h9.75a1.377 1.377 0 0 1 1.375 1.375v12.75a1.377 1.377 0 0 1-1.375 1.375h-9.75a1.377 1.377 0 0 1-1.375-1.375v-.792H3v.792A2.63 2.63 0 0 0 5.625 19h9.75A2.63 2.63 0 0 0 18 16.375V3.625A2.63 2.63 0 0 0 15.375 1Z">
+                                </path>
+                            </svg>
+                            <p>Logout</p>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -122,8 +126,8 @@
             Log in
         </button>
 
-        {%include 'components/sign_in.html'%}
-        {%include 'components/sign_up.html'%}
+        {%include 'components/account/sign_in.html'%}
+        {%include 'components/account/sign_up.html'%}
         {% endif %}
     </div>
 </nav>

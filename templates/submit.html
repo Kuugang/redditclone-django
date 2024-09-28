@@ -15,7 +15,7 @@
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html'%}
     <div class="p-10 relative left-[15%]">
-        <form method="POST" action="{% url 'create_post' %}" class="flex flex-col gap-3 relative">
+        <form method="POST" action="{% url 'post:create_post' %}" class="flex flex-col gap-3 relative">
             {% csrf_token %}
             <h1 class="font-bold text-xl">Create Post</h1>
 
@@ -163,7 +163,7 @@
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch('/upload_post_image/', {
+            const response = await fetch('/post/upload_post_image/', {
                 method: 'POST',
                 body: formData,
                 headers: {

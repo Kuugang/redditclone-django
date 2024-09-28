@@ -2,16 +2,26 @@
 <div id="create_community_modal" tabindex="-1" aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
-        <form method="POST" enctype="multipart/form-data" action="{% url 'create_community' %}"
+        <form method="POST" id="create_community_form" enctype="multipart/form-data"
+            action="{% url 'community:create_community' %}"
             class="text-dark_1 dark:text-white_1 bg-white dark:bg-dark_2 flex flex-col gap-4 justify-center p-4 px-8 text-sm relative rounded-lg">
             {% csrf_token %}
-            <div class="tab hidden">
+            <button type="button" id="btn_create_community_prev" class="hidden relative left-[-10%]">
+                <svg width="29" height="30" viewBox="0 0 29 30" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M28.4999 14.0625H3.76493L15.6629 2.163L14.3369 0.836998L0.836931 14.337C0.74985 14.4241 0.680772 14.5274 0.633642 14.6412C0.586513 14.7549 0.562256 14.8769 0.562256 15C0.562256 15.1231 0.586513 15.2451 0.633642 15.3588C0.680772 15.4726 0.74985 15.5759 0.836931 15.663L14.3369 29.163L15.6629 27.837L3.76343 15.9375H28.4999V14.0625Z"
+                        class="dark:fill-white" />
+                </svg>
+            </button>
+
+            <div class="create_community_tab hidden flex flex-col gap-2">
                 <div class="flex flex-row justify-between">
-                    <div>
+                    <div class="flex flex-col gap-2">
                         <h1 class="text-xl font-bold">Name and style your community</h1>
-                        <p class="text-xs">Banners and descriptions help redditors discover and understand
-                            your
-                            community.</p>
+                        <p class="text-xs">
+                            Banners and descriptions help redditors discover and understand
+                            your community.
+                        </p>
                     </div>
                     <button type="button" data-modal-hide="create_community_modal"
                         class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_6 rounded-full w-[30px] h-[30px] py-2 px-2 flex justify-center items-center text-black relative left-5">
@@ -23,50 +33,50 @@
                         </svg>
                     </button>
                 </div>
-                <div>
+                <div class="flex flex-col gap-3">
                     <div class="h-[115px] rounded-lg">
                         <div id="banner_preview_container" class="relative hidden">
-                            <div class="h-[115px] rounded-lg overflow-hidden">
-                                <img src="" id="banner_preview" alt="Banner Preview">
+                            <div class="relative h-[115px] rounded-lg overflow-hidden">
+                                <img src="" id="banner_preview" alt="Banner Preview" />
                             </div>
-                            <div class='absolute bottom-0 right-0 text-white'>
-                                <button id="remove_banner_preview_btn" type="button""
-                        class='bg-[#1A282D] rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]'>
-                        <svg fill=" currentColor" height="16" viewBox="0 0 20 20" width="16"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M15.751 6.023 17 6.106l-.761 11.368a2.554 2.554 0 0 1-.718 1.741A2.586 2.586 0 0 1 13.8 20H6.2a2.585 2.585 0 0 1-1.718-.783 2.553 2.553 0 0 1-.719-1.737L3 6.106l1.248-.083.761 11.369c-.005.333.114.656.333.908.22.252.525.415.858.458h7.6c.333-.043.64-.207.859-.46.22-.254.338-.578.332-.912l.76-11.363ZM18 2.983v1.243H2V2.983h4v-.372A2.737 2.737 0 0 1 6.896.718 2.772 2.772 0 0 1 8.875.002h2.25c.729-.03 1.44.227 1.979.716.538.488.86 1.169.896 1.893v.372h4Zm-10.75 0h5.5v-.372a1.505 1.505 0 0 0-.531-1.014 1.524 1.524 0 0 0-1.094-.352h-2.25c-.397-.03-.79.097-1.094.352-.304.256-.495.62-.531 1.014v.372Z">
-                                    </path>
+                            <div class="absolute bottom-0 right-0 text-white">
+                                <button id="remove_banner_preview_btn" type="button"
+                                    class="bg-[#1A282D] rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]">
+                                    <svg fill=" currentColor" height="16" viewBox="0 0 20 20" width="16"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M15.751 6.023 17 6.106l-.761 11.368a2.554 2.554 0 0 1-.718 1.741A2.586 2.586 0 0 1 13.8 20H6.2a2.585 2.585 0 0 1-1.718-.783 2.553 2.553 0 0 1-.719-1.737L3 6.106l1.248-.083.761 11.369c-.005.333.114.656.333.908.22.252.525.415.858.458h7.6c.333-.043.64-.207.859-.46.22-.254.338-.578.332-.912l.76-11.363ZM18 2.983v1.243H2V2.983h4v-.372A2.737 2.737 0 0 1 6.896.718 2.772 2.772 0 0 1 8.875.002h2.25c.729-.03 1.44.227 1.979.716.538.488.86 1.169.896 1.893v.372h4Zm-10.75 0h5.5v-.372a1.505 1.505 0 0 0-.531-1.014 1.524 1.524 0 0 0-1.094-.352h-2.25c-.397-.03-.79.097-1.094.352-.304.256-.495.62-.531 1.014v.372Z">
+                                        </path>
                                     </svg>
                                 </button>
                             </div>
                         </div>
-                        <div id="banner_file_input_container">
+                        <div id="banner_file_input_container" class="h-full">
                             <label for="banner_file_input" ondragover="handleDragEnter(event)"
                                 ondrop="handleBannerFileInputDrop(event)">
                                 <div
-                                    class='bg-white_1 dark:bg-dark_6 w-full h-full border border-black border-dashed dark:border-gray_1 p-6 rounded-lg flex flex-col gap-2 items-center justify-center px-20 text-xs text-[#82959B]'>
+                                    class="bg-white_1 dark:bg-dark_6 w-full h-full border border-black border-dashed dark:border-gray_1 rounded-lg flex flex-col gap-2 items-center justify-center text-xs text-[#82959B]">
                                     <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="20"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="m10.513 5.63 3.929 3.928-.884.884-2.933-2.933V19h-1.25V7.51l-2.933 2.932-.884-.884L9.67 5.446l.589-.029.254.212Zm5.859-1.482A6.876 6.876 0 0 0 10 0a6.876 6.876 0 0 0-6.372 4.148A4.639 4.639 0 0 0 0 8.625a4.716 4.716 0 0 0 4.792 4.625V12A3.465 3.465 0 0 1 1.25 8.625 3.412 3.412 0 0 1 4.189 5.31l.364-.06.123-.35A5.607 5.607 0 0 1 10 1.25a5.607 5.607 0 0 1 5.324 3.65l.123.348.364.06a3.412 3.412 0 0 1 2.939 3.317A3.465 3.465 0 0 1 15.208 12v1.25A4.716 4.716 0 0 0 20 8.625a4.639 4.639 0 0 0-3.628-4.477Z">
                                         </path>
                                     </svg>
-                                    <p class='text-center'>Drag and drop or browse your device</p>
+                                    <p class="text-center">Drag and drop or browse your device</p>
                                 </div>
                             </label>
-                            <input id="banner_file_input" name="banner" type="file" accept='image/*' class='hidden' />
+                            <input id="banner_file_input" name="banner" type="file" accept="image/*" class="hidden" />
                         </div>
                     </div>
-                    <div class='flex flex-row justify-between'>
+                    <div class="flex flex-row justify-between">
                         <div class="rounded-full relative bottom-14 left-3">
                             <div id="avatar_preview_container"
-                                class="relative w-[80px] h-[80px] border border-white rounded-full hidden">
+                                class="relative w-[100px] h-[100px] border border-white rounded-full hidden">
                                 <img id="avatar_preview" src="" alt=""
                                     class="w-full h-full rounded-full object-cover" />
-                                <div class='absolute bottom-0 right-0 text-white'>
+                                <div class="absolute bottom-0 right-0 text-white">
                                     <button id="remove_avatar_preview_btn" type="button"
-                                        class='bg-[#1A282D] rounded-full w-[25px] h-[25px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]'>
+                                        class="bg-[#1A282D] rounded-full w-[25px] h-[25px] py-2 px-2 flex justify-center items-center hover:bg-[#223237]">
                                         <svg fill="currentColor" height="16" viewBox="0 0 20 20" width="16"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -79,14 +89,16 @@
                             <div id="avatar_file_input_container">
                                 <label for="avatar_file_input" class="">
                                     <div
-                                        class='bg-white_1 dark:bg-dark_6 dark:border-gray_1 w-[100px] h-[100px] border border-black border-dashed rounded-full flex flex-col gap-1 items-center justify-center text-[#82959B]'>
+                                        class="bg-white_1 dark:bg-dark_6 dark:border-gray_1 w-[100px] h-[100px] border border-black border-dashed rounded-full flex flex-col gap-1 items-center justify-center text-[#82959B]">
                                         <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="20"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="m10.513 5.63 3.929 3.928-.884.884-2.933-2.933V19h-1.25V7.51l-2.933 2.932-.884-.884L9.67 5.446l.589-.029.254.212Zm5.859-1.482A6.876 6.876 0 0 0 10 0a6.876 6.876 0 0 0-6.372 4.148A4.639 4.639 0 0 0 0 8.625a4.716 4.716 0 0 0 4.792 4.625V12A3.465 3.465 0 0 1 1.25 8.625 3.412 3.412 0 0 1 4.189 5.31l.364-.06.123-.35A5.607 5.607 0 0 1 10 1.25a5.607 5.607 0 0 1 5.324 3.65l.123.348.364.06a3.412 3.412 0 0 1 2.939 3.317A3.465 3.465 0 0 1 15.208 12v1.25A4.716 4.716 0 0 0 20 8.625a4.639 4.639 0 0 0-3.628-4.477Z">
                                             </path>
                                         </svg>
-                                        <p class='text-center text-[10px]'>Drag and drop or browse your device</p>
+                                        <p class="text-center text-[10px]">
+                                            Drag and drop or browse your device
+                                        </p>
                                     </div>
                                 </label>
                                 <input id="avatar_file_input" name="avatar" type="file" accept="image/*" class="hidden"
@@ -106,7 +118,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="relative bottom-8">
                         <div class="relative w-full min-w-[200px]">
                             <textarea name="about" id="create_community_community_description_input"
                                 class="bg-white_1 dark:bg-dark_6 border dark:border-[#ffffff33] text-gray-900 text-sm rounded-lg block w-full p-2.5 pt-4 peer"
@@ -179,10 +191,9 @@
                 </div>
             </div>
 
-            <div class="tab hidden">
-                <div class="hidden create_community_step_2 flex flex-col max-h-[100px] overflow-auto">
-                    {% get_global_topics as topics %}
-                    {% for topic in topics%}
+            <div class="create_community_tab hidden">
+                <div class="flex flex-col max-h-[100px] overflow-auto">
+                    {% get_global_topics as topics %} {% for topic in topics%}
                     <div class="flex items-center">
                         <input type="checkbox" id="topic-{{ topic.id }}" name="topics" value="{{ topic.id }}"
                             class="topic-checkbox" />
@@ -193,8 +204,7 @@
             </div>
 
             <button type="button" id="btn_create_community_continue"
-                class="rounded-3xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white flex flex-row gap-2 justify-center font-medium"
-                disabled>
+                class="rounded-3xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white flex flex-row gap-2 justify-center font-medium">
                 <svg aria-hidden="true" id="create_community_check_availability_spinner"
                     class="w-6 h-6 animate-spin dark:text-gray-600 hidden" viewBox="0 0 100 101" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -205,13 +215,11 @@
                         d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
                         class="fill-white" />
                 </svg>
-                <p>
-                    Continue
-                </p>
+                <p>Continue</p>
             </button>
-            <button type="submit"
-                class="hidden create_community_step_2 w-full bg-[#006C7F] p-2 rounded-lg text-white">Create
-                Community</button>
+            <!-- <button type="submit" class="hidden create_community_step_2 w-full bg-[#006C7F] p-2 rounded-lg text-white">
+                Create Community
+            </button> -->
         </form>
     </div>
 </div>
@@ -219,60 +227,105 @@
 <script>
     async function check_community_name_availability(name) {
         fetch(`/check_community_name_availability/?${community_name}=${name}`)
-            .then(response => response.json())
-            .then(data => {
-
-            })
+            .then((response) => response.json())
+            .then((data) => { });
     }
 
     function handleBannerFileInputDrop(event) {
         event.preventDefault();
         event.stopPropagation();
-        const fileInput = document.getElementById('bannerfileinput');
+        const fileInput = document.getElementById("bannerfileinput");
         if (event.dataTransfer.files.length > 0) {
             fileInput.files = event.dataTransfer.files;
-            fileInput.dispatchEvent(new Event('change'));
+            fileInput.dispatchEvent(new Event("change"));
         }
     }
 
     function handleAvatarFileInputDrop(event) {
         event.preventDefault();
         event.stopPropagation();
-        const fileInput = document.getElementById('avatarfileinput');
+        const fileInput = document.getElementById("avatarfileinput");
         if (event.dataTransfer.files.length > 0) {
             fileInput.files = event.dataTransfer.files;
-            fileInput.dispatchEvent(new Event('change'));
+            fileInput.dispatchEvent(new Event("change"));
         }
     }
 
-    var avatar_preview = document.getElementById('avatar_preview');
-    var avatar_preview_container = document.getElementById('avatar_preview_container');
-    var avatar_file_input_container = document.getElementById('avatar_file_input_container');
-    var avatar_file_input = document.getElementById("avatar_file_input")
-    var remove_avatar_preview_btn = document.getElementById("remove_avatar_preview_btn")
+    var avatar_preview = document.getElementById("avatar_preview");
+    var avatar_preview_container = document.getElementById(
+        "avatar_preview_container"
+    );
+    var avatar_file_input_container = document.getElementById(
+        "avatar_file_input_container"
+    );
+    var avatar_file_input = document.getElementById("avatar_file_input");
+    var remove_avatar_preview_btn = document.getElementById(
+        "remove_avatar_preview_btn"
+    );
 
-    setupFileInput(avatar_preview, avatar_preview_container, avatar_file_input, avatar_file_input_container);
-    setupRemoveFilePreview(remove_avatar_preview_btn, avatar_preview, avatar_preview_container, avatar_file_input, avatar_file_input_container)
+    setupFileInput(
+        avatar_preview,
+        avatar_preview_container,
+        avatar_file_input,
+        avatar_file_input_container
+    );
+    setupRemoveFilePreview(
+        remove_avatar_preview_btn,
+        avatar_preview,
+        avatar_preview_container,
+        avatar_file_input,
+        avatar_file_input_container
+    );
 
-    var banner_preview = document.getElementById('banner_preview');
-    var banner_preview_container = document.getElementById('banner_preview_container');
-    var banner_file_input_container = document.getElementById('banner_file_input_container');
-    var banner_file_input = document.getElementById("banner_file_input")
-    var remove_banner_preview_btn = document.getElementById("remove_banner_preview_btn")
+    var banner_preview = document.getElementById("banner_preview");
+    var banner_preview_container = document.getElementById(
+        "banner_preview_container"
+    );
+    var banner_file_input_container = document.getElementById(
+        "banner_file_input_container"
+    );
+    var banner_file_input = document.getElementById("banner_file_input");
+    var remove_banner_preview_btn = document.getElementById(
+        "remove_banner_preview_btn"
+    );
 
-    setupFileInput(banner_preview, banner_preview_container, banner_file_input, banner_file_input_container);
-    setupRemoveFilePreview(remove_banner_preview_btn, banner_preview, banner_preview_container, banner_file_input, banner_file_input_container)
+    setupFileInput(
+        banner_preview,
+        banner_preview_container,
+        banner_file_input,
+        banner_file_input_container
+    );
+    setupRemoveFilePreview(
+        remove_banner_preview_btn,
+        banner_preview,
+        banner_preview_container,
+        banner_file_input,
+        banner_file_input_container
+    );
 
-    const checkboxes = document.querySelectorAll('.topic-checkbox');
+    const checkboxes = document.querySelectorAll(".topic-checkbox");
     const maxChecks = 3;
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            const checkedCount = document.querySelectorAll('.topic-checkbox:checked').length;
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            const checkedCount = document.querySelectorAll(
+                ".topic-checkbox:checked"
+            ).length;
             if (checkedCount > maxChecks) {
                 checkbox.checked = false;
             }
         });
     });
 
+    var create_community_current_tab = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+        showTab(create_community_current_tab, "create_community_tab", "btn_create_community_prev", "btn_create_community_continue", null);
+
+        btn_create_community_continue.addEventListener("click", async () => {
+            create_community_current_tab = await nextPrev(1, null, "create_community_tab", "create_community_form", "btn_create_community_prev", "btn_create_community_continue", null, create_community_current_tab);
+        })
+        btn_create_community_prev.addEventListener("click", async () => {
+            create_community_current_tab = await nextPrev(-1, null, "create_community_tab", "create_community_form", "btn_create_community_prev", "btn_create_community_continue", null, create_community_current_tab);
+        })
+    })
 </script>

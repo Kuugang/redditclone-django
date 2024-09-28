@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
+    # 'main',
+    'account',
+    'community',
+    'post'
 ]
 
 MIDDLEWARE = [
@@ -67,7 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'main.context_processors.user_communities_context',
+                'community.context_processors.user_communities_context',
             ],
         },
     },
@@ -134,10 +137,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'main.User'
+AUTH_USER_MODEL = 'account.User'
 
 AUTHENTICATION_BACKENDS = [
-    'main.backends.EmailOrUsernameBackend',
+    'account.backends.EmailOrUsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -151,3 +154,5 @@ if not GOOGLE_OAUTH_CLIENT_ID:
 
 SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+
+LOGOUT_REDIRECT_URL = '/'

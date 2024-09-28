@@ -2,7 +2,7 @@
 <div
     class="flex flex-col gap-2 overflow-auto p-3 left-0 text-sm top-[10vh] h-[90vh] w-[15%] fixed border-r border-dark_3 dark:bg-dark_3 dark:border-gray_1 shadow-md">
     <div>
-        <a href="{% url 'dashboard' %}"
+        <a href="{% url 'account:dashboard' %}"
             class="hover:bg-button_gray_hover dark:hover:bg-gray_1 flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full">
             <p>Home</p>
         </a>
@@ -41,13 +41,13 @@
                 <p>Create Community</p>
             </button>
 
-
-            {% for community in user_communities%} <a href="{% url 'community' community.name %}"
+            {% for community in user_communities%}
+            <a href="{% url 'community:community' community.name %}"
                 class="hover:bg-button_gray_hover flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full dark:hover:bg-gray_1">
                 <div class="rounded-full w-[30px] h-[30px] bg-gray-200 border border-black">
                     {% if community.avatar%}
                     <img src="{{ community.avatar}}" class="w-full h-full rounded-full object-cover"
-                        alt="{{ community.name }}">
+                        alt="{{ community.name }}" />
                     {% endif %}
                 </div>
                 <p>r/{{ community.name }}</p>
@@ -58,22 +58,21 @@
     </div>
 </div>
 {% if user.is_authenticated %}
-{% include 'components/create_community.html'%}
+{% include 'components/community/create_community.html'%}
 {% endif %}
-
 
 <script>
     function toggle_dropdown_cap(event) {
         const target = event.target;
         const nextSibling = target.nextElementSibling;
-        const cap = nextSibling.querySelector('svg');
+        const cap = nextSibling.querySelector("svg");
 
         if (target.checked) {
-            cap.classList.add('rotate-0');
-            cap.classList.remove('rotate-180');
+            cap.classList.add("rotate-0");
+            cap.classList.remove("rotate-180");
         } else {
-            cap.classList.add('rotate-180');
-            cap.classList.remove('rotate-0');
+            cap.classList.add("rotate-180");
+            cap.classList.remove("rotate-0");
         }
     }
 </script>
