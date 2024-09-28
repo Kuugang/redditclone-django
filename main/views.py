@@ -106,9 +106,6 @@ def check_availability(request):
     username = request.GET.get('username')
     email = request.GET.get('email')
 
-    print(username)
-    print(email)
-
     response_data = {
         'username_available': not User.objects.filter(username=username).exists(),
         'email_available': not User.objects.filter(email=email).exists(),
@@ -125,7 +122,7 @@ def create_community(request):
     data = dict(request.POST.items())
     files = dict(request.FILES.items())
 
-    name = data.get('name')
+    community_name = data.get('community_name')
     about = data.get('about')
     visibility = data.get('visibility')
     topics = request.POST.getlist("topics")
@@ -136,7 +133,7 @@ def create_community(request):
     banner_public_URL = upload_image(banner, "communityBanner")
     
     if avatar_public_URL and banner_public_URL:
-        community = models.Community(name = name, visibility = visibility, about = about, avatar = avatar_public_URL, banner = banner_public_URL)
+        community = models.Community(name = community_name, visibility = visibility, about = about, avatar = avatar_public_URL, banner = banner_public_URL)
         community.save()
 
         member = models.CommunityMember(community = community, user = request.user, role = 'admin')
@@ -182,11 +179,7 @@ def create_post(request):
 
 def upload_post_image(request):
     image = request.FILES.get("file")
-    print(image)
-
     url = upload_image(image, "postImage")
-
-    print(url)
 
     response_data = {
         'url' : url
@@ -279,3 +272,11 @@ def edit_community_details(request):
     community.save()
 
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+@require_http_methods(["GET"])
+def check_community_name_availability(request):
+    name = request.GET.get('community_name')
+    response_data = {
+        'name_available': not models.Community.objects.filter(name=name).exists(),
+    }
+    return JsonResponse(response_data)

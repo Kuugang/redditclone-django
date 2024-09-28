@@ -2,71 +2,94 @@
 <div id="sign_up_modal"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full w-1/3">
-        <form method="POST" action="{% url 'sign_up' %}"
-            class="dark:text-white_1 text-black flex flex-col gap-4 justify-center bg-dark_5 py-10 px-16 rounded-2xl relative"
+        <form id="sign_up_form" method="POST" action="{% url 'sign_up' %}"
+            class="bg-white dark:text-white_1 dark:bg-dark_5 dark:text-white_1 text-black justify-center py-10 px-16 rounded-2xl relative"
             enctype='multipart/form-data'>
             {% csrf_token %}
 
-            <button type="button" id="btn_back" class="hidden relative left-[-10%]">
-                <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button type="button" id="prevBtn" class="hidden relative left-[-10%]">
+                <svg width="29" height="30" viewBox="0 0 29 30" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M28.4999 14.0625H3.76493L15.6629 2.163L14.3369 0.836998L0.836931 14.337C0.74985 14.4241 0.680772 14.5274 0.633642 14.6412C0.586513 14.7549 0.562256 14.8769 0.562256 15C0.562256 15.1231 0.586513 15.2451 0.633642 15.3588C0.680772 15.4726 0.74985 15.5759 0.836931 15.663L14.3369 29.163L15.6629 27.837L3.76343 15.9375H28.4999V14.0625Z"
-                        fill="white" />
+                        class="dark:fill-white" />
                 </svg>
             </button>
 
-
-            <h1 class="text-xl font-bold register_step_1">Sign Up</h1>
-            <h1 class="font-bold text-xl register_step_2 hidden">Create your username and password</h1>
-            <p class="text-xs register_step_2 hidden">Reddit is anonymous, so your username is what you’ll go by here.
-                Choose
-                wisely—because once you get a
-                name, you can’t change it.</p>
-            <h1 class="font-bold text-xl register_step_3 hidden">Personalization (Optional)</h1>
-            <div class="w-full flex flex-row justify-center register_step_1">
-                <div id="g_id_onload"
-                    data-client_id="245316070777-i13g0d10qdahvm5egq33dhifn3gqesi1.apps.googleusercontent.com"
-                    data-context="signin" data-ux_mode="popup" data-login_uri="http://localhost:8000/auth-receiver"
-                    data-auto_prompt="false">
+            <div class="sign_up_tab hidden flex flex-col gap-6">
+                <div>
+                    <h1 class="text-xl font-bold">Sign Up</h1>
                 </div>
-                <div class="g_id_signin" data-type="standard" data-shape="pill" data-text="continue_with"
-                    data-size="large" data-logo_alignment="center" data-theme="outline">
-                </div>
-            </div>
+                <div class="flex flex-col gap-2">
+                    <div class="w-full flex flex-row justify-center">
+                        <div id="g_id_onload"
+                            data-client_id="245316070777-i13g0d10qdahvm5egq33dhifn3gqesi1.apps.googleusercontent.com"
+                            data-context="signin" data-ux_mode="popup"
+                            data-login_uri="http://localhost:8000/auth-receiver" data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin" data-type="standard" data-shape="pill" data-text="continue_with"
+                            data-size="large" data-logo_alignment="center" data-theme="outline">
+                        </div>
+                    </div>
 
-            <div class="flex flex-row gap-1 items-center register_step_1">
-                <div class=" border-b w-[50%] h-[1px]"></div>
-                <p>OR</p>
-                <div class=" border-b w-[50%] h-[1px]"></div>
-            </div>
+                    <div class="flex flex-row gap-1 items-center">
+                        <div class=" border-b w-[50%] h-[1px]"></div>
+                        <p>OR</p>
+                        <div class=" border-b w-[50%] h-[1px]"></div>
+                    </div>
 
+                    <div class="flex flex-col gap-2">
+                        <div class="relative">
+                            <input type="text" name="email" id="email_input"
+                                class="bg-white_1 dark:bg-dark_6 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder=" " required />
+                            <label for="email_input"
+                                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Email</label>
+                        </div>
+                        <div id="email_message" class="hidden text-xs"></div>
 
-
-            <!-- STEP 1 -->
-            <div class="flex flex-col gap-2 register_step_1">
-                <input id="email_input" name="email"
-                    class="text-sm bg-dark_4 h-10 px-4 border-0 rounded-xl text-white_1" type="email"
-                    placeholder="Email" required>
-                <div id="email_message" class="hidden text-xs"></div>
-                <div class="flex flex-row gap-1">
-                    <p class="text-xs">Already a redditor?</p>
-                    <button type="button" class="text-xs text-blue-500 cursor-pointer" data-modal-target="sign_in_modal"
-                        data-modal-toggle="sign_in_modal" data-modal-hide="sign_up_modal">Log In</button>
+                        <div class="flex flex-row gap-1">
+                            <p class="text-xs">Already a redditor?</p>
+                            <button type="button" class="text-xs text-blue-500 cursor-pointer"
+                                data-modal-target="sign_in_modal" data-modal-toggle="sign_in_modal"
+                                data-modal-hide="sign_up_modal">Log In</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- STEP 2 -->
-            <div class="flex flex-col gap-2 register_step_2 hidden">
-                <input id="username_input" name="username"
-                    class="text-sm bg-dark_4 h-10 px-4 border-0 rounded-xl text-white_1" type="text"
-                    placeholder="Username" minlength="8" maxlength="20" required>
-                <div id="username_message" class="hidden text-xs"></div>
-                <input name="password" class="text-sm bg-dark_4 h-10 px-4 border-0 rounded-xl text-white_1"
-                    type="password" placeholder="Password" minlength="8" maxlength="64" required>
+            <div class="sign_up_tab hidden flex flex-col gap-6">
+                <div class="flex flex-col gap-4">
+                    <h1 class="text-xl font-bold">Create your username and password</h1>
+                    <p class="text-xs">Reddit is anonymous, so your username is what you’ll go by
+                        here.
+                        Choose
+                        wisely—because once you get a
+                        name, you can’t change it.</p>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <div class="relative">
+                        <input type="text" name="username" id="username_input"
+                            class="bg-white_1 dark:bg-dark_6 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " minlength="8" maxlength="20" />
+                        <label for="username_input"
+                            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Username</label>
+                        <div id="username_message" class="text-xs"></div>
+                    </div>
+                    <div class="relative">
+                        <input type="password" name="password" id="password_input"
+                            class="bg-white_1 dark:bg-dark_6 block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " minlength="8" maxlength="20" />
+                        <label for="password_input"
+                            class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Password</label>
+                    </div>
+                </div>
             </div>
 
             <!-- STEP 3 -->
-            <div class="register_step_3 hidden">
+            <div class="sign_up_tab hidden flex flex-col gap-6">
+                <h1 class="font-bold text-xl ">Personalization (Optional)</h1>
                 <div class="flex flex-col items-center gap-4 w-full p-2">
                     <div class="flex flex-col items-center gap-2">
                         <div id="avatar_preview_container"
@@ -86,37 +109,43 @@
                         </div>
                         <div id="avatar_file_input_container">
                             <label for="sign_up_avatar_file_input"
-                                class="w-[80px] h-[80px] rounded-full bg-[#1a282d] flex flex-col gap-2 items-center justify-center px-2 border">
+                                class="bg-white_1 dark:bg-dark_6 dark:border-gray_1 w-[80px] h-[80px] border border-black border-dashed rounded-full flex flex-col gap-1 items-center justify-center text-[#82959B]">
                                 <svg width="45" height="45" viewBox="0 0 45 45" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                    class="stroke-black dark:stroke-white" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M40.9674 25.1327C40.7139 23.0959 39.7919 21.2008 38.3456 19.7445C36.8994 18.2882 35.0107 17.3529 32.976 17.0854C32.0986 14.6285 30.3855 12.5584 28.1364 11.2364C25.8873 9.91435 23.2451 9.42444 20.6715 9.85299C18.0981 10.2815 15.7571 11.6012 14.0577 13.5808C12.3583 15.5603 11.4088 18.0741 11.3749 20.6829C9.40789 20.6829 7.52144 21.4639 6.13054 22.8547C4.73963 24.2457 3.95825 26.1325 3.95825 28.0996C3.95825 30.0665 4.73963 31.9529 6.13054 33.3437C7.52144 34.7347 9.40789 35.5163 11.3749 35.5163H22.4999"
-                                        stroke="white" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M35.0701 42.8958V28.0625" stroke="white" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M29.1382 33.9958L35.0715 28.0625L41.0047 33.9958" stroke="white"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M35.0701 42.8958V28.0625" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M29.1382 33.9958L35.0715 28.0625L41.0047 33.9958" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </label>
                             <input id="sign_up_avatar_file_input" name="avatar" type="file" accept="image/*"
-                                class="hidden" />
+                                class="hidden optional" />
                         </div>
                         <p class="font-medium text-xs">Avatar</p>
                     </div>
 
                     <div class="relative w-full h-24">
                         <p class="font-medium text-xs">Bio</p>
-                        <textarea name="bio" id="message" rows="2"
-                            class="text-xs text-white_1 block p-2.5 w-full text-sm text-gray-900 bg-dark_4 rounded-lg"
+                        <textarea name="bio" id="message" rows="3"
+                            class="bg-white_1 dark:bg-dark_6 text-xs dark:text-white_1 block p-2.5 w-full text-sm text-gray-900 rounded-lg resize-none border dark:border-[#ffffff33]"
                             maxlength="128" placeholder="Write something about youself"></textarea>
                     </div>
                 </div>
             </div>
 
-            <button type="button" id="btn_continue"
-                class="rounded-3xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white flex flex-row gap-2 justify-center font-medium"
-                disabled>
+
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+            </div>
+
+            <button type="button" id="nextBtn"
+                class="rounded-3xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white flex flex-row gap-2 justify-center font-medium">
                 <svg aria-hidden="true" id="check_availability_spinner"
                     class="w-6 h-6 animate-spin dark:text-gray-600 hidden" viewBox="0 0 100 101" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -131,167 +160,72 @@
                     Continue
                 </p>
             </button>
-            <button type="submit" id="btn_register"
-                class="rounded-3xl px-3 py-2 w-full bg-button_red text-white font-md transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white">
-                <p>
-                    Register
-                </p>
-            </button>
         </form>
     </div>
 </div>
 
 
 <script>
-    // TODO REFACTOR
-    document.addEventListener("DOMContentLoaded", (event) => {
-        let step = 1;
+    var sign_up_current_tab = 0;
+    const avatar_preview = document.getElementById('avatar_preview');
+    const avatar_preview_container = document.getElementById('avatar_preview_container');
+    const avatar_file_input_container = document.getElementById('avatar_file_input_container');
+    const avatar_file_input = document.getElementById("sign_up_avatar_file_input")
+    const remove_avatar_preview_btn = document.getElementById("sign_up_remove_avatar_preview_btn")
+    const check_availability_spinner = document.getElementById('check_availability_spinner');
 
-        step_1_contents = document.querySelectorAll(".register_step_1")
-        step_2_contents = document.querySelectorAll(".register_step_2")
-        step_3_contents = document.querySelectorAll(".register_step_3")
+    async function checkAvailability(type, value) {
+        check_availability_spinner.classList.remove("hidden");
+        let result
+        await fetch(`/check_availability/?${type}=${value}`)
+            .then(response => response.json())
+            .then(data => {
+                check_availability_spinner.classList.add("hidden");
+                result = (type === 'username' && data.username_available) || (type === 'email' && data.email_available);
+            })
+            .catch(error => console.error('Error:', error));
+        return result
+    }
 
-        check_availability_spinner = document.getElementById("check_availability_spinner")
-
-        const email_input = document.getElementById('email_input');
-        const username_input = document.getElementById('username_input');
-
-        const username_message = document.getElementById('username_message');
-        const email_message = document.getElementById('email_message');
-
-        const btn_continue = document.getElementById('btn_continue');
-        const btn_back = document.getElementById('btn_back');
-        const btn_register = document.getElementById('btn_register');
-
-        const stepContents = [step_1_contents, step_2_contents, step_3_contents];
-
-        email_valid = false
-        username_valid = false
-
-        function updateSteps() {
-            stepContents.forEach(contents => {
-                contents.forEach(element => element.classList.add("hidden"));
-            });
-
-            stepContents[step - 1].forEach(element => {
-                element.classList.remove("hidden");
-            });
-
-            btn_continue.classList.remove("hidden")
-
-            if (step === 1) {
-                btn_back.classList.add("hidden");
-                btn_register.classList.add("hidden")
-                btn_continue.disabled = email_valid === true ? false : true
-            } else if (step === 3) {
-                btn_register.classList.remove("hidden")
-                btn_continue.classList.add("hidden")
-            } else {
-                btn_back.classList.remove("hidden");
-                btn_register.classList.add("hidden")
-                btn_continue.disabled = username_valid === true ? false : true
-            }
-        }
-
-        function handleStepChange(direction) {
-            if (step <= 3) {
-                step += direction;
-            }
-            updateSteps();
-        }
-
-        updateSteps();
-
-        btn_continue.addEventListener("click", () => handleStepChange(1));
-        btn_back.addEventListener("click", () => handleStepChange(-1));
-
-        email_input.addEventListener('blur', function () {
-            btn_continue.disabled = true;
-            if (!validateEmail(email_input.value)) {
+    async function validate_sign_up_form(valid, current_valid, y, i) {
+        if (y[i].id == "email_input") {
+            const email = email_input.value;
+            if (!validateEmail(email) || !await checkAvailability("email", email)) {
                 email_message.classList.remove('hidden');
-                email_message.classList.remove('text-green-500');
                 email_message.classList.add('text-red-500');
-                email_message.textContent = 'Please enter a valid email.';
+                email_message.textContent = !validateEmail(email) ? 'Please enter a valid email.' : 'Email is already taken';
+                y[i].classList.add("ring-1", "ring-red-500", "ring-inset")
+                valid = false;
+                current_valid = false
             } else {
                 email_message.classList.add('hidden');
-                email_input.classList.remove('border-red-500');
-
-                check_availability_spinner.classList.remove("hidden")
-
-                const email = email_input.value;
-                if (email.length > 0) {
-                    checkAvailability('email', email);
-                } else {
-                    email_message.classList.add('hidden');
-                }
             }
-        });
-
-        username_input.addEventListener('blur', function () {
+        }
+        if (y[i].id == "username_input") {
             const username = username_input.value;
-            if (username.length > 0) {
-                check_availability_spinner.classList.remove("hidden")
-                checkAvailability('username', username);
+            if (!await checkAvailability("username", username)) {
+                username_message.classList.remove('hidden');
+                username_message.classList.add('text-red-500');
+                username_message.textContent = 'Username is already taken';
+                y[i].classList.add("ring-1", "ring-red-500", "ring-inset")
+                valid = false;
+                current_valid = false
             } else {
                 username_message.classList.add('hidden');
             }
-        })
-
-        function validateEmail(email) {
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            return emailPattern.test(email);
         }
+        return [valid, current_valid]
+    }
 
-        function checkAvailability(type, value) {
-            fetch(`/check_availability/?${type}=${value}`)
-                .then(response => response.json())
-                .then(data => {
-                    check_availability_spinner.classList.add("hidden")
-
-                    btn_continue.disabled = true;
-
-                    if (type === 'username') {
-                        if (data.username_available) {
-                            username_message.classList.remove('hidden');
-                            username_message.textContent = 'Username is available.';
-                            username_message.classList.remove('text-red-500');
-                            username_message.classList.add('text-green-500');
-                            btn_continue.disabled = false;
-                            username_valid = true
-                        } else {
-                            username_message.classList.remove('hidden');
-                            username_message.textContent = 'Username is already taken.';
-                            username_message.classList.remove('text-green-500');
-                            username_message.classList.add('text-red-500');
-                            username_valid = false
-                        }
-                    } else if (type === 'email') {
-                        if (data.email_available) {
-                            email_message.classList.remove('hidden');
-                            email_message.textContent = 'Email is available.';
-                            email_message.classList.remove('text-red-500');
-                            email_message.classList.add('text-green-500');
-                            btn_continue.disabled = false;
-                            email_valid = true
-                        } else {
-                            email_message.classList.remove('hidden');
-                            email_message.textContent = 'Email is already taken.';
-                            email_message.classList.remove('text-green-500');
-                            email_message.classList.add('text-red-500');
-                            email_valid = false
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        var avatar_preview = document.getElementById('avatar_preview');
-        var avatar_preview_container = document.getElementById('avatar_preview_container');
-        var avatar_file_input_container = document.getElementById('avatar_file_input_container');
-        var avatar_file_input = document.getElementById("sign_up_avatar_file_input")
-        var remove_avatar_preview_btn = document.getElementById("sign_up_remove_avatar_preview_btn")
-
+    document.addEventListener("DOMContentLoaded", () => {
         setupFileInput(avatar_preview, avatar_preview_container, avatar_file_input, avatar_file_input_container);
         setupRemoveFilePreview(remove_avatar_preview_btn, avatar_preview, avatar_preview_container, avatar_file_input, avatar_file_input_container)
+        showTab(sign_up_current_tab, "sign_up_tab", "prevBtn", "nextBtn", "step");
+        nextBtn.addEventListener("click", async () => {
+            sign_up_current_tab = await nextPrev(1, validate_sign_up_form, "sign_up_tab", "sign_up_form", "prevBtn", "nextBtn", "step", sign_up_current_tab);
+        })
+        prevBtn.addEventListener("click", async () => {
+            sign_up_current_tab = await nextPrev(-1, validate_sign_up_form, "sign_up_tab", "sign_up_form", "prevBtn", "nextBtn", "step", sign_up_current_tab);
+        })
     })
 </script>

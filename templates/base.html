@@ -38,6 +38,7 @@
                         dark_6: "#181C1F",
                         gray_1: '#3C4244',
                         gray_2: "#2B3336",
+                        gray_3: "#ffffff33",
                         white_1: "#F3F3F2",
                         white_2: "#717981",
                         white_3: "#889375",
@@ -63,22 +64,10 @@
 <body class="dark:text-white dark:bg-dark_1 transition-colors">
     {% include 'components/navbar.html'%}
     <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
+        function validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return emailPattern.test(email);
         }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        window.onclick = function (event) {
-            var modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    closeModal(modal.getAttribute("id"));
-                }
-            });
-        };
 
         function setupRemoveFilePreview(button, previewElement, previewContainer, fileInput, fileInputContainer) {
             button.addEventListener("click", () => {
@@ -122,6 +111,84 @@
             document.classList.add(class_name);
         }
 
+        function showTab(n, class_name, prev_button_id, next_button_id, step_class_name) {
+            var x = document.getElementsByClassName(class_name);
+            x[n].classList.remove("hidden")
+
+            const prevBtn = document.getElementById(prev_button_id);
+            const nextBtn = document.getElementById(next_button_id);
+
+            if (n == 0) {
+                prevBtn.classList.add("hidden")
+            } else {
+                prevBtn.classList.remove("hidden")
+            }
+
+            if (n == (x.length - 1)) {
+                nextBtn.innerHTML = "Submit";
+            } else {
+                nextBtn.innerHTML = "Next";
+            }
+            fixStepIndicator(n, step_class_name)
+        }
+
+        // OPTIONAL
+        function fixStepIndicator(n, step_class_name) {
+            var i, x = document.getElementsByClassName(step_class_name);
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" active", "");
+            }
+            x[n].className += " active";
+        }
+
+        async function validate_form(tab_class_name, form_specific_validation_function, current_tab) {
+            var x, y, i, valid = true;
+            x = document.getElementsByClassName(tab_class_name);
+            y = x[current_tab].getElementsByTagName("input");
+            for (i = 0; i < y.length; i++) {
+                current_valid = true
+                if (y[i].classList.contains("optional")) {
+                    continue
+                }
+                if (y[i].value == "") {
+                    y[i].classList.add("ring-1", "ring-red-500", "ring-inset")
+                    valid = false;
+                    current_valid = false
+                }
+
+                const result = await form_specific_validation_function(valid, current_valid, y, i)
+                valid = result[0]
+                current_valid = result[1]
+
+                if (current_valid) {
+                    y[i].classList.remove("ring-1", "ring-red-500", "ring-inset")
+                }
+            }
+
+            if (valid) {
+                document.getElementsByClassName("step")[current_tab].className += " finish";
+            }
+            return valid;
+        }
+
+
+
+        async function nextPrev(n, form_specific_validation_function, tab_class_name, form_id, prev_button_id, next_button_id, step_class_name, current_tab) {
+            var x = document.getElementsByClassName(tab_class_name);
+            if (n == 1 && !await validate_form(tab_class_name, form_specific_validation_function, current_tab)) return current_tab;
+
+            x[current_tab].classList.add("hidden")
+            current_tab = current_tab + n;
+
+            if (current_tab >= x.length) {
+                x[x.length - 1].classList.remove("hidden")
+                document.getElementById(form_id).submit();
+                nextBtn.disabled = true;
+                return false;
+            }
+            showTab(current_tab, tab_class_name, prev_button_id, next_button_id, step_class_name);
+            return current_tab
+        }
     </script>
 
     {% block content %}

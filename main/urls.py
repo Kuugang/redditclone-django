@@ -18,6 +18,7 @@ urlpatterns = [
     path('edit_community_details/', views.edit_community_details, name='edit_community_details'),
     path('delete_community_rule/', views.delete_community_rule, name='delete_community_rule'),
     path('edit_community_topics/', views.edit_community_topics, name='edit_community_topics'),
+    path('check_community_name_availability/', views.check_community_name_availability, name='check_community_name_availability'),
 
     # Post
     path('submit/', views.submit, name='submit'),
