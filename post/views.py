@@ -38,3 +38,6 @@ def upload_post_image(request):
 
     return JsonResponse(response_data)
 
+def comment(request):
+    return "wiggy"
+#deo code
