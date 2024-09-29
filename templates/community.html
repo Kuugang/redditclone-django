@@ -2,6 +2,7 @@
 {% load role_lookup %}
 
 {% block content %}
+{% with user_role=user_communities|get_community_role:community.id %}
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html' %}
     <div class="p-10 flex flex-col w-[85%] relative left-[15%] min-h-[90vh]">
@@ -13,8 +14,6 @@
                 <img id="community_banner" src="{{ community.banner }}" alt="Community Banner"
                     class='object-cover w-full h-full rounded-lg' />
 
-                {% if user_communities|get_community_role:community.id %}
-                {% with user_role=user_communities|get_community_role:community.id %}
                 {% if user_role == 'moderator' or user_role == 'admin' %}
                 <button onClick='set_is_editing(true); set_current_edit("Banner")' class='absolute right-3
                 top-[70%] rounded-full p-2 bg-white dark:bg-dark_1 dark:hover:bg-dark_2'>
@@ -26,19 +25,16 @@
                     </svg>
                 </button>
                 {% endif %}
-                {% endwith %}
-                {% endif %}
             </div>
             <div class='flex flex-row justify-between w-full relative bottom-6 items-end'>
                 <div class='flex flex-row gap-2 items-end'>
                     <div
                         class="relative inline-flex items-center justify-center w-24 h-24 overflow-hidden rounded-full bg-white dark:bg-dark_1 p-2 {% if user_communities|get_community_role:community.id == 'admin' or 'moderator' %}cursor-pointer{%endif%}">
                         {% if community.avatar %}
+
                         <img id="community_avatar" src="{{community.avatar}}"
                             class="w-full h-full rounded-full object-cover" />
 
-                        {% if user_communities|get_community_role:community.id %}
-                        {% with user_role=user_communities|get_community_role:community.id %}
                         {% if user_role == 'moderator' or user_role == 'admin' %}
 
                         <div onClick='set_is_editing(true); set_current_edit("Avatar")' class='group flex
@@ -52,8 +48,6 @@
                                 </path>
                             </svg>
                         </div>
-                        {% endif %}
-                        {% endwith %}
                         {% endif %}
 
                         {%else %}
@@ -99,8 +93,6 @@
                             Reddit
                         </h5>
 
-                        {% if user_communities|get_community_role:community.id %}
-                        {% with user_role=user_communities|get_community_role:community.id %}
                         {% if user_role == 'moderator' or user_role == 'admin' %}
 
                         <button data-modal-target="edit_community_detail" data-modal-toggle="edit_community_detail"
@@ -114,9 +106,6 @@
                             </svg>
                         </button>
                         {% endif %}
-                        {% endwith %}
-                        {% endif %}
-
                     </div>
                     <p class="mb-3 text-txt_color_3 font-normal text-dark_2 dark:text-white_2">{{community.about}}
                     </p>
@@ -137,5 +126,5 @@
 {%include 'components/community/create_community_rule.html'%}
 {%include 'components/community/edit_community_rule.html'%}
 
-
+{% endwith %}
 {% endblock %}

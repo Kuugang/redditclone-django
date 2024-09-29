@@ -21,7 +21,7 @@
 
             <div class="relative max-w-fit" id="custom-dropdown">
                 <div id="selected-community"
-                    class="bg-[#1A1A1B] text-white p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
+                    class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
                     <img id="selected-avatar" src="" alt="Selected Community Avatar"
                         class="inline-block w-8 h-8 mr-2 rounded-full hidden" />
                     <span id="selected-name">Choose a community</span>
@@ -52,7 +52,7 @@
             </select>
 
             <input name="title" type="text" placeholder="Title"
-                class="border border-[#ffffff33] bg-[#1A1A1B] px-3 py-2 rounded-md " required />
+                class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
             <div class="">
                 {% include 'components/editor.html' %}
             </div>
