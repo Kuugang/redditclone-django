@@ -193,6 +193,53 @@
             showTab(current_tab, tab_class_name, prev_button_id, next_button_id, step_class_name);
             return current_tab
         }
+
+        function parseDateString(dateString) {
+            const [month, day, year, time, period] = dateString.split(/[\s,]+/);
+            const months = {
+                'Jan.': 0, 'Feb.': 1, 'Mar.': 2, 'Apr.': 3, 'May': 4, 'Jun.': 5,
+                'Jul.': 6, 'Aug.': 7, 'Sept.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
+            };
+            const [hours, minutes] = time.split(':').map(Number);
+            const adjustedHours = period === 'p.m.' && hours !== 12 ? hours + 12 : (period === 'a.m.' && hours === 12 ? 0 : hours);
+
+
+            const utcDate = new Date(Date.UTC(year, months[month], day, adjustedHours, minutes));
+            
+            return utcDate;
+        } 
+
+        function timeAgo(datetime) {
+            const currentDate = new Date();
+            const createdAt = new Date(parseDateString(datetime));
+            const timeDifference = currentDate.getTime() - createdAt.getTime();
+
+            const minute = 60 * 1000;
+            const hour = minute * 60;
+            const day = hour * 24;
+            const month = day * 30;
+            const year = day * 365;
+
+            if (timeDifference < minute) {
+                return "Just now";
+            } else if (timeDifference < hour) {
+                const minutes = Math.floor(timeDifference / minute);
+                return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+            } else if (timeDifference < day) {
+                const hours = Math.floor(timeDifference / hour);
+                return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+            } else if (timeDifference < month) {
+                const days = Math.floor(timeDifference / day);
+                return `${days} day${days > 1 ? "s" : ""} ago`;
+            } else if (timeDifference < year) {
+                const months = Math.floor(timeDifference / month);
+                return `${months} month${months > 1 ? "s" : ""} ago`;
+            } else {
+                const years = Math.floor(timeDifference / year);
+                return `${years} year${years > 1 ? "s" : ""} ago`;
+            }
+        };
+
     </script>
 
     {% block content %}

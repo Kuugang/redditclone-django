@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load role_lookup %}
 
 {% block quill %}
 
@@ -14,55 +15,63 @@
 
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html'%}
-    <div class="p-10 relative left-[15%]">
-        <form method="POST" action="{% url 'post:create_post' %}" class="flex flex-col gap-3 relative">
-            {% csrf_token %}
-            <h1 class="font-bold text-xl">Create Post</h1>
+    <div class="p-10 relative left-[15%] w-[85%]">
+        <div class = "flex flex-row justify-between w-full">
+            <form method="POST" action="{% url 'post:create_post' %}" class="w-[50%] flex flex-col gap-3 relative">
+                {% csrf_token %}
+                <h1 class="font-bold text-xl">Create Post</h1>
 
-            <div class="relative max-w-fit" id="custom-dropdown">
-                <div id="selected-community"
-                    class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
-                    <img id="selected-avatar" src="" alt="Selected Community Avatar"
-                        class="inline-block w-8 h-8 mr-2 rounded-full hidden" />
-                    <span id="selected-name">Choose a community</span>
-                    <svg rpl="" class="ml-xs" fill="currentColor" height="20" icon-name="caret-down-outline"
-                        viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 13.125a.624.624 0 0 1-.442-.183l-5-5 .884-.884L10 11.616l4.558-4.558.884.884-5 5a.624.624 0 0 1-.442.183Z">
-                        </path>
-                    </svg>
-                </div>
-
-                <div id="dropdown-options" class="absolute bg-[#1A1A1B] w-full mt-1 hidden z-10">
-                    {% for community in user_communities %}
-                    <div class="dropdown-item flex items-center p-2 hover:bg-[#333] cursor-pointer"
-                        data-value="{{ community.id }}" data-avatar="{{ community.avatar }}">
-                        <img src="{{ community.avatar }}" alt="Community Avatar" class="w-8 h-8 mr-2 rounded-full" />
-                        <span>r/{{ community.name }}</span>
+                <div class="relative max-w-fit" id="custom-dropdown">
+                    <div id="selected-community"
+                        class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
+                        <img id="selected-avatar" src="" alt="Selected Community Avatar"
+                            class="inline-block w-8 h-8 mr-2 rounded-full hidden" />
+                        <span id="selected-name">Choose a community</span>
+                        <svg rpl="" class="ml-xs" fill="currentColor" height="20" icon-name="caret-down-outline"
+                            viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 13.125a.624.624 0 0 1-.442-.183l-5-5 .884-.884L10 11.616l4.558-4.558.884.884-5 5a.624.624 0 0 1-.442.183Z">
+                            </path>
+                        </svg>
                     </div>
-                    {% endfor %}
+
+                    <div id="dropdown-options" class="absolute bg-[#1A1A1B] w-full mt-1 hidden z-10">
+                        {% for community in user_communities %}
+                        <a href="{% url 'post:submit_with_community' community.name %}" class="bg-white dark:bg-dark_3 dropdown-item flex items-center p-2 hover:bg-white_1 dark:hover:bg-[#333] cursor-pointer"
+                            data-value="{{ community.id }}" data-avatar="{{ community.avatar }}">
+                            <img src="{{ community.avatar }}" alt="Community Avatar" class="w-8 h-8 mr-2 rounded-full" />
+                            <span>r/{{ community.name }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            <select name="community" id="hidden-select" class="hidden">
-                <option value="">Choose a community</option>
-                {% for community in user_communities %}
-                <option value="{{ community.id }}">r/{{ community.name }}</option>
-                {% endfor %}
-            </select>
+                <select name="community" id="hidden-select" class="hidden">
+                    <option value="">Choose a community</option>
+                    {% for community in user_communities %}
+                    <option value="{{ community.id }}">r/{{ community.name }}</option>
+                    {% endfor %}
+                </select>
 
-            <input name="title" type="text" placeholder="Title"
-                class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
-            <div class="">
-                {% include 'components/editor.html' %}
-            </div>
-            <input type="hidden" name="content" id="hidden_content">
+                <input name="title" type="text" placeholder="Title"
+                    class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                <div class="w-full">
+                    {% include 'components/editor.html' %}
+                </div>
+                <input type="hidden" name="content" id="hidden_content">
 
-            <div class="flex justify-end">
-                <button id="submit-button" type="submit"
-                    class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
+                <div class="flex justify-end">
+                    <button id="submit-button" type="submit"
+                        class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
+                </div>
+            </form>
+
+            {% if community %}
+            <div class="w-[30%]">
+                {% include 'components/community/community_right_bar.html'%}
             </div>
-        </form>
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -73,6 +82,14 @@
     const hiddenSelect = document.getElementById('hidden-select');
     const selectedAvatar = document.getElementById('selected-avatar');
     const selectedName = document.getElementById('selected-name');
+
+
+    if("{{community}}"){
+        selectedAvatar.src = "{{community.avatar}}";
+        selectedAvatar.classList.remove('hidden');
+        selectedName.textContent = "{{community.name}}";
+        hiddenSelect.value = "{{community.id}}";
+    }
 
     selectedCommunity.addEventListener('click', function () {
         dropdownOptions.classList.toggle('hidden');

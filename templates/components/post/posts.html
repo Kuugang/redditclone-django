@@ -1,6 +1,7 @@
+<div class="flex flex-col gap-4">
 {% for post in posts %}
-<a href = "{% url 'post:post' post.id %}" class="flex flex-col gap-3 border-b p-3 max-h-[400px] border rounded-2xl hover:bg-button_gray">
-    <div class="flex flex-row items-end">
+<div onclick="window.location.href=`{% url 'post:post' post.id %}`" class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-button_gray dark:hover:bg-dark_3 cursor-pointer">
+    <div class="flex flex-row gap-2 items-end">
         {% if community %}
             <div class="rounded-full w-6 h-6">
                 {% if post.user.avatar %}
@@ -14,14 +15,13 @@
             </div>
             <p>u/{{ post.user.username }}</p>
         {% else %}
-            <div class="rounded-full w-6 h-6 bg-gray-200 border border-black">
-                <img class="w-full h-full rounded-full object-cover" src="{{ post.community.avatar }}"
-                    alt="Community avatar">
-            </div>
-            <p>r/{{ post.community.name }}</p>
+            <a href="{% url 'community:community' post.community.name %}" class="flex flex-row gap-1 items-end">
+                <img class="w-7 h-7 rounded-full" src="{{post.community.avatar}}" alt="Community avatar">
+                r/{{ post.community.name }}
+            </a>
         {% endif %}
-        *
-        <p>{{ post.created_at }}</p>
+        <p>•</p>
+        <p data-created-at="{{ post.created_at }}">{{ post.created_at }}</p>
     </div>
     <h1 class="font-bold text-xl">{{ post.title }}</h1>
 
@@ -32,16 +32,16 @@
         }
         .post-content {
             display: -webkit-box;
-            -webkit-line-clamp: 50; /* Number of lines to show */
+            -webkit-line-clamp: 50;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
         }
     </style>
     <span class="post-content">{{ post.content }}</span>
-
-</a>
+</div>
 {% endfor %}
+</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -49,5 +49,11 @@
         postContents.forEach(postContent => {
             postContent.innerHTML = postContent.textContent;
         });
+
+        const createdAtElements = document.querySelectorAll('[data-created-at]');
+        for(const createdAtElement of createdAtElements) {
+            const createdAt = createdAtElement.getAttribute('data-created-at');
+            createdAtElement.textContent = timeAgo(createdAt);
+        }
     });
 </script>
