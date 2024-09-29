@@ -1,5 +1,6 @@
 import uuid
 from . import models
+from post.models import Post
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -11,11 +12,14 @@ def community(request, community_name):
     community_rules = models.CommunityRule.objects.filter(community=community)
     community_topics = models.CommunityTopic.objects.filter(community=community)
 
+    posts = Post.objects.filter(community=community).order_by('-created_at')
+
     context = {
         'community': community, 
         'community_rules': community_rules, 
         'community_topics': community_topics,
-        'topics' : {topic.topic for topic in community_topics}
+        'topics' : {topic.topic for topic in community_topics},
+        'posts': posts
     }
 
     return render(request, 'community.html', context)

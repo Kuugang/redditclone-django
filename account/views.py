@@ -112,5 +112,9 @@ def check_availability(request):
     return JsonResponse(response_data)
 
 def dashboard(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-created_at')
+
+
+    # posts = Post.objects.filter(community=community).order_by('-created_at')
+
     return render(request, 'dashboard.html', {'posts': posts})

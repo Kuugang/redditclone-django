@@ -55,7 +55,7 @@
 
 #     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
-#     return HttpResponseRedirect(reverse('dashboard'))
+    # return HttpResponseRedirect(reverse('dashboard'))
 
 # def dashboard(request):
 #     posts = models.Post.objects.all()
