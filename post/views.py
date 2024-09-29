@@ -40,4 +40,15 @@ def upload_post_image(request):
 
 def comment(request):
     return "wiggy"
+
+
+def reply_to_comment(request):
+    return "oscarrrrr"
+
+def upvote(request):
+    return 1
+
+def downvote(request):
+    return -1
+
 #deo code
