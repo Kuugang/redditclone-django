@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -6,7 +8,7 @@ from . import models
 from community.models import Community, CommunityTopic, CommunityRule
 
 # Utils
-from main.utils import upload_image
+from common.utils import upload_image, upload_local_image
 
 def post(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
@@ -42,7 +44,11 @@ def create_post(request):
 
 def upload_post_image(request):
     image = request.FILES.get("file")
-    url = upload_image(image, "postImage")
+    if os.getenv("ENV") == "development":
+        url = upload_local_image(image, "postImage")
+    else:
+        url = upload_image(image, "postImage")
+
 
     response_data = {
         'url' : url

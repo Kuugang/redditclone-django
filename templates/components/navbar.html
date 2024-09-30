@@ -1,3 +1,5 @@
+{% load static %}
+{% load utils %}
 <nav
     class="shadow-md text-md fixed top-0 left-0 flex flex-row justify-between w-full p-3 px-6 items-center bg-white_1 border-b border-zinc-800 z-50 h-[10vh] dark:bg-dark_3 dark:border-gray_1">
     <div class="flex flex-row items-center gap-2">
@@ -58,7 +60,11 @@
         <button id="btn_drop_down_profile" class="w-[30px] h-[30px] rounded-full" type="button"
             data-dropdown-toggle="drop_down_profile">
             {% if user.avatar%}
-            <img src="{{ user.avatar}}" alt="" class="object-contain rounded-full">
+                {% if user.avatar|startswith:'https' %}
+                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{{user.avatar}}" alt="{{user.username}}">
+                {% else %}
+                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{% static user.avatar %}" alt="{{ user.username}}">
+                {% endif %}
             {% else %}
             <div class="w-full h-full bg-black rounded-full"></div>
             {% endif %}
@@ -72,7 +78,11 @@
                     <a href="" class="flex flex-row gap-2 items-center">
                         <div class="w-[30px] h-[30px] rounded-full">
                             {% if user.avatar%}
-                            <img src="{{ user.avatar }}" alt="Profile image" class="object-contain rounded-full">
+                                {% if user.avatar|startswith:'https' %}
+                                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{{user.avatar}}" alt="{{user.username}}">
+                                {% else %}
+                                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{% static user.avatar %}" alt="{{ user.username}}">
+                                {% endif %}
                             {% else %}
                             <div class="w-full h-full bg-black rounded-full"></div>
                             {% endif %}

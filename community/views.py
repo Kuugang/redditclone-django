@@ -1,11 +1,11 @@
-import uuid
+import uuid, os
 from . import models
 from post.models import Post
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from common.utils import upload_image
+from common.utils import upload_image, upload_local_image
 
 def community(request, community_name):
     community = get_object_or_404(models.Community, name=community_name)
@@ -35,9 +35,15 @@ def create_community(request):
     topics = request.POST.getlist("topics")
     banner = files.get('banner')
     avatar = files.get('avatar')
+    avatar_public_URL = ""
+    banner_public_URL = ""
 
-    avatar_public_URL = upload_image(avatar, "communityAvatar")
-    banner_public_URL = upload_image(banner, "communityBanner")
+    if os.getenv("ENV") == "development":
+        avatar_public_URL = upload_local_image(avatar, "communityAvatar")
+        banner_public_URL = upload_local_image(banner, "communityBanner")
+    else:
+        avatar_public_URL = upload_image(avatar, "communityAvatar")
+        banner_public_URL = upload_image(banner, "communityBanner")
     
     if avatar_public_URL and banner_public_URL:
         community = models.Community(name = community_name, visibility = visibility, about = about, avatar = avatar_public_URL, banner = banner_public_URL)
@@ -60,8 +66,15 @@ def edit_community_appearance(request):
     community_id = request.POST.get("community_id")
     community = models.Community.objects.get(id=community_id)
 
-    banner_url = upload_image(banner, "communityBanner") if banner else None 
-    avatar_url = upload_image(avatar, "communityAvatar") if avatar else None
+    avatar_url = ""
+    banner_url = ""
+
+    if os.getenv("ENV") == "development":
+        avatar_url = upload_local_image(avatar, "communityAvatar")
+        banner_url = upload_local_image(banner, "communityBanner")
+    else:
+        avatar_url = upload_image(avatar, "communityAvatar")
+        banner_url = upload_image(banner, "communityBanner")
 
     if banner_url:
         community.banner = banner_url

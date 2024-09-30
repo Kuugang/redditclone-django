@@ -15,7 +15,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
 # Utils
-from common.utils import upload_image
+from common.utils import upload_image, upload_local_image
 
 # Models
 from post.models import Post
@@ -89,7 +89,11 @@ def sign_up(request):
         user.bio = bio if bio else None 
 
         if avatar:
-            avatar_public_URL = upload_image(avatar, "userAvatar")
+            avatar_public_URL = ""
+            if os.getenv("ENV") == "development":
+                avatar_public_URL = upload_local_image(avatar, "userAvatar")
+            else:
+                avatar_public_URL = upload_image(avatar, "userAvatar")
             user.avatar = avatar_public_URL
 
         user.save()
@@ -113,8 +117,5 @@ def check_availability(request):
 
 def dashboard(request):
     posts = Post.objects.all().order_by('-created_at')
-
-
-    # posts = Post.objects.filter(community=community).order_by('-created_at')
 
     return render(request, 'dashboard.html', {'posts': posts})

@@ -19,14 +19,11 @@ class CommunityTopicAdmin(admin.ModelAdmin):
     search_fields = ('community', 'topic')
     list_filter = ('created_at', 'updated_at')
 
-
-
 @admin.register(models.CommunityRule)
 class CommunityRuleAdmin(admin.ModelAdmin):
     list_display = ('id', 'community', 'name', 'description', 'created_at', 'updated_at')
     search_fields = ('community', 'name', 'description')
     list_filter = ('created_at', 'updated_at')
-
 
 @admin.register(models.CommunityMember)
 class CommunityMemberAdmin(admin.ModelAdmin):

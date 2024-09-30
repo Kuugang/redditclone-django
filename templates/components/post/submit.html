@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load role_lookup %}
+{% load env_extras %}
+{% load utils %}
 
 {% block quill %}
+{% load static %}
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
@@ -11,7 +15,6 @@
 {% endblock %}
 
 {% block content %}
-
 
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html'%}
@@ -24,8 +27,9 @@
                 <div class="relative max-w-fit" id="custom-dropdown">
                     <div id="selected-community"
                         class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
-                        <img id="selected-avatar" src="" alt="Selected Community Avatar"
-                            class="inline-block w-8 h-8 mr-2 rounded-full hidden" />
+                        <div class="rounded-full w-[30px] h-[30px] border">
+                            <img id="selected-avatar" src="" alt="Selected Community Avatar" class="w-full h-full rounded-full object-cover hidden" />
+                        </div>
                         <span id="selected-name">Choose a community</span>
                         <svg rpl="" class="ml-xs" fill="currentColor" height="20" icon-name="caret-down-outline"
                             viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +43,13 @@
                         {% for community in user_communities %}
                         <a href="{% url 'post:submit_with_community' community.name %}" class="bg-white dark:bg-dark_3 dropdown-item flex items-center p-2 hover:bg-white_1 dark:hover:bg-[#333] cursor-pointer"
                             data-value="{{ community.id }}" data-avatar="{{ community.avatar }}">
-                            <img src="{{ community.avatar }}" alt="Community Avatar" class="w-8 h-8 mr-2 rounded-full" />
+                            <div class="rounded-full w-[30px] h-[30px]">
+                                {% if community.avatar|startswith:'https' %}
+                                    <img src="{{ community.avatar }}" alt="Community Avatar" class="w-full h-full rounded-full object-cover" />
+                                {% else %}
+                                    <img src="{% static community.avatar %}" alt="Community Avatar" class="w-full h-full rounded-full object-cover" />
+                                {% endif %}
+                            </div>
                             <span>r/{{ community.name }}</span>
                         </a>
                         {% endfor %}
@@ -83,13 +93,15 @@
     const selectedAvatar = document.getElementById('selected-avatar');
     const selectedName = document.getElementById('selected-name');
 
+    let community = "{{community}}";
 
-    if("{{community}}"){
-        selectedAvatar.src = "{{community.avatar}}";
+    if ("{{community}}") {
+        selectedAvatar.src = "{% if community and community.avatar and community.avatar|startswith:'https' %}{{ community.avatar }}{% else %}{% static community.avatar %}{% endif %}";
         selectedAvatar.classList.remove('hidden');
         selectedName.textContent = "{{community.name}}";
         hiddenSelect.value = "{{community.id}}";
     }
+    
 
     selectedCommunity.addEventListener('click', function () {
         dropdownOptions.classList.toggle('hidden');
@@ -102,7 +114,14 @@
             const avatar = this.getAttribute('data-avatar');
             const name = this.textContent.trim();
 
-            selectedAvatar.src = avatar;
+            if(avatar.startsWith('https')){
+                selectedAvatar.src = avatar;
+            } else {
+                staticUrlPrefix = "{% static '' %}";
+                url = staticUrlPrefix + res.url;
+                selectedAvatar.src = url;
+            }
+
             selectedAvatar.classList.remove('hidden');
             selectedName.textContent = name;
 
@@ -155,7 +174,14 @@
                         uploadImage(file).then((res) => {
                             if (res && res.url) {
                                 if (image) {
-                                    image.src = res.url;
+                                    console.log(res.url)
+                                    if("{% get_env_var 'ENV' %}" === "development"){
+                                        staticUrlPrefix = "{% static '' %}";
+                                        url = staticUrlPrefix + res.url;
+                                        image.src = url
+                                    } else {
+                                        image.src = res.url;
+                                    }
                                 }
 
                                 image.classList.remove("blur-sm")
@@ -202,6 +228,5 @@
             document.querySelector('form').submit()
         });
     })
-
 </script>
 {% endblock %}
