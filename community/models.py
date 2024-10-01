@@ -75,3 +75,41 @@ class CommunityMember(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['community', 'user'], name='unique_community_member')
         ]
+
+class CommunityEvent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    host = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=2048)
+    image = models.CharField(max_length=1024)
+    location = models.CharField(max_length=255)
+
+    start_date = models.DateField(blank=False)
+    end_date = models.DateField(blank=False)
+    start_time = models.TimeField(blank=False)
+    end_time = models.TimeField(blank=False)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(start_date__lte=models.F('end_date')),
+                name='check_event_dates'
+            ),
+            models.CheckConstraint(
+                check=(
+                    models.Q(start_date=models.F('end_date')) &
+                    models.Q(start_time__lt=models.F('end_time'))
+                ) | models.Q(start_date__lt=models.F('end_date')),
+                name='check_event_times'
+            )
+        ]
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class CommunityEventParticipant(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    event = models.ForeignKey(CommunityEvent, on_delete=models.CASCADE)
+    participant = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

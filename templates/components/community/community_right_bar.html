@@ -13,6 +13,10 @@
                             {{post.community.name}} on Reddit
                         </p>
                     </div>
+                {% elif event %}
+                    <a href="{% url 'community:community' event.community.name %}" class="font-bold">
+                        {{event.community.name}} on Reddit
+                    </a>
                 {%else%}
                     {{community.name}} on Reddit
                 {%endif%}
@@ -33,11 +37,16 @@
         <p class="mb-3 text-txt_color_3 font-normal text-dark_2 dark:text-white_2">
             {% if post %}
                 {{post.community.about}}
+            {% elif event %}
+                {{event.community.about}}
             {% else %}
                 {{community.about}}
             {% endif %}
         </p>
     </div>
     {%include 'components/community/community_topics.html'%}
-    {%include 'components/community/community_rules.html' %}
+    {% if not event %}
+        {%include 'components/community/community_rules.html' %}
+    {% endif %}
+    {%include 'components/community/community_events.html' %}
 </div>

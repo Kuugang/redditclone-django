@@ -1,4 +1,5 @@
 import uuid, os
+from datetime import datetime
 from . import models
 from post.models import Post
 from django.shortcuts import render, redirect, get_object_or_404
@@ -11,6 +12,7 @@ def community(request, community_name):
     community = get_object_or_404(models.Community, name=community_name)
     community_rules = models.CommunityRule.objects.filter(community=community)
     community_topics = models.CommunityTopic.objects.filter(community=community)
+    community_events = models.CommunityEvent.objects.filter(community=community)
 
     posts = Post.objects.filter(community=community).order_by('-created_at')
 
@@ -19,7 +21,8 @@ def community(request, community_name):
         'community_rules': community_rules, 
         'community_topics': community_topics,
         'topics' : {topic.topic for topic in community_topics},
-        'posts': posts
+        'posts': posts,
+        'community_events': community_events
     }
 
     return render(request, 'community.html', context)
@@ -165,3 +168,47 @@ def check_community_name_availability(request):
         'name_available': not models.Community.objects.filter(name=name).exists(),
     }
     return JsonResponse(response_data)
+
+def create_event(request, community_name):
+    if request.method == "POST":
+        data = dict(request.POST.items())
+        community = models.Community.objects.get(id=uuid.UUID(data.get('community_id')))
+        name = data.get("name")
+        host = request.user
+        description = data.get('description')
+
+        event_image = request.FILES.get('event_image')
+        location = data.get('location')
+
+        event_start_date = datetime.strptime(data.get('event_start_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+        event_end_date = datetime.strptime(data.get('event_end_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+
+        event_start_time = data.get('event_start_time')
+        event_end_time = data.get('event_end_time')
+
+        event_image_url = ""
+        if os.getenv("ENV") == "development":
+            event_image_url = upload_local_image(event_image, "eventImage")
+        else:
+            event_image_url = upload_image(event_image, "eventImage")
+        event = models.CommunityEvent(community=community, host=host, name = name, description=description, image=event_image_url, location=location, start_date=event_start_date, end_date=event_end_date, start_time=event_start_time, end_time=event_end_time) 
+        event.save()
+
+        return redirect('community:community', community_name=community.name)
+    else:
+        context = {}
+        if community_name:
+            community = get_object_or_404(models.Community, name=community_name)
+            community_rules = models.CommunityRule.objects.filter(community=community)
+            community_topics = models.CommunityTopic.objects.filter(community=community)
+            context['community'] = community
+            context['community_rules'] = community_rules
+            context['community_topics'] = community_topics
+            context['submit'] = True
+
+        return render(request, 'components/community/create_event.html', context)
+
+def community_event_detail(request, community_name, event_id):
+    event = models.CommunityEvent.objects.get(id=event_id)
+    community_events = models.CommunityEvent.objects.filter(community=event.community)
+    return render(request, "components/community/community_event_detail.html", {"event": event, "community_events": community_events})
