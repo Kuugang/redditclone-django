@@ -63,8 +63,22 @@ def comment(request):
 def reply_to_comment(request):
     return "oscarrrrr"
 
-def upvote(request):
-    return 1
+def vote(request, post_id, vote_type):
+
+    vote = models.Vote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
+    print(vote)
+    if vote:
+        vote[0].vote = vote_type
+        vote = vote[0]
+    else:
+        vote = models.Vote(user=request.user, post=models.Post.objects.get(id=post_id), vote=vote_type)
+    vote.save()
+   # return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+    response_data = {
+        'vote' : vote
+    }
+    return JsonResponse(response_data)
 
 def downvote(request):
     return -1

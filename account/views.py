@@ -18,7 +18,7 @@ from google.auth.transport import requests as google_requests
 from common.utils import upload_image, upload_local_image
 
 # Models
-from post.models import Post
+from post.models import Post, Vote
 
 User = get_user_model()
 
@@ -117,5 +117,10 @@ def check_availability(request):
 
 def dashboard(request):
     posts = Post.objects.all().order_by('-created_at')
+    votes = Vote.objects.all()
+
+    for post in posts:
+        post.upvotes = votes.filter(post_id = post.id, vote = "upvote")
+        post.downvotes = votes.filter(post_id = post.id, vote = "downvote")
 
     return render(request, 'dashboard.html', {'posts': posts})
