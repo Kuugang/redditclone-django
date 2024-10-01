@@ -2,13 +2,3 @@ env
 .env
 *.pyc
 __pycache__/
-static/images/communityAvatar/*
-!static/images/communityAvatar/.gitkeep
-static/images/communityBanner/*
-!static/images/communityBanner/.gitkeep
-static/images/postImage/*
-!static/images/postImage/.gitkeep
-static/images/userAvatar/*
-!static/images/userAvatar/.gitkeep
-static/images/eventImage/*
-!static/images/eventImage/.gitkeep
