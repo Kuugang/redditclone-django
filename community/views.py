@@ -62,6 +62,11 @@ def create_community(request):
         return redirect('dashboard')
     return redirect('dashboard')
 
+def join_community(request, community_name):
+    community = models.Community.objects.get(name=community_name)
+    member = models.CommunityMember(community = community, user = request.user, role = 'member')
+    member.save()
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 def edit_community_appearance(request):
     avatar = request.FILES.get("avatar")

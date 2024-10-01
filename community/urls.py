@@ -5,6 +5,7 @@ app_name = 'community'
 
 urlpatterns = [
     path('create_community/', views.create_community, name='create_community'),
+    path('join_community/<str:community_name>', views.join_community, name='join_community'),
     path('edit_community_appearance/', views.edit_community_appearance, name = 'edit_community_appearance'),
     path('create_community_rule/', views.create_community_rule, name='create_community_rule'),
     path('edit_community_rule/', views.edit_community_rule, name='edit_community_rule'),
@@ -15,5 +16,4 @@ urlpatterns = [
     path('<str:community_name>/', views.community, name='community'),
     path('<str:community_name>/create_event', views.create_event , name='create_event'),
     path('<str:community_name>/events/<uuid:event_id>/', views.community_event_detail, name='community_event_detail'),
-
 ]

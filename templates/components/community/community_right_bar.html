@@ -18,7 +18,12 @@
                         {{event.community.name}} on Reddit
                     </a>
                 {%else%}
-                    {{community.name}} on Reddit
+                    <a href="{% url 'community:community' community.name %}" class="font-bold text-lg">
+                        r/{{community.name}}
+                    </a>
+                    <p>
+                        {{community.name}} on Reddit
+                    </p>
                 {%endif%}
             </h5>
 
@@ -48,5 +53,7 @@
     {% if not event %}
         {%include 'components/community/community_rules.html' %}
     {% endif %}
+
     {%include 'components/community/community_events.html' %}
+
 </div>
