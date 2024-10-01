@@ -99,7 +99,7 @@ def create_community_rule(request):
 
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
-
+    
 def edit_community_rule(request):
     data = dict(request.POST.items())
 

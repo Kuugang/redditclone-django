@@ -1,5 +1,5 @@
 import os
-
+from django.core import serializers
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -56,6 +56,8 @@ def upload_post_image(request):
 
     return JsonResponse(response_data)
 
+#deo code
+
 def comment(request):
     return "wiggy"
 
@@ -66,7 +68,7 @@ def reply_to_comment(request):
 def vote(request, post_id, vote_type):
 
     vote = models.Vote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
-    print(vote)
+    print("vote: ", vote)
     if vote:
         vote[0].vote = vote_type
         vote = vote[0]
@@ -75,12 +77,7 @@ def vote(request, post_id, vote_type):
     vote.save()
    # return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
-    response_data = {
-        'vote' : vote
-    }
-    return JsonResponse(response_data)
+    response_data = serializers.serialize('json', [vote])
+    
+    return JsonResponse({'vote': response_data})
 
-def downvote(request):
-    return -1
-
-#deo code

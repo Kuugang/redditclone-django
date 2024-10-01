@@ -11,7 +11,7 @@ class Post(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     title = models.TextField(max_length = 300)
     content = models.TextField(max_length = 40000)
-
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

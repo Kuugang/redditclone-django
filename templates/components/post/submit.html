@@ -23,7 +23,6 @@
             <form method="POST" action="{% url 'post:create_post' %}" class="w-[50%] flex flex-col gap-3 relative">
                 {% csrf_token %}
                 <h1 class="font-bold text-xl">Create Post</h1>
-
                 <div class="relative max-w-fit" id="custom-dropdown">
                     <div id="selected-community"
                         class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
