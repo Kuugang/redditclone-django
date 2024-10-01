@@ -10,5 +10,5 @@ static/images/postImage/*
 !static/images/postImage/.gitkeep
 static/images/userAvatar/*
 !static/images/userAvatar/.gitkeep
-static/images/eventImages/*
-!static/images/eventImages/.gitkeep
+static/images/eventImage/*
+!static/images/eventImage/.gitkeep
