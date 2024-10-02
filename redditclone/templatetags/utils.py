@@ -1,7 +1,6 @@
 import os
 from django import template
-from django.templatetags.static import static
-from django.db.models import Count
+from post.models import Comment
 
 
 register = template.Library()
@@ -29,3 +28,8 @@ def get_vote_counts(post):
     upvotes = post.vote_set.filter(vote="upvote").count()
     downvotes = post.vote_set.filter(vote="downvote").count()
     return upvotes - downvotes
+
+@register.filter
+def get_comment_counts(post):
+    count = Comment.objects.filter(post=post).count()
+    return count

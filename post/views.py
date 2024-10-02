@@ -12,7 +12,11 @@ from common.utils import upload_image, upload_local_image
 
 def post(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
-    return render(request, 'components/post/post_detail.html', {'post': post})
+    # TODO 
+    root_comments = models.Comment.objects.filter(post = post, parent = None)
+    child_comments = models.Comment.objects.filter(post = post)
+
+    return render(request, 'components/post/post_detail.html', {'post': post, 'root_comments' :root_comments, "child_comments" : child_comments})
 
 def submit(request, community_name=None):
     context = {}
@@ -72,18 +76,19 @@ def reply_to_comment(request, post_id, comment):
     return JsonResponse({'vote': response_data})
 
 def vote(request, post_id, vote_type):
-
     vote = models.Vote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
-    print("vote: ", vote)
+
     if vote:
-        vote[0].vote = vote_type
-        vote = vote[0]
+        if vote[0].vote == vote_type:
+            vote[0].delete()
+        else:
+            vote[0].vote = vote_type
+            vote = vote[0]
+            vote.save()
     else:
         vote = models.Vote(user=request.user, post=models.Post.objects.get(id=post_id), vote=vote_type)
-    vote.save()
-   # return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+        vote.save()
 
-    response_data = serializers.serialize('json', [vote])
-    
-    return JsonResponse({'vote': response_data})
-
+    return JsonResponse(
+        {'status': True}
+    )

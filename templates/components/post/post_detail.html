@@ -167,13 +167,26 @@
            <div id="comments-{{ postId }}" class="comments-section"></div>
                 <h3>Comments:</h3>
                 <ul class="comment-list">
-                  <!-- Comments will be dynamically inserted here -->
+                {% for comment in comments %}
+                    <li id = {{comment.id}}>
+                        <div class="w-[30px] h-[30px] rounded-full">
+                            {% if comment.user.avatar%}
+                                {% if comment.user.avatar|startswith:'https' %}
+                                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{{ comment.user.avatar}}" alt="{{user.username}}">
+                                {% else %}
+                                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{% static comment.user.avatar %}" alt="{{ user.username}}">
+                                {% endif %}
+                            {% else %}
+                            <div class="w-full h-full bg-black rounded-full"></div>
+                            {% endif %}
+                        </div>
+                        <p>{{comment.content}}</p>
+                    </li>
+                {% endfor %}
+
                 </ul>
               </div>
-          
-          
           </div>
-
         </div>
       </div>
 
