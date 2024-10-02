@@ -12,11 +12,11 @@ def context(request):
     """
      
     user_communities = Community.objects.raw(query, [request.user.id])
-    user_posts = Post.objects.filter(user=request.user).order_by('created_at')
+    user_posts = Post.objects.filter(user=request.user.id).order_by('created_at')
 
-    user_comments = Comment.objects.filter(user=request.user)
-    user_upvotes = Vote.objects.filter(user=request.user, vote="upvote")
-    user_downvotes = Vote.objects.filter(user=request.user, vote="downvote")
+    user_comments = Comment.objects.filter(user=request.user.id)
+    user_upvotes = Vote.objects.filter(user=request.user.id, vote="upvote")
+    user_downvotes = Vote.objects.filter(user=request.user.id, vote="downvote")
 
     user_commented_posts = sorted(set(comment.post for comment in user_comments), key=lambda x: x.created_at, reverse=True)
     user_upvoted_posts = sorted(set(vote.post for vote in user_upvotes), key=lambda x: x.created_at, reverse=True)
