@@ -13,4 +13,5 @@ urlpatterns = [
     # path('logout/', views.handle_logout, name='logout'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('auth-receiver', views.auth_receiver, name='auth_receiver'),
+    path('profile/', views.profile, name='profile'),
 ]

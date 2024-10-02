@@ -70,7 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'community.context_processors.user_communities_context',
+                'redditclone.context_processors.context',
             ],
             'libraries' : {
                 'env_extras' : 'redditclone.templatetags.env_extras',

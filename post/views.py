@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from . import models
-from community.models import Community, CommunityTopic, CommunityRule
+from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
 
 # Utils
 from common.utils import upload_image, upload_local_image
@@ -21,9 +21,11 @@ def submit(request, community_name=None):
         community = get_object_or_404(Community, name=community_name)
         community_rules = CommunityRule.objects.filter(community=community)
         community_topics = CommunityTopic.objects.filter(community=community)
+        community_events = CommunityEvent.objects.filter(community=community)
         context['community'] = community
         context['community_rules'] = community_rules
         context['community_topics'] = community_topics
+        context['community_events'] = community_events
         context['submit'] = True
 
     return render(request, 'components/post/submit.html', context)

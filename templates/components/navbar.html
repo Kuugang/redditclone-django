@@ -75,7 +75,7 @@
             <ul class="divide-y divide-gray-400 pt-3 px-3 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="btn_drop_down_profile">
                 <li class="h-10 ">
-                    <a href="" class="flex flex-row gap-2 items-center">
+                    <a href="{% url 'account:profile' %}" class="flex flex-row gap-2 items-center">
                         <div class="w-[30px] h-[30px] rounded-full">
                             {% if user.avatar%}
                                 {% if user.avatar|startswith:'https' %}
