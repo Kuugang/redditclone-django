@@ -176,7 +176,6 @@
   });
 
   async function vote(postId, voteType) {
-    
     fetch(`/post/vote/${postId}/${voteType}`, {
       method: "POST",
       headers: {
@@ -184,17 +183,41 @@
       },
     }).then(async (response) => {
       const data = await response.json();
-      console.log(data);
+      console.log("current user status: " + data.userVoteStatus);
       let vote_count = document.getElementById(postId).querySelector(".vote_count");
       let current_vote_count = parseInt(vote_count.textContent, 10); 
-      
+      console.log("current status: " + previousVote);
       
       // e fix ang same user gikan upvote to down, vice versa
-      if(voteType == "upvote"){
-        current_vote_count += 1;
-      }else{
-        current_vote_count -= 1;
-      }current_vote_count
+       if (voteType === "upvote") {
+          if (previousVote === "upvote") {
+            
+            current_vote_count -= 1;
+            userVoteStatus[postId] = null; 
+          } else if (previousVote === "downvote") {
+            
+            current_vote_count += 2;
+            userVoteStatus[postId] = "upvote";
+          } else {
+            
+            current_vote_count += 1;
+            userVoteStatus[postId] = "upvote";
+          }
+        } else if (voteType === "downvote") {
+          if (previousVote === "downvote") {
+            
+            current_vote_count += 1;
+            userVoteStatus[postId] = null; 
+          } else if (previousVote === "upvote") {
+            
+            current_vote_count -= 2;
+            userVoteStatus[postId] = "downvote";
+          } else {
+            
+            current_vote_count -= 1;
+            userVoteStatus[postId] = "downvote";
+          }
+       }
 
       vote_count.textContent = current_vote_count;
 

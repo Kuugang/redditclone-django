@@ -62,8 +62,12 @@ def comment(request):
     return "wiggy"
 
 
-def reply_to_comment(request):
-    return "oscarrrrr"
+def reply_to_comment(request, post_id, comment):
+    comment = models.Comment.objects.filter(user=request.user, comment=models.Comment.get(id=post_id))
+    print("comment: ", comment)
+    response_data = serializers.serialize('json', [comment])
+
+    return JsonResponse({'vote': response_data})
 
 def vote(request, post_id, vote_type):
 
