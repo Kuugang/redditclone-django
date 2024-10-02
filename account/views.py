@@ -18,7 +18,7 @@ from google.auth.transport import requests as google_requests
 from common.utils import upload_image, upload_local_image
 
 # Models
-from post.models import Post
+from post.models import Post, Comment, Vote
 
 User = get_user_model()
 
@@ -43,9 +43,8 @@ def auth_receiver(request):
     email = user_data['email']
     first_name = user_data.get('given_name', '')
     last_name = user_data.get('family_name', '')
-
     user, created = User.objects.get_or_create(email=email, defaults={
-        'username': f"{first_name} {last_name}",
+        'username': f"{first_name}{last_name}",
         'avatar': user_data.get("picture")
     })
 
@@ -117,5 +116,33 @@ def check_availability(request):
 
 def dashboard(request):
     posts = Post.objects.all().order_by('-created_at')
-
     return render(request, 'dashboard.html', {'posts': posts})
+
+def profile(request):
+    user_posts = Post.objects.filter(user=request.user)
+
+    user_comments = Comment.objects.filter(user=request.user)
+    user_upvotes = Vote.objects.filter(user=request.user, vote="upvote")
+    user_downvotes = Vote.objects.filter(user=request.user, vote="downvote")
+
+
+    # commented_posts = Post.objects.filter(comments__in=user_comments).distinct()
+
+    # upvoted_posts = Post.objects.filter(votes__in=user_upvotes).distinct()
+
+    # downvoted_posts = Post.objects.filter(votes__in=user_downvotes).distinct()
+
+    user_overview = sorted(
+        list(user_posts) + list(user_comments),
+        key=lambda x: x.created_at,
+        reverse=True
+    )
+
+    context = {
+        'user_overview' : user_overview,
+        'user_posts':user_posts,
+        # 'user_comments': commented_posts,
+        # 'user_upvotes': upvoted_posts,
+        # 'user_downvotes': downvoted_posts,
+    }
+    return render(request, 'components/account/profile.html', context)
