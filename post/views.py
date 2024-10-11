@@ -1,4 +1,4 @@
-import os
+import os, uuid
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 
 from . import models
 from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
+
 
 # Utils
 from common.utils import upload_image, upload_local_image
@@ -92,3 +93,10 @@ def vote(request, post_id, vote_type):
     return JsonResponse(
         {'status': True}
     )
+
+def delete_post(request):
+    post_id = request.POST.get("post_id")
+    post = get_object_or_404(models.Post, id=uuid.UUID(str(post_id)), user = request.user)
+    post.delete()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
