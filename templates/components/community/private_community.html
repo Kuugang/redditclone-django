@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load role_lookup %}
+{% load utils %}
+
+{% block content %}
+
+<div class="flex flex-row relative top-[10vh]">
+    {% include 'components/leftbar.html' %}
+
+    <div class="p-10 flex flex-col w-[85%] relative left-[15%] min-h-[90vh]">
+        <p class="font-bold text-md">r/{{community_name}} is private</p>
+        <p class="text-sm">This community is private and only approved members can view and take part in its discussions.</p>
+    </div> 
+
+</div>
+{% endblock %}

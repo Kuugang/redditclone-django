@@ -6,7 +6,7 @@ User = get_user_model()
 
 class UserAdmin(BaseUserAdmin):
     model = User
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active', 'birth_date', 'avatar', 'bio', 'updated_at')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active', 'birth_date', 'avatar', 'about', 'updated_at')
     search_fields = ('username', 'email')
     ordering = ('-date_joined',)
     filter_horizontal = ()

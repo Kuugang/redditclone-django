@@ -1,0 +1,103 @@
+{% load static %} 
+{% load utils %}
+
+<div class="flex flex-col gap-4">
+    {% for comment in comments %}
+    <div
+        onclick="window.location.href=`{% url 'post:post' comment.post.id %}`"
+        class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+        id="{{comment.id}}"
+    >
+        <div class="flex flex-col gap-2 items-start">
+            <a
+              href="{% url 'community:community' comment.post.community.name %}"
+              class="flex flex-row gap-1 items-end"
+            >
+                {%if comment.post.community.avatar|startswith:'https'%}
+                    <img
+                        class="w-7 h-7 rounded-full"
+                        src="{{comment.post.community.avatar}}"
+                        alt="Community avatar"
+                    />
+                {% else %}
+                    <img
+                        class="w-7 h-7 rounded-full"
+                        src="{% static comment.post.community.avatar %}"
+                        alt="Community avatar"
+                    />
+                {% endif %} 
+                <p>
+                    r/{{ comment.post.community.name }}
+                </p>
+            </a>
+            <div class="ml-10 flex flex-col gap-2 text-xs">
+                <div class="flex flex-row gap-1 items-end">
+                    <p class="text-sm font-semibold">{{comment.user}}</p>
+                    {% if comment.post.user == user %}
+                    <p class="text-blue-600">OP</p>
+                    {% endif %}
+                    <p>commented</p>
+                    <p data-created-at="{{ comment.created_at }}">{{ comment.created_at }}</p>
+                </div>
+                <div class="text-sm">
+                    <span>{{ comment.comment }}</span>
+                </div>
+            </div>
+            <h1>TODO VOTES</h1>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<script>
+    document.addEventListener("DOMcommentLoaded", function () {
+        const postcomments = document.querySelectorAll(".post-comment");
+        postcomments.forEach((postcomment) => {
+            postcomment.innerHTML = postcomment.textcomment;
+        });
+    });
+
+    async function vote(button, postId, voteType) {
+        await fetch(`/post/vote/${postId}/${voteType}`, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+        }).then(async (response) => {
+            const data = await response.json();
+
+            let vote_count = document.getElementById(postId).querySelector(".vote_count");
+            let current_vote_count = parseInt(vote_count.textcomment, 10); 
+
+            voted = vote_count.dataset.voted
+
+            if(voted == "upvote"){
+                if(voteType == "upvote"){
+                    current_vote_count -= 1 
+                    vote_count.dataset.voted = ""
+                }else{
+                    current_vote_count -= 2
+                    vote_count.dataset.voted = "downvote"
+                }
+            }else if (voted == "downvote"){
+                if(voteType == "downvote"){
+                    current_vote_count += 1
+                    vote_count.dataset.voted = ""
+                }else{
+                    current_vote_count += 2
+                    vote_count.dataset.voted = "upvote"
+                }
+            }else{
+                if(voteType == "downvote"){
+                    current_vote_count -= 1
+                    vote_count.dataset.voted = "downvote"
+                }else{
+                    current_vote_count += 1
+                    vote_count.dataset.voted = "upvote"
+                }
+            }
+            vote_count.textcomment = current_vote_count
+        });
+    }
+</script>

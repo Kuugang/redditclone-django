@@ -32,6 +32,9 @@ class Community(models.Model):
     class Meta:
         verbose_name_plural = "Communities"
 
+    def __str__(self):
+        return self.name
+
 class CommunityTopic(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)

@@ -11,5 +11,9 @@ urlpatterns = [
     path('<uuid:post_id>/', views.post, name='post'),
     path('vote/<uuid:post_id>/<str:vote_type>', views.vote, name='vote'),
     path('comment/uuid:post_ud/<str:comment>',  views.comment, name='vote'),
-    path('delete/',  login_required(views.delete_post), name='delete_post')
+    path('delete/',  login_required(views.delete_post), name='delete_post'),
+
+    # Should probably make next 2 into 1 view
+    path("save/", login_required(views.save_post), name="save_post"),
+    path("unsave/", login_required(views.unsave_post), name="unsave_post"),
 ]

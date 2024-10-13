@@ -1,0 +1,62 @@
+<div id="edit-about-modal" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <form action="{% url 'account:edit_about' %}" method="POST">
+            {% csrf_token %}
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        About description
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="edit-about-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5 space-y-4">
+                    <p class="text-base leading-relaxed dark:text-gray-400">
+                        Give a brief description of yourself
+                    </p>
+
+                    <div class="relative w-full">
+                        <textarea name="about" id="about"
+                            class="bg-white_1 dark:text-white_1 dark:bg-dark_6 border dark:border-[#ffffff33] text-gray-900 text-sm rounded-lg block w-full p-2.5 pt-4 peer"
+                            placeholder="" rows="4" maxlength="200" oninput="updateCounter()">{% if request.user.about %}{{request.user.about}}{% endif %}</textarea>
+                        <label for="about"
+                            class="absolute text-sm font-medium text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">About</label>
+                        <p id="charCount" class="float-right">200</p>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex flex-row items-end justify-end p-4 md:p-5 rounded-b dark:border-gray-600 w-full">
+                    <button type="button" data-modal-hide="edit-about-modal"
+                        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Close</button>
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateCounter() {
+        const textarea = document.getElementById('about');
+        const counter = document.getElementById('charCount');
+        counter.textContent = 200 - textarea.value.length;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const textarea = document.getElementById('about');
+        const counter = document.getElementById('charCount');
+        counter.textContent = 200 - textarea.value.length;
+    });
+</script>

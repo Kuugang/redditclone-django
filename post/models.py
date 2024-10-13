@@ -15,6 +15,20 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class UserSavedPost(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_save')
+        ]
+
 class Vote(models.Model):
     class VoteType(models.TextChoices):
         UPVOTE = 'upvote', 'Upvote'

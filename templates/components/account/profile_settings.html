@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="flex flex-row w-full relative top-[10vh]">
+    {% include 'components/leftbar.html'%}
+
+    <div class="p-10 w-[85%] relative left-[15%] flex flex-col gap-10 z-10">
+        <h1 class="font-bold text-2xl">Settings</h1>
+
+        <div class="flex flex-col gap-4 w-full items-start px-10 py-5">
+            <button class="flex flex-row justify-between w-full group" data-modal-target="edit-display-name-modal" data-modal-toggle="edit-display-name-modal">
+                <div class="flex flex-col items-start">
+                    <p class="">Display name</p>
+                    <p class="text-sm font-light">Changing your display name won’t change your username</p>
+                </div>
+                <div class="px-2 py-2 rounded-full group-hover:bg-button_gray">
+                    <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z"></path>
+                    </svg>
+                </div>
+            </button>
+
+            <button class="flex flex-row justify-between w-full group" data-modal-target="edit-about-modal" data-modal-toggle="edit-about-modal">
+                <p>
+                    About description
+                </p>
+                <div class="px-2 py-2 rounded-full group-hover:bg-button_gray">
+                    <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z"></path>
+                    </svg>
+                </div>
+            </button>
+            <button class="flex flex-row justify-between w-full group" data-modal-target="edit-avatar-modal" data-modal-toggle="edit-avatar-modal">
+                <div class="flex flex-col items-start">
+                    <p>
+                        Avatar
+                    </p>
+                    <p class="text-sm font-light">Upload a profile image</p>
+                </div>
+                <div class="px-2 py-2 rounded-full group-hover:bg-button_gray">
+                    <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z"></path>
+                    </svg>
+                </div>
+            </button>
+            <button class="flex flex-row justify-between w-full group" data-modal-target="edit-banner-modal" data-modal-toggle="edit-banner-modal">
+                <div class="flex flex-col items-start">
+                    <p>
+                        Banner
+                    </p>
+                    <p class="text-sm font-light">Upload a profile background image</p>
+                </div>
+                <div class="px-2 py-2 rounded-full group-hover:bg-button_gray">
+                    <svg rpl="" fill="currentColor" height="20" icon-name="caret-right-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m7.942 15.442-.884-.884L11.616 10 7.058 5.442l.884-.884 5 5a.624.624 0 0 1 0 .884l-5 5Z"></path>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
+{% include 'components/account/edit-display-name-modal.html' %}
+{% include 'components/account/edit-about-modal.html' %}
+{% include 'components/account/edit-avatar-modal.html' %}
+{% include 'components/account/edit-banner-modal.html' %}
+
+{% endblock %}

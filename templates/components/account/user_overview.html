@@ -1,0 +1,111 @@
+{% load static %} 
+{% load utils %}
+
+<div class="flex flex-col gap-4">
+    {% for content in overview %}
+    <div
+        {% if content.post %}
+            onclick="window.location.href=`{% url 'post:post' content.post.id %}`"
+        {% else %}
+            onclick="window.location.href=`{% url 'post:post' content.id %}`"
+        {% endif %}
+        class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+        id="{{content.id}}"
+    >
+
+        {% if content.post %}
+            <div class="flex flex-col gap-2 items-start">
+                <a
+                  href="{% url 'community:community' content.post.community.name %}"
+                  class="flex flex-row gap-1 items-end"
+                >
+                    {%if content.post.community.avatar|startswith:'https'%}
+                        <img
+                            class="w-7 h-7 rounded-full"
+                            src="{{content.post.community.avatar}}"
+                            alt="Community avatar"
+                        />
+                    {% else %}
+                        <img
+                            class="w-7 h-7 rounded-full"
+                            src="{% static content.post.community.avatar %}"
+                            alt="Community avatar"
+                        />
+                    {% endif %} 
+                    <p>
+                        r/{{ content.post.community.name }}
+                    </p>
+                </a>
+                <div class="ml-10 flex flex-col gap-2 text-xs">
+                    <div class="flex flex-row gap-1 items-end">
+                        <p class="text-sm font-semibold">{{content.user}}</p>
+                        {% if content.post.user == user %}
+                        <p class="text-blue-600">OP</p>
+                        {% endif %}
+                        <p>commented</p>
+                        <p data-created-at="{{ content.created_at }}">{{ content.created_at }}</p>
+                    </div>
+                    <div class="text-sm">
+                        <span>{{ content.content }}</span>
+                    </div>
+                </div>
+                <h1>TODO VOTES</h1>
+            </div>
+        {% else %}
+            {% include 'components/post/post_item.html' with post=content%}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const postContents = document.querySelectorAll(".post-content");
+        postContents.forEach((postContent) => {
+            postContent.innerHTML = postContent.textContent;
+        });
+    });
+
+    async function vote(button, postId, voteType) {
+        await fetch(`/post/vote/${postId}/${voteType}`, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+        }).then(async (response) => {
+            const data = await response.json();
+
+            let vote_count = document.getElementById(postId).querySelector(".vote_count");
+            let current_vote_count = parseInt(vote_count.textContent, 10); 
+
+            voted = vote_count.dataset.voted
+
+            if(voted == "upvote"){
+                if(voteType == "upvote"){
+                    current_vote_count -= 1 
+                    vote_count.dataset.voted = ""
+                }else{
+                    current_vote_count -= 2
+                    vote_count.dataset.voted = "downvote"
+                }
+            }else if (voted == "downvote"){
+                if(voteType == "downvote"){
+                    current_vote_count += 1
+                    vote_count.dataset.voted = ""
+                }else{
+                    current_vote_count += 2
+                    vote_count.dataset.voted = "upvote"
+                }
+            }else{
+                if(voteType == "downvote"){
+                    current_vote_count -= 1
+                    vote_count.dataset.voted = "downvote"
+                }else{
+                    current_vote_count += 1
+                    vote_count.dataset.voted = "upvote"
+                }
+            }
+            vote_count.textContent = current_vote_count
+        });
+    }
+</script>

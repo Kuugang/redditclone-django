@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect
 from . import models
 from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
 
-
 # Utils
 from common.utils import upload_image, upload_local_image
 
@@ -100,3 +99,23 @@ def delete_post(request):
     post.delete()
 
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def save_post(request):
+    post_id = request.POST.get('post_id')
+    post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+    user = request.user
+
+    user_saved_post = models.UserSavedPost(user=user, post=post)
+    user_saved_post.save()
+
+    return JsonResponse({'success': True})
+
+def unsave_post(request):
+    post_id = request.POST.get('post_id')
+    post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+    user = request.user
+
+    user_saved_post = models.UserSavedPost.objects.filter(user=user, post=post)
+    user_saved_post.delete()
+
+    return JsonResponse({'success': True})
