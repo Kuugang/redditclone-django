@@ -178,7 +178,7 @@
             </div>
           </div>
           <!-- comment section wiggy-->
-           <div id="comments-{{ postId }}" class="comments-section"></div>
+           <div id="comments-{{ post.id }}" >
                 <h3>Comments:</h3>
                 <ul class="comment-list">
                 {% for comment in root_comments %}
@@ -195,11 +195,13 @@
                             {% endif %}
                         </div>
                         <p>{{comment.content}}</p>
+                        <small>{{comment.created_at}}</small>
                         <!-- child comments nigga-->
                     </li>
                 {% endfor %}
 
                 </ul>
+                </div>
               </div>
           </div>
         </div>
@@ -270,46 +272,60 @@
 
 
   async function submitComment(postId) {
-  const commentValue = null
   const commentBox = document.getElementById("commentBox");
-  if (commentBox && commentBox.value) {
-    const commentValue = commentBox.value;
-    // Proceed with submitting the comment
-  } else {
-    console.error("Comment box is not found or has no value");
+  if (commentBox.value.trim() === "") {
+    throw new Error("Comment box has no value")
+    return
   }
-
   // Send the POST request to submit the comment
   try {
+    let data = new FormData()
+    data.append('comment', commentBox.value)
+
     const response = await fetch(`/post/comment/${postId}`, {
       method: "POST",
       headers: {
         "X-CSRFToken": "{{ csrf_token }}",
       },
-      body: JSON.stringify({ comment: commentValue })
+      body: data
     });
 
     if (response.ok) {
       const data = await response.json(); // Assuming the response contains the new comment details
-      console.log(data);
+      console.log("data: ",data);
 
+      const commentsSection = document.getElementById(`comments-${postId}`)
       // Clear the comment box after submission
       commentBox.value = "";
-
+     console.log(`Searching for element with ID: comments-${postId}`);
       // Dynamically append the new comment to the comment section
-      const commentsSection = document.getElementById(`comments-${postId}`).querySelector(".comment-list");
+     console.log("Comment section", commentsSection)
 
+      
+       if (!commentsSection) {
+        commentsSection = document.createElement('div');
+         commentsSection.id = `comments-${postId}`;
+         document.querySelector('.comment-list').appendChild(commentsSection);
+        console.error(`Comments section for post ${postId} not found`);
+        return;
+      }
       // Create the new comment element
+      console.log("datas: ", data.user)
+      console.log("datas: ", data.content)
+      console.log("datas: ", data.created_at)
+      
+      
       const newCommentItem = document.createElement("li");
       newCommentItem.classList.add("comment-item", "mb-2");
 
       newCommentItem.innerHTML = `
         <div class="comment">
-          <strong>${data.user}</strong> 
-          <p>${data.comment_text}</p>
+          <p>${data.content}</p>
           <small>${new Date(data.created_at).toLocaleString()}</small>
         </div>
       `;
+
+      console.log("comment item", newCommentItem)
 
       // Append the new comment to the comment list
       commentsSection.appendChild(newCommentItem);

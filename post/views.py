@@ -3,12 +3,14 @@ from django.core import serializers
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
+import json
+from django.core.serializers import serialize
 from . import models
 from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
 
 # Utils
 from common.utils import upload_image, upload_local_image
+from .serializers import CommentSerializer
 
 def post(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
@@ -64,10 +66,24 @@ def upload_post_image(request):
 
 #deo code
 
-def comment(request, post_id, comment):
-    comment = models.Comment.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
-    response_data = serializers.serialize('json', comment)
-    return JsonResponse(response_data)
+def comment(request, post_id):
+    post_instance = get_object_or_404(models.Post, id=post_id)
+    content = request.POST.get("comment")
+    
+    if not content:
+        return JsonResponse({"error": "Comment content is required"}, status=400)
+    
+    comment = models.Comment.objects.create(
+        user=request.user,
+        post=post_instance,
+        content=content
+    )
+    
+    comment_data = serialize('json', [comment])
+    comment_json = json.loads(comment_data)[0]['fields']
+    
+    return JsonResponse(comment_json)
+
 
 
 def reply_to_comment(request, post_id, comment):
