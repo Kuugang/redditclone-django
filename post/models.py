@@ -29,6 +29,10 @@ class UserSavedPost(models.Model):
             models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_save')
         ]
 
+# TODO: CHANGE
+# class PostVote
+# class CommnentVote
+
 class Vote(models.Model):
     class VoteType(models.TextChoices):
         UPVOTE = 'upvote', 'Upvote'

@@ -10,7 +10,7 @@ from community.models import Community, CommunityTopic, CommunityRule, Community
 
 # Utils
 from common.utils import upload_image, upload_local_image
-from .serializers import CommentSerializer
+from django.utils.dateformat import format
 
 def post(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
@@ -72,18 +72,23 @@ def comment(request, post_id):
     
     if not content:
         return JsonResponse({"error": "Comment content is required"}, status=400)
-    
+
     comment = models.Comment.objects.create(
         user=request.user,
         post=post_instance,
         content=content
     )
-    
+
+    comment_object = models.Comment.objects.filter(id=comment.id).values('created_at')[0]
+    formatted_date = format(comment_object['created_at'], 'M. j, Y, P')
+
     comment_data = serialize('json', [comment])
     comment_json = json.loads(comment_data)[0]['fields']
     comment_json["id"] = json.loads(comment_data)[0]['pk']
-    print("id ba oten: ", comment_json) 
-    print("comment oten: ", comment_data)
+    comment_json["created_at"] = formatted_date
+
+    print(comment_data)
+    print(comment_json)
     return JsonResponse(comment_json)
 
 
