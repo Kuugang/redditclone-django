@@ -10,5 +10,5 @@ urlpatterns = [
     path('upload_post_image/', views.upload_post_image, name='upload_post_image'),
     path('<uuid:post_id>/', views.post, name='post'),
     path('vote/<uuid:post_id>/<str:vote_type>', views.vote, name='vote'),
-    path('comment/uuid:post_ud/<str:comment>',  views.comment, name='vote')
+    path('comment/<uuid:post_id>/<str:comment>',  views.comment, name='comment'),
 ]

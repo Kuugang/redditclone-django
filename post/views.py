@@ -15,7 +15,7 @@ def post(request, post_id):
     # TODO 
     root_comments = models.Comment.objects.filter(post = post, parent = None)
     child_comments = models.Comment.objects.filter(post = post)
-
+  
     return render(request, 'components/post/post_detail.html', {'post': post, 'root_comments' :root_comments, "child_comments" : child_comments})
 
 def submit(request, community_name=None):
@@ -64,8 +64,10 @@ def upload_post_image(request):
 
 #deo code
 
-def comment(request):
-    return "wiggy"
+def comment(request, post_id, comment):
+    comment = models.Comment.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
+    response_data = serializers.serialize('json', comment)
+    return JsonResponse(response_data)
 
 
 def reply_to_comment(request, post_id, comment):
