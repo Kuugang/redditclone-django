@@ -154,22 +154,27 @@
             </div>
           </div>
           </div>
-          <div class="w-full mt-2 rounded-lg border border-gray-300 bg-white-500 overflow-hidden focus-within:border-blue-500">
+          <div class="w-full mt-2 rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
             <textarea
               id="commentBox"
               placeholder="Add a comment..."
-              class="w-full border-0 p-2 transition-all duration-300 ease-in-out h-10 focus:h-24 resize-none focus:outline-none" 
-              style="padding-right: 40px; background-color: white;"
+              class="w-full p-2 transition-all duration-300 ease-in-out h-10 focus:h-24 resize-none"
+              style="width: 100%; border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"
+              onfocus="showButtons()"
+              onblur="hideButtonsIfEmpty()"
             ></textarea>
           
-            <div class="mt-2 flex justify-end comment-buttons p-3 hidden focus-within:block">
+            <div id="buttonContainer" style="display: none; justify-content: flex-end; padding: 10px; border-top: none; background-color: white;">
               <button
+                style="margin-right: 10px; padding: 5px 10px; border: none; background-color: white; border-radius: 15px;"
                 class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm"
                 onclick="cancelComment()"
               >
                 Cancel
               </button>
+          
               <button
+                style="padding: 5px 10px; border: none; background-color: #1a73e8; color: white; border-radius: 15px;"
                 class="inline-flex items-center px-2 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 text-sm"
                 onclick="submitComment('{{post.id}}')"
               >
@@ -177,12 +182,13 @@
               </button>
             </div>
           </div>
+          
           <!-- comment section wiggy-->
            <div id="comments-{{ post.id }}" >
                 <h3>Comments:</h3>
-                <ul class="comment-list">
-                {% for comment in root_comments %}
-                    <li id = {{comment.id}}>
+                <div class="comment-list">
+                {% for comment in root_comments reversed %}
+                    <div id = {{comment.id}}>
                         <div class="w-[30px] h-[30px] rounded-full">
                             {% if comment.user.avatar%}
                                 {% if comment.user.avatar|startswith:'https' %}
@@ -197,10 +203,10 @@
                         <p>{{comment.content}}</p>
                         <small>{{comment.created_at}}</small>
                         <!-- child comments nigga-->
-                    </li>
+                      </div>
                 {% endfor %}
 
-                </ul>
+                  </div>
                 </div>
               </div>
           </div>
@@ -221,6 +227,24 @@
       postContent.innerHTML = postContent.textContent;
     });
   });
+
+
+  function showButtons() {
+  document.getElementById('buttonContainer').style.display = 'flex';
+}
+
+function hideButtonsIfEmpty() {
+  var textarea = document.getElementById('commentBox');
+  var buttonContainer = document.getElementById('buttonContainer');
+  if (textarea.value.trim() === '') {
+    buttonContainer.style.display = 'none';
+  }
+}
+
+function cancelComment() {
+  document.getElementById('commentTextarea').value = '';
+  hideButtonsIfEmpty();
+}
 
 
  async function vote(button, postId, voteType) {
@@ -315,20 +339,29 @@
       console.log("datas: ", data.created_at)
       
       
-      const newCommentItem = document.createElement("li");
-      newCommentItem.classList.add("comment-item", "mb-2");
 
-      newCommentItem.innerHTML = `
-        <div class="comment">
-          <p>${data.content}</p>
-          <small>${new Date(data.created_at).toLocaleString()}</small>
+      const newCommentItem = document.createElement("div");
+      newCommentItem.setAttribute("id", data.id)
+      
+      newCommentItem.innerHTML = `<div class="w-[30px] h-[30px] rounded-full">
+            {% if comment.user.avatar%}
+                {% if comment.user.avatar|startswith:'https' %}
+                    <img class="w-[30px] h-[30px] rounded-full object-cover" src="{{ comment.user.avatar}}" alt="{{user.username}}">
+                        {% else %}
+                            <img class="w-[30px] h-[30px] rounded-full object-cover" src="{% static comment.user.avatar %}" alt="{{ user.username}}">
+                        {% endif %}
+                  {% else %}
+              <div class="w-full h-full bg-black rounded-full"></div>
+            {% endif %}
         </div>
+        <p>${data.content}</p>
+        <small>${data.created_at}</small>
       `;
 
       console.log("comment item", newCommentItem)
 
       // Append the new comment to the comment list
-      commentsSection.appendChild(newCommentItem);
+      commentsSection.prepend(newCommentItem);
     } else {
       alert("Failed to post comment.");
     }
@@ -336,6 +369,8 @@
     console.error("Error submitting comment:", error);
     alert("There was an error submitting your comment.");
   }
+
+  hideButtonsIfEmpty();
 }
 
 
@@ -349,5 +384,6 @@
     }
   });
 
-  
+document.getElementById('commentBox').addEventListener('focus', showButtons);
+document.getElementById('commentBox').addEventListener('blur', hideButtonsIfEmpty);
 </script>{% endblock %}

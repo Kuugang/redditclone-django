@@ -81,7 +81,9 @@ def comment(request, post_id):
     
     comment_data = serialize('json', [comment])
     comment_json = json.loads(comment_data)[0]['fields']
-    
+    comment_json["id"] = json.loads(comment_data)[0]['pk']
+    print("id ba oten: ", comment_json) 
+    print("comment oten: ", comment_data)
     return JsonResponse(comment_json)
 
 
