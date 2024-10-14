@@ -5,13 +5,13 @@
 <div class="flex flex-row w-full relative top-[10vh]">
     {% include 'components/leftbar.html'%}
 
-    <div class="p-10 w-[85%] relative left-[15%] flex flex-row gap-10">
+    <div class="p-10 w-[85%] relative left-[15%] flex flex-row gap-10 ">
         <div class="w-[75%]">
             {% include 'components/post/posts.html' %}
         </div>
 
         <div class="w-[25%]">
-            <div class="inline-block flex flex-col gap-3 max-w-sm p-6 bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-auto">
+            <div class="inline-block flex flex-col gap-3 max-w-sm p-6 bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 border dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-auto">
                 <div class="flex flex-row justify-between w-full">
                     <h1 class="text-sm font-semibold">RECENT POSTS</h1>
                     <button>Clear</button>
@@ -20,4 +20,7 @@
         </div>
     </div>
 </div>
+
+
 {% endblock %}
+

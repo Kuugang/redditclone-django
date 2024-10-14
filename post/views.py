@@ -1,4 +1,4 @@
-import os
+import os, uuid
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
@@ -94,3 +94,30 @@ def vote(request, post_id, vote_type):
     return JsonResponse(
         {'status': True}
     )
+
+def delete_post(request):
+    post_id = request.POST.get("post_id")
+    post = get_object_or_404(models.Post, id=uuid.UUID(str(post_id)), user = request.user)
+    post.delete()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def save_post(request):
+    post_id = request.POST.get('post_id')
+    post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+    user = request.user
+
+    user_saved_post = models.UserSavedPost(user=user, post=post)
+    user_saved_post.save()
+
+    return JsonResponse({'success': True})
+
+def unsave_post(request):
+    post_id = request.POST.get('post_id')
+    post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+    user = request.user
+
+    user_saved_post = models.UserSavedPost.objects.filter(user=user, post=post)
+    user_saved_post.delete()
+
+    return JsonResponse({'success': True})

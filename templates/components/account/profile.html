@@ -7,45 +7,50 @@
     {% include 'components/leftbar.html'%}
 
     <div class="p-10 w-[85%] relative left-[15%] flex flex-row gap-10">
-        <div class="w-[75%] flex flex-col gap-6">
+        <div class="w-[70%] flex flex-col gap-6">
             <div class="flex flex-col gap-10">
                 <div class="flex flex-row gap-2 items-center">
                     <div class="w-20 h-20 rounded-full border relative">
-                        {% if user.avatar%}
-                            {% if user.avatar|startswith:'https' %}
-                                <img class="w-full h-full rounded-full object-cover" src="{{user.avatar}}" alt="{{user.username}}">
+                        {% if user_profile.avatar%}
+                            {% if user_profile.avatar|startswith:'https' %}
+                                <img class="w-full h-full rounded-full object-cover" src="{{user_profile.avatar}}" alt="{{user_profile.username}}">
                             {% else %}
-                                <img class="w-full h-full rounded-full object-cover" src="{% static user.avatar %}" alt="{{ user.username}}">
+                                <img class="w-full h-full rounded-full object-cover" src="{% static user_profile.avatar %}" alt="{{ user_profile.username}}">
                             {% endif %}
                         {% else %}
+
                         <div class="w-full h-full bg-black rounded-full"></div>
+
                         {% endif %}
-                        <div class="w-8 h-8 flex flex-col items-center justify-center rounded-full border relative bottom-8 left-[65%] bg-button_gray">
-                            <a href="" class="w-8 h-8 rounded-full flex flex-col items-center justify-center">
+                            {% if user == user_profile %}
+                            <a href="{% url 'account:profile_settings'  %}" class="w-8 h-8 flex flex-col items-center justify-center rounded-full border relative bottom-8 left-[65%] bg-button_gray">
                                 <svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z"></path>
                                 </svg>
                             </a>
-                        </div>
+                        {% endif %}
                     </div>
 
                     <div>
-                        <p class="font-bold text-xl">{{user.username}}</p>
-                        <p class="text-md">u/{{user.username}}</p>
+                        <p class="font-bold text-xl">{% if user_profile.display_name %} {{user_profile.display_name}} {%else%} {{user_profile}} {% endif %}</p>
+                        <p class="text-md">u/{{user_profile.username}}</p>
                     </div>
                 </div>
             
                 <div class="flex flex-row gap-4">
-                    <button onclick = "changeUserProfileContentView('overview')" class="px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Overview</button>
-                    <button onclick = "changeUserProfileContentView('posts')"  class="px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Posts</button>
-                    <button onclick = "changeUserProfileContentView('comments')"   class="px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Comments</button>
-                    <button onclick = "changeUserProfileContentView('upvotes')" class="px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Upvoted</button>
-                    <button onclick = "changeUserProfileContentView('downvotes')" class="px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Downvoted</button>
+                    <button onclick = "changeUserProfileContentView(event, 'overview')" class="content-button px-3 py-2 bg-button_gray hover:bg-button_gray_hover rounded-xl font-medium">Overview</button>
+                    <button onclick = "changeUserProfileContentView(event, 'posts')"  class="content-button px-3 py-2 hover:bg-button_gray_hover rounded-xl font-medium">Posts</button>
+                    <button onclick = "changeUserProfileContentView(event, 'comments')"   class="content-button px-3 py-2 hover:bg-button_gray_hover rounded-xl font-medium">Comments</button>
+                    {% if user_profile == user %}
+                        <button onclick = "changeUserProfileContentView(event, 'saved')" class="content-button px-3 py-2 hover:bg-button_gray_hover rounded-xl font-medium">Saved</button>
+                        <button onclick = "changeUserProfileContentView(event, 'upvotes')" class="content-button px-3 py-2 hover:bg-button_gray_hover rounded-xl font-medium">Upvoted</button>
+                        <button onclick = "changeUserProfileContentView(event, 'downvotes')" class="content-button px-3 py-2 hover:bg-button_gray_hover rounded-xl font-medium">Downvoted</button>
+                    {% endif %}
                 </div>
             </div>
 
             <div id = "overview" class = "user_content_container">
-                {% include 'components/post/posts.html' with posts=user_overview %}
+                {% include 'components/account/user_overview.html' with overview=user_overview %}
             </div>
 
             <div id = "posts" class = "user_content_container hidden">
@@ -53,26 +58,125 @@
             </div>
 
             <div id = "comments" class = "user_content_container hidden">
-                {% include 'components/post/posts.html' with posts=user_commented_posts %}
+                {% include 'components/account/user_comments.html' with comments=user_comments %}
             </div>
 
-            <div id = "upvotes" class = "user_content_container hidden">
-                {% include 'components/post/posts.html' with posts=user_upvoted_posts %}
-            </div>
+            {% if user_profile == user %}
+                <div id = "saved" class = "user_content_container hidden">
+                    {% include 'components/post/posts.html' with posts=user_saved_posts %}
+                </div>
+
+                <div id = "upvotes" class = "user_content_container hidden">
+                    {% include 'components/post/posts.html' with posts=user_upvoted_posts %}
+                </div>
             
-            <div id = "downvotes" class = "user_content_container hidden">
-                {% include 'components/post/posts.html' with posts=user_downvoted_posts %}
+                <div id = "downvotes" class = "user_content_container hidden">
+                    {% include 'components/post/posts.html' with posts=user_downvoted_posts %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="w-[30%]">
+            <div class="inline-block flex flex-col max-w-sm bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-auto">
+                <div class="relative">
+                    {% if user_profile.banner %}
+                        {% if user_profile.banner|startswith:'https' %}
+                            <img src="{{ user_profile.banner }}" alt="Profile banner" class='w-[300px] h-[120px] object-contain w-full h-full rounded-lg' />
+                        {% else %}
+                            <img src="{% static user_profile.banner %}" alt="Profile Banner" class='object-contain w-full h-full rounded-lg' />
+                        {% endif %}
+                    {% endif %}
+
+                    {% if user_profile == user %}
+                        <a href="{% url 'account:profile_settings'  %}" class="w-8 h-8 flex flex-col items-center justify-center rounded-full border absolute bottom-2 right-2 bg-button_gray">
+                            <svg rpl="" aria-hidden="true" fill="currentColor" height="16" icon-name="add-media-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.376 3.032h-2.355L13.8 1.446A1.155 1.155 0 0 0 12.892 1h-5.74a1.17 1.17 0 0 0-.923.454L5.014 3.031H2.625A2.629 2.629 0 0 0 0 5.656v9.719A2.63 2.63 0 0 0 2.625 18h14.75A2.63 2.63 0 0 0 20 15.375V5.657a2.627 2.627 0 0 0-2.624-2.625Zm1.374 12.343a1.377 1.377 0 0 1-1.375 1.375H2.625a1.377 1.377 0 0 1-1.375-1.375V5.656a1.377 1.377 0 0 1 1.375-1.375h3L7.152 2.25l5.657-.041 1.6 2.072h2.971a1.375 1.375 0 0 1 1.37 1.376v9.718Zm-8.125-6H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375Z"></path>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="flex flex-col gap-3 p-3">
+                    <p class="font-bold text-md">{% if user_profile.display_name%}{{user_profile.display_name}}{% else %}{{user_profile}}{% endif %}</p>
+
+                    {% if user != user_profile  %}
+                        {% if user_profile.id not in user_following %}
+                        <a href = "{% url 'account:follow' user_profile %}" class="flex flex-row gap-2 px-3 py-1 items-center bg-button_blue hover:bg-button_blue_hover rounded-xl w-min text-white">
+                            <svg rpl="" aria-hidden="true" class="button-leading-icon" fill="currentColor" height="16" icon-name="join-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.625 9.375H14v1.25h-3.375V14h-1.25v-3.375H6v-1.25h3.375V6h1.25v3.375ZM20 10A10 10 0 1 1 10 0a10.011 10.011 0 0 1 10 10Zm-1.25 0A8.75 8.75 0 1 0 10 18.75 8.76 8.76 0 0 0 18.75 10Z"></path>
+                            </svg>
+                            <p>Follow</p>
+                        </a>
+                        {% else %}
+                        <a href = "{% url 'account:unfollow' user_profile %}" class="flex flex-row gap-2 px-3 py-1 items-center bg-white_4 border border-gray_4 hover:border-black rounded-xl w-min text-black">
+                            <svg rpl="" aria-hidden="true" class="button-leading-icon" fill="currentColor" height="16" icon-name="leave-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 10.625H6v-1.25h8v1.25ZM20 10a10 10 0 1 0-10 10 10.011 10.011 0 0 0 10-10Zm-1.25 0A8.75 8.75 0 1 1 10 1.25 8.76 8.76 0 0 1 18.75 10Z"></path>
+                            </svg>
+                            <p>Unfollow</p>
+                        </a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if user_profile.about %}
+                        <p class="font-light text-sm">{{user_profile.about}}</p>
+                    {% endif %}
+
+                    <div class="w-full h-[1px] border-b"></div>
+                    <div class="flex flex-row justify-between px-5">
+                        <div class="flex flex-col gap-1">
+                            <div class="flex flex-col gap-0 items-start">
+                                <p class="text-sm font-semibold">{{user_posts | length}}</p>
+                                <p class="text-xs">Post</p>  
+                            </div>
+                        
+                            <div class="flex flex-col gap-0 items-start">
+                                <p class="text-sm font-semibold">{{user_followers | length}}</p>
+                                <p class="text-xs">Followers</p>  
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <div class="flex flex-col gap-0 items-start">
+                                <p class="text-sm font-semibold">{{user_comments | length}}</p>
+                                <p class="text-xs">Comment</p>  
+                            </div>
+                        
+                            <div class="flex flex-col gap-0 items-start">
+                                <p class="text-sm font-semibold">{{ user.date_joined|date:"M d, Y" }}</p>
+                                <p class="text-xs">Cake Day</p>  
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    function changeUserProfileContentView(content){
+    function changeUserProfileContentView(e, content){
         document.querySelectorAll(".user_content_container").forEach(e => {
             e.classList.add("hidden")
         })
+        document.querySelectorAll(".content-button").forEach(e => {
+            e.classList.remove("bg-button_gray")
+        })
+        e.target.classList.add("bg-button_gray")
+
         document.getElementById(content).classList.remove("hidden")
     }
+
+    let containers = document.querySelectorAll(".post-item");
+    containers.forEach(container => {
+        dropdown_id = uuidv4();
+        button = container.querySelector("button");
+        button.setAttribute("id", `dropdownDefaultButton-${dropdown_id}`);
+        button.setAttribute("data-dropdown-toggle", `dropdown-${dropdown_id}`);
+        dropdown = container.querySelector("div");
+        dropdown.setAttribute("id", `dropdown-${dropdown_id}`);
+        ul = dropdown.querySelector("ul");
+        ul.setAttribute("aria-labelledby", `dropdownDefaultButton-${dropdown_id}`);
+    })
 </script>
 {% endblock %}

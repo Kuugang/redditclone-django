@@ -8,8 +8,13 @@ from django.views.decorators.http import require_http_methods
 
 from common.utils import upload_image, upload_local_image
 
+from redditclone.context_processors import context as context_processor_context
+
 def community(request, community_name):
     community = get_object_or_404(models.Community, name=community_name)
+    if(community.visibility == 'private' and (request.user.is_anonymous or not models.CommunityMember.objects.filter(community=community, user=request.user).exists())):
+        return render(request, 'components/community/private_community.html', {'community_name': community_name})
+
     community_rules = models.CommunityRule.objects.filter(community=community)
     community_topics = models.CommunityTopic.objects.filter(community=community)
     community_events = models.CommunityEvent.objects.filter(community=community)

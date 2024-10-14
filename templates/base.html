@@ -9,8 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+    <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}">
 
 
     {% block quill %}
@@ -39,9 +38,11 @@
                         gray_1: '#3C4244',
                         gray_2: "#2B3336",
                         gray_3: "#ffffff33",
+                        gray_4: "#A2A2A5",
                         white_1: "#F3F3F2",
                         white_2: "#717981",
                         white_3: "#889375",
+                        white_4: "#F7F9F9",
                         button_red: "#C82C00",
                         button_red_hover: "#A61F00",
                         button_gray: "#E5EBEE",
@@ -64,6 +65,11 @@
 <body class="dark:text-white dark:bg-dark_1 transition-colors">
     {% include 'components/navbar.html'%}
     <script>
+        function uuidv4() {
+          return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+          );
+        }
         function validateEmail(email) {
             const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             return emailPattern.test(email);
@@ -224,19 +230,19 @@
                 return "Just now";
             } else if (timeDifference < hour) {
                 const minutes = Math.floor(timeDifference / minute);
-                return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+                return `${minutes} min. ago`;
             } else if (timeDifference < day) {
                 const hours = Math.floor(timeDifference / hour);
-                return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+                return `${hours} hr. ago`;
             } else if (timeDifference < month) {
                 const days = Math.floor(timeDifference / day);
-                return `${days} day${days > 1 ? "s" : ""} ago`;
+                return `${days} day${days > 0 ? 's' : ''} ago`;
             } else if (timeDifference < year) {
                 const months = Math.floor(timeDifference / month);
-                return `${months} month${months > 1 ? "s" : ""} ago`;
+                return `${months} mon. ago`;
             } else {
                 const years = Math.floor(timeDifference / year);
-                return `${years} year${years > 1 ? "s" : ""} ago`;
+                return `${years} yr. ago`;
             }
         };
 
@@ -247,11 +253,21 @@
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const createdAtElements = document.querySelectorAll("[data-created-at]");
+            for (const createdAtElement of createdAtElements) {
+              const createdAt = createdAtElement.getAttribute("data-created-at");
+              createdAtElement.textContent = timeAgo(createdAt);
+            }
+        })
     </script>
+
 
     {% block content %}
     {% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-</body>
 
+
+    <script src="{% static 'js/flowbite.min.js'%}"></script>
+</body>
 </html>

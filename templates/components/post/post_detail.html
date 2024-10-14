@@ -55,10 +55,13 @@
                   class="font-medium text-sm"
                   >r/{{ post.community.name }}</a
                 >
-                <p class="text-xs">{{ post.user.username }}</p>
+                <!-- TODO -->
+                <a href = "{% url 'account:user_profile' post.user.username %}" class="text-xs">{{ post.user.username }}</a>
               </div>
               <p>•</p>
-              <p>{{ post.created_at }}</p>
+
+                <p data-created-at="{{ post.created_at }}">{{ post.created_at }}</p>
+
             </div>
             <h1 class="font-bold text-xl">{{ post.title }}</h1>
           </div>

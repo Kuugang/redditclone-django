@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.db.models import Q
 
 # Decorators
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +20,8 @@ from common.utils import upload_image, upload_local_image
 
 # Models
 from post.models import Post, Comment, Vote
+from community.models import Community
+from . import models
 
 User = get_user_model()
 
@@ -100,8 +103,6 @@ def sign_up(request):
     except IntegrityError:
         return redirect('dashboard')
 
-
-
 @require_http_methods(["GET"])
 def check_availability(request):
     username = request.GET.get('username')
@@ -118,19 +119,76 @@ def dashboard(request):
     posts = Post.objects.all().order_by('-created_at')
     return render(request, 'dashboard.html', {'posts': posts})
 
+
 def profile(request):
-    user_posts = Post.objects.filter(user=request.user)
+    return render(request, 'components/account/profile.html')
 
-    user_comments = Comment.objects.filter(user=request.user)
-    user_upvotes = Vote.objects.filter(user=request.user, vote="upvote")
-    user_downvotes = Vote.objects.filter(user=request.user, vote="downvote")
+def profile_settings(request):
+    return render(request, 'components/account/profile_settings.html')
+
+def edit_display_name(request):
+    display_name = request.POST.get('display_name')
+    request.user.display_name = display_name.strip()
+    request.user.save()
+    return redirect('account:profile_settings')
+
+def edit_about(request):
+    about = request.POST.get('about')
+    request.user.about = about.strip()
+    request.user.save()
+    return redirect('account:profile_settings')
+
+def edit_avatar(request):
+    avatar = request.FILES.get('avatar')
+    if os.getenv("ENV") == "development":
+        avatar_public_URL = upload_local_image(avatar, "userAvatar")
+    else:
+        avatar_public_URL = upload_image(avatar, "userAvatar")
+    request.user.avatar = avatar_public_URL
+    request.user.save()
+    return redirect('account:profile_settings')
+
+def edit_banner(request):
+    banner = request.FILES.get('banner')
+    if os.getenv("ENV") == "development":
+        banner_public_URL = upload_local_image(banner, "userBanner")
+    else:
+        banner_public_URL = upload_image(banner, "userBanner")
+    request.user.banner = banner_public_URL
+    request.user.save()
+    return redirect('account:profile_settings')
+
+def user_profile(request, username):
+    user = User.objects.get(username=username)
+
+    query = """
+        SELECT c.*, cm.role
+        FROM community_community c
+        LEFT JOIN community_communitymember cm ON cm.community_id = c.id
+        WHERE cm.user_id = %s
+        ORDER BY c.name;
+    """
+    user_communities = Community.objects.raw(query, [user.id])
+    if not request.user.is_anonymous:
+        private_communities_user_not_in = set(
+            Community.objects.filter(visibility='private')
+            .exclude(communitymember__user=request.user)
+            .values_list('id', flat=True)
+        )
+    else:
+        private_communities_user_not_in = set(
+            Community.objects.filter(visibility='private').values_list('id', flat=True)
+        )
+
+    user_posts = Post.objects.filter(user=user).order_by('-created_at')
+
+    if request.user != user:
+        user_posts = [post for post in user_posts if post.community_id not in private_communities_user_not_in]
 
 
-    # commented_posts = Post.objects.filter(comments__in=user_comments).distinct()
-
-    # upvoted_posts = Post.objects.filter(votes__in=user_upvotes).distinct()
-
-    # downvoted_posts = Post.objects.filter(votes__in=user_downvotes).distinct()
+    user_comments = Comment.objects.filter(user=user.id).order_by('-created_at')
+    if request.user != user:
+        user_comments = [comment for comment in user_comments if comment.post.community_id not in private_communities_user_not_in]
 
     user_overview = sorted(
         list(user_posts) + list(user_comments),
@@ -138,11 +196,24 @@ def profile(request):
         reverse=True
     )
 
+    userprofile_followers = models.Follower.objects.filter(user=user.id).values_list('follower', flat=True)
+
     context = {
+        'user_profile' : user,
+        'user_posts' : user_posts,
         'user_overview' : user_overview,
-        'user_posts':user_posts,
-        # 'user_comments': commented_posts,
-        # 'user_upvotes': upvoted_posts,
-        # 'user_downvotes': downvoted_posts,
+        'user_comments' : user_comments,
+        'user_followers': userprofile_followers,
     }
     return render(request, 'components/account/profile.html', context)
+
+def follow(request, user):
+    user = User.objects.get(username=user)
+    if not models.Follower.objects.filter(user=user, follower=request.user).exists():
+        models.Follower.objects.create(user=user, follower=request.user)
+    return redirect('account:user_profile', username=user.username)
+
+def unfollow(request, user):
+    user = User.objects.get(username=user)
+    models.Follower.objects.filter(user=user, follower=request.user).delete()
+    return redirect('account:user_profile', username=user.username)
