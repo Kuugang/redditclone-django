@@ -1,6 +1,6 @@
 
 
-<div class="flex flex-col gap-4">
+<div class = "posts-container flex flex-col gap-4">
   {% for post in posts %}
     <div
         onclick="window.location.href=`{% url 'post:post' post.id %}`"
@@ -11,3 +11,12 @@
     </div>
   {% endfor %}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const postContents = document.querySelectorAll(".posts-container")[0].querySelectorAll(".post-content");
+        postContents.forEach((postContent) => {
+            postContent.innerHTML = postContent.textContent;
+        });
+    });
+</script>

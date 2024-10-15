@@ -87,8 +87,6 @@ def comment(request, post_id):
     comment_json["id"] = json.loads(comment_data)[0]['pk']
     comment_json["created_at"] = formatted_date
 
-    print(comment_data)
-    print(comment_json)
     return JsonResponse(comment_json)
 
 
