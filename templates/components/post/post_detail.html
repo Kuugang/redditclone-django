@@ -155,6 +155,34 @@
                                     <p></p>{{comment.content}}</p>
                                 </div>
                                 {% endfor %}
+                                
+                                {% for comment in child_comments reversed %}
+                                <div id={{comment.id}} class="flex flex-col gap-2">
+                                    <div class="flex flex-row gap-2 items-start relative">
+                                        <div class="w-[30px] h-[30px] rounded-full relative ">
+                                            {% if comment.user.avatar%}
+                                            {% if comment.user.avatar|startswith:'https' %}
+                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
+                                                src="{{ comment.user.avatar}}" alt="{{user.username}}">
+                                            {% else %}
+                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
+                                                src="{% static comment.user.avatar %}" alt="{{ user.username}}">
+                                            {% endif %}
+                                            {% else %}
+                                            <div class="w-full h-full bg-black rounded-full"></div>
+                                            {% endif %}
+                                        </div>
+                                        <span class="flex flex-row gap-1 items-start">
+                                            <a href="{% url 'account:user_profile' post.user.username %}"
+                                                class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
+                                            <p class="text-xs">•</p>
+                                            <p data-created-at="{{comment.created_at}}" class="font-semibold text-xs">
+                                                {{comment.created_at}}</p>
+                                        </span>
+                                    </div>
+                                    <p></p>{{comment.content}}</p>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

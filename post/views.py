@@ -12,11 +12,40 @@ from community.models import Community, CommunityTopic, CommunityRule, Community
 from common.utils import upload_image, upload_local_image
 from django.utils.dateformat import format
 
+def get_replies(comment, post):
+        
+    formatted_date = format(comment['created_at'], 'M. j, Y, P')
+    comment_data = serialize('json', [comment])
+    comment_json = json.loads(comment_data)[0]['fields']
+    comment_json["id"] = json.loads(comment_data)[0]['pk']
+    comment_json["created_at"] = formatted_date
+    comment_json["replies"] = []
+
+    replies = models.Comment.objects.filter(post = post, parent = comment).count()
+
+    for reply in replies:
+        formatted_date = format(reply['created_at'], 'M. j, Y, P')
+        reply_data = serialize('json', [reply])
+        reply_json = json.loads(reply_data)[0]['fields']
+        reply_json["id"] = json.loads(reply_data)[0]['pk']
+        reply_json["created_at"] = formatted_date
+
+    return JsonResponse(reply_json)    
+
 def post(request, post_id):
     post = get_object_or_404(models.Post, id=post_id)
     # TODO 
     root_comments = models.Comment.objects.filter(post = post, parent = None)
+
+    for comment in root_comments:
+        if comment != 0:
+
+            return
+
     child_comments = models.Comment.objects.filter(post = post)
+
+
+
   
     return render(request, 'components/post/post_detail.html', {'post': post, 'root_comments' :root_comments, "child_comments" : child_comments})
 
@@ -86,6 +115,7 @@ def comment(request, post_id):
     comment_json = json.loads(comment_data)[0]['fields']
     comment_json["id"] = json.loads(comment_data)[0]['pk']
     comment_json["created_at"] = formatted_date
+
 
     return JsonResponse(comment_json)
 
