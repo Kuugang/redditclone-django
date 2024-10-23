@@ -4,6 +4,11 @@
 {% load utils %}
 <div id="{{ post.id }}">
     <div class="flex flex-row w-full relative top-[10vh]">
+
+
+
+
+
         {% include 'components/leftbar.html'%}
 
         <div class="p-10 w-[85%] relative left-[15%]">
@@ -19,6 +24,8 @@
                                 </path>
                             </svg>
                         </button>
+
+
                     </div>
                     <div class="flex flex-col gap-6 w-full">
                         <div class="flex flex-col gap-3">
@@ -36,7 +43,8 @@
                                     <a href="{% url 'community:community' post.community.name %}"
                                         class="font-medium text-sm">r/{{ post.community.name }}</a>
                                     <!-- TODO -->
-                                    <a href="{% url 'account:user_profile' post.user.username %}" class="text-xs">{{ post.user.username }}</a>
+                                    <a href="{% url 'account:user_profile' post.user.username %}" class="text-xs">{{
+                                        post.user.username }}</a>
                                 </div>
                                 <p>•</p>
 
@@ -70,8 +78,7 @@
                                 <h1 class="vote_count {% if post in user_upvoted_posts or post in user_downvoted_posts%}text-white{%endif%}"
                                     data-voted="{% if post in user_upvoted_posts%}upvote{%elif post in user_downvoted_posts %}downvote{%endif%}">
                                     {{ post|get_vote_counts}}</h1>
-                                <button onclick="event.stopPropagation(); vote(this, '{{post.id}}', 'downvote')" 
-                                {% if not user.is_authenticated %} disabled {% endif %}>
+                                <button onclick="event.stopPropagation(); vote(this, '{{post.id}}', 'downvote')" {% if not user.is_authenticated %} disabled {% endif %}>
 
                                     <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
