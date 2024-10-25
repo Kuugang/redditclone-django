@@ -222,3 +222,12 @@ def community_event_detail(request, community_name, event_id):
     event = models.CommunityEvent.objects.get(id=event_id)
     community_events = models.CommunityEvent.objects.filter(community=event.community)
     return render(request, "components/community/community_event_detail.html", {"event": event, "community_events": community_events})
+
+def delete_community_event(request):
+    event_id = request.POST.get('event_id')
+    community_name = request.POST.get('community_name')
+
+    event = models.CommunityEvent.objects.filter(id=event_id).first()
+    if event:
+        event.delete()
+    return redirect('community:community', community_name=community_name)

@@ -17,7 +17,7 @@
     {% if community_events|length > 0 %}
     {% for event in community_events %}
     <li class="border-b rounded-t dark:border-gray-600 mb-2 italic">
-        <a href = "{% url 'community:community_event_detail' event.community.name event.id %}" class="flex flex-col gap-2 group">
+        <div onclick = "window.location.href = `{% url 'community:community_event_detail' event.community.name event.id %}`" class="flex flex-col gap-2 group">
             <label for="t-{{event.id}}"
                 class="flex flex-row justify-between items-center rounded-lg w-full cursor-pointer">
                 <div class="flex flex-col gap-1">
@@ -38,8 +38,7 @@
                         </button>
                     </div>
 
-                    <button 
-                        onclick="populate_delete_rule_input_values('{{rule.name}}', '{{rule.description}}', '{{rule.id}}')">
+                    <button onclick = "event.stopPropagation(); populate_delete_community_event_input_values('{{event.id}}', '{{event.name}}')" data-modal-target="delete_community_event" data-modal-toggle="delete_community_event" type="button">
                         <svg rpl="" fill="currentColor" height="14" icon-name="delete-outline" viewBox="0 0 20 20"
                             width="14" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -50,7 +49,7 @@
                     {% endif %}
                 </div>
             </label>
-        </a>
+        </div>
     </li>
     {% endfor %}
     {% else %}
