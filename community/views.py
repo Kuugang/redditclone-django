@@ -15,19 +15,11 @@ def community(request, community_name):
     if(community.visibility == 'private' and (request.user.is_anonymous or not models.CommunityMember.objects.filter(community=community, user=request.user).exists())):
         return render(request, 'components/community/private_community.html', {'community_name': community_name})
 
-    community_rules = models.CommunityRule.objects.filter(community=community)
-    community_topics = models.CommunityTopic.objects.filter(community=community)
-    community_events = models.CommunityEvent.objects.filter(community=community)
-
     posts = Post.objects.filter(community=community).order_by('-created_at')
 
     context = {
         'community': community, 
-        'community_rules': community_rules, 
-        'community_topics': community_topics,
-        'topics' : {topic.topic for topic in community_topics},
         'posts': posts,
-        'community_events': community_events
     }
 
     return render(request, 'community.html', context)

@@ -13,22 +13,7 @@
             Tidder
         </a>
     </div>
-    <form class="max-w-md mx-auto w-[40%]">
-        <label for="default-search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M22.5556 21.6453L17.3328 16.4213C19.0013 14.4881 19.8551 11.9832 19.7147 9.43341C19.5742 6.8836 18.4505 4.48761 16.5798 2.74933C14.7091 1.01105 12.2371 0.0659417 9.68389 0.112776C7.13065 0.159609 4.69506 1.19473 2.88934 3.00045C1.08362 4.80617 0.0484949 7.24176 0.00166105 9.795C-0.0451728 12.3482 0.899934 14.8202 2.63821 16.6909C4.3765 18.5616 6.77249 19.6854 9.3223 19.8258C11.8721 19.9662 14.377 19.1124 16.3102 17.4439L21.533 22.6667L22.5556 21.6453ZM1.50377 10.0048C1.50377 8.3454 1.99586 6.72325 2.91781 5.3435C3.83976 3.96376 5.15016 2.8884 6.68329 2.25342C8.21642 1.61844 9.90341 1.45236 11.5309 1.77618C13.1585 2.1 14.6534 2.89918 15.8267 4.07265C17 5.24612 17.799 6.74117 18.1226 8.36874C18.4462 9.9963 18.2799 11.6833 17.6447 13.2163C17.0095 14.7494 15.9339 16.0596 14.5541 16.9814C13.1742 17.9031 11.552 18.395 9.89256 18.3948C7.66836 18.392 5.53606 17.5072 3.96342 15.9343C2.39078 14.3614 1.50622 12.229 1.50377 10.0048Z"
-                        class="fill-black dark:fill-white_1" />
-                </svg>
-            </div>
-            <input
-                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Search" required />
-        </div>
-    </form>
+    {% include 'components/search.html' %}
 
 
     <div class="flex flex-row gap-5 items-center relative">

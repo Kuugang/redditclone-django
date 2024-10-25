@@ -48,6 +48,9 @@ class CommunityTopic(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['community', 'topic'], name='unique_community_topic')
         ]
+    
+    def __str__(self):
+        return self.topic.name
 
 class CommunityRule(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

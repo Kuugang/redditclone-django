@@ -1,30 +1,17 @@
 <div
-    class="inline-block flex flex-col gap-3 max-w-sm p-6 bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-auto">
+    class="inline-block flex flex-col gap-3 w-96 p-6 bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-auto border">
     <div>
         <div class="flex flex-row justify-between">
             <h5
                 class="mb-2 text-md text-txt_color_2 font-bold tracking-tight text-gray-900 dark:text-white">
-                {%if post%}
-                    <div class="flex flex-col gap-2">
-                        <a href="{% url 'community:community' post.community.name %}" class="font-bold text-lg">
-                            r/{{post.community.name}}
-                        </a>
-                        <p>
-                            {{post.community.name}} on Reddit
-                        </p>
-                    </div>
-                {% elif event %}
-                    <a href="{% url 'community:community' event.community.name %}" class="font-bold">
-                        {{event.community.name}} on Reddit
-                    </a>
-                {%else%}
+                <div class="flex flex-col gap-2">
                     <a href="{% url 'community:community' community.name %}" class="font-bold text-lg">
                         r/{{community.name}}
                     </a>
                     <p>
-                        {{community.name}} on Reddit
+                        {{community.name}} on Tidder
                     </p>
-                {%endif%}
+                </div>
             </h5>
 
             {% if user_role == 'moderator' or user_role == 'admin'%}
@@ -40,22 +27,12 @@
             {% endif %}
         </div>
         <p class="mb-3 text-txt_color_3 font-normal text-dark_2 dark:text-white_2">
-            {% if post %}
-                {{post.community.about}}
-            {% elif event %}
-                {{event.community.about}}
-            {% else %}
-                {{community.about}}
-            {% endif %}
+            {{community.about}}
         </p>
     </div>
     {%include 'components/community/community_topics.html'%}
-    {% if not event %}
-        {%include 'components/community/community_rules.html' %}
-    {% endif %}
-
+    {%include 'components/community/community_rules.html' %}
     {%include 'components/community/community_events.html' %}
-
 </div>
 {% if user_role == 'moderator' or user_role == 'admin' %}
 {% include 'components/community/delete_community_event_modal.html' %}

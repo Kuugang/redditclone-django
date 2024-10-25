@@ -33,3 +33,15 @@ def get_vote_counts(post):
 def get_comment_counts(post):
     count = Comment.objects.filter(post=post).count()
     return count
+
+@register.filter
+def get_community_events(community):
+    return community.communityevent_set.all()
+
+@register.filter
+def get_community_rules(community):
+    return community.communityrule_set.all()
+
+@register.filter
+def get_community_topics(community):
+    return community.communitytopic_set.all()

@@ -141,95 +141,11 @@
         setupFileInput(event_image_preview, event_image_preview_container, event_image_file_input, event_image_input_container);
         setupRemoveFilePreview(remove_event_image_preview_btn, event_image_preview, event_image_preview_container, event_image_file_input, event_image_input_container)
 
-        const quill = new Quill('#editor', {
-            modules: {
-                toolbar: '#toolbar-container',
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow',
-        });
-        const Delta = Quill.import('delta');
-        let ongoingUploads = 0;
-
-        quill.on('text-change', function (delta, oldDelta, source) {
-            let uploaded = false;
-
-            delta.ops.forEach(op => {
-                if (op.insert && op.insert.image && !uploaded) {
-                    const imageData = op.insert.image;
-                    const image = document.querySelector(`img[src="${imageData}"]`);
-
-                    const base64Pattern = /^data:image\/(png|jpg|jpeg);base64,/;
-                    if (base64Pattern.test(imageData)) {
-                        image.classList.add("blur-sm")
-                        ongoingUploads++;
-                        const byteString = atob(imageData.split(',')[1]);
-                        const mimeString = imageData.split(',')[0].split(':')[1].split(';')[0];
-                        const ab = new ArrayBuffer(byteString.length);
-                        const ia = new Uint8Array(ab);
-                        for (let i = 0; i < byteString.length; i++) {
-                            ia[i] = byteString.charCodeAt(i);
-                        }
-
-                        const file = new Blob([ab], { type: mimeString });
-
-                        uploadImage(file).then((res) => {
-                            if (res && res.url) {
-                                if (image) {
-                                    console.log(res.url)
-                                    if("{% get_env_var 'ENV' %}" === "development"){
-                                        staticUrlPrefix = "{% static '' %}";
-                                        url = staticUrlPrefix + res.url;
-                                        image.src = url
-                                    } else {
-                                        image.src = res.url;
-                                    }
-                                }
-
-                                image.classList.remove("blur-sm")
-                                uploaded = true;
-                            } else {
-                                console.error('Unexpected response structure:', res);
-                            }
-                        }).catch((error) => {
-                            console.error('Upload failed:', error);
-                        }).finally(() => {
-                            ongoingUploads--;
-                            if (ongoingUploads === 0) {
-                                console.log('All uploads complete');
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
-        async function uploadImage(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await fetch('/post/upload_post_image/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': getCSRFToken()
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Upload failed');
-            }
-
-            const data = await response.json();
-            return data;
-        }
-
         document.getElementById('submit-button').addEventListener('click', function (e) {
             e.preventDefault();
             const editor_content = quill.root.innerHTML
             const description = document.getElementById('hidden_content')
             description.value = editor_content
-            console.log(description)
             document.getElementById('create_event_form').submit()
         });
     })

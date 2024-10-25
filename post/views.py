@@ -142,3 +142,18 @@ def unsave_post(request):
     user_saved_post.delete()
 
     return JsonResponse({'success': True})
+
+def edit_post(request, post_id):
+    if request.method == "GET":
+        post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+        community = Community.objects.get(id=post.community_id)
+        return render(request, 'components/post/edit_post.html', {'post': post, 'community': community})
+    if request.method == "POST":
+        data = dict(request.POST.items())
+        post_id = data.get("post_id")
+        post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+        content = data.get("post_content")
+        post.content = content
+        post.save()
+
+        return redirect('post:post', post_id=post.id)

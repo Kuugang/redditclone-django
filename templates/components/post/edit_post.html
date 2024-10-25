@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load role_lookup %}
+{% load env_extras %}
+{% load utils %}
+
+{% block quill %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" />
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="flex flex-row relative top-[10vh]">
+    {% include 'components/leftbar.html'%}
+    <div class="p-10 relative left-[15%] w-[85%]">
+        <div class="flex flex-row gap-4 items-start">
+            <button onclick="history.back()" type="button"
+                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                <svg rpl="" fill="currentColor" height="16" icon-name="left-outline" viewBox="0 0 20 20" width="16"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="m13.058 19.442-9-9a.624.624 0 0 1 0-.884l9-9 .884.884L5.384 10l8.558 8.558-.884.884Z">
+                    </path>
+                </svg>
+            </button>
+            <div class="flex flex-col gap-4 w-full">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row items-center gap-2 w-full">
+                        <div class="rounded-full w-10 h-10 bg-gray-200">
+                            {% if post.community.avatar|startswith:'https'%}
+                            <img class="w-full h-full rounded-full object-cover" src="{{ post.community.avatar }}"
+                                alt="Community avatar" />
+                            {% else %}
+                            <img class="w-full h-full rounded-full object-cover"
+                                src="{% static post.community.avatar %}" alt="Community avatar" />
+                            {% endif %}
+                        </div>
+                        <div class="flex flex-col items-start justify-end gap-0 leading-none">
+                            <a href="{% url 'community:community' post.community.name %}"
+                                class="font-medium text-sm">r/{{ post.community.name }}</a>
+                            <a href="{% url 'account:user_profile' post.user.username %}" class="text-xs">{{post.user}}</a>
+                        </div>
+                        <p>•</p>
+                        <p data-created-at="{{ post.created_at }}">{{ post.created_at }}</p>
+                    </div>
+                    <h1 class="font-bold text-xl">{{ post.title }}</h1>
+                </div>
+                <div class="flex flex-row justify-between">
+                    <form id = "form_edit_post" method = "POST" action="{% url 'post:edit_post' post.id %}" class="hidden">
+                        {% csrf_token %}
+                        <input name = "post_id" type="text" value="{{post.id}}" >
+                        <input name = "post_content" type="text">
+                    </form>
+
+                    <div class="max-w-2xl flex flex-col gap-2">
+                        <div>
+                            {% include 'components/editor.html' %}
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button id="submit_button" type="submit"
+                                class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
+                        </div>
+                    </div>
+
+                    {% if community %}
+                    {% include 'components/community/community_right_bar.html' with community=community %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById('submit_button').addEventListener('click', function (e) {
+            e.preventDefault();
+            const post_content = quill.root.innerHTML
+            const form_edit_post = document.getElementById('form_edit_post')
+            form_edit_post.elements['post_content'].value = post_content
+            form_edit_post.submit()
+        });
+    })
+</script>
+{% endblock %}

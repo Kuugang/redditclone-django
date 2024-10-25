@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.db.models import Q
+from django.core.serializers import serialize
+import json
 
 # Decorators
 from django.views.decorators.csrf import csrf_exempt
@@ -22,6 +24,8 @@ from common.utils import upload_image, upload_local_image
 from post.models import Post, Comment, Vote
 from community.models import Community
 from . import models
+
+
 
 User = get_user_model()
 
@@ -217,3 +221,55 @@ def unfollow(request, user):
     user = User.objects.get(username=user)
     models.Follower.objects.filter(user=user, follower=request.user).delete()
     return redirect('account:user_profile', username=user.username)
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def search(request):
+    try:
+        data = json.loads(request.body)
+        query = data.get('search', '')
+        
+        users = User.objects.filter(Q(username__icontains=query) | Q(display_name__icontains=query))
+        communities = Community.objects.filter(name__icontains=query)
+        posts = Post.objects.filter(title__icontains=query)
+
+        user_data = serialize('json', users)
+        community_data = serialize('json', communities)
+        post_data = serialize('json', posts)
+
+        user_data = json.loads(user_data)
+        community_data = json.loads(community_data)
+        post_data = json.loads(post_data)
+
+        response_data = {
+            'users': [
+            {
+                'username': user['fields']['username'],
+                'display_name': user['fields']['display_name'],
+                'avatar': user['fields']['avatar'],
+                'banner': user['fields']['banner'],
+                'about': user['fields']['about']
+            }
+            for user in user_data
+            ],
+            'communities': [
+            {
+                'name': community['fields']['name'],
+                'about': community['fields']['about'],
+                'visibility': community['fields']['visibility']
+            }
+            for community in community_data
+            ],
+            'posts': [
+            {
+                'title': post['fields']['title'],
+                'content': post['fields']['content'],
+                'created_at': post['fields']['created_at']
+            }
+            for post in post_data
+            ]
+        }
+
+        return JsonResponse(response_data, safe=False)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
