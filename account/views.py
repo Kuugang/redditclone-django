@@ -255,6 +255,7 @@ def search(request):
             'communities': [
             {
                 'name': community['fields']['name'],
+                'avatar': community['fields']['avatar'],
                 'about': community['fields']['about'],
                 'visibility': community['fields']['visibility']
             }
@@ -262,6 +263,7 @@ def search(request):
             ],
             'posts': [
             {
+                'id' : post['pk'],
                 'title': post['fields']['title'],
                 'content': post['fields']['content'],
                 'created_at': post['fields']['created_at']

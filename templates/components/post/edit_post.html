@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load role_lookup %}
 {% load env_extras %}
 {% load utils %}
 
@@ -71,13 +70,13 @@
                     {% include 'components/community/community_right_bar.html' with community=community %}
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        quill.root.innerHTML = `{{ post.content|safe }}`;
         document.getElementById('submit_button').addEventListener('click', function (e) {
             e.preventDefault();
             const post_content = quill.root.innerHTML

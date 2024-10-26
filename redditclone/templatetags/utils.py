@@ -45,3 +45,10 @@ def get_community_rules(community):
 @register.filter
 def get_community_topics(community):
     return community.communitytopic_set.all()
+
+@register.filter
+def get_community_role(user_communities, community_id):
+    for community in user_communities:
+        if community.id == community_id:
+            return community.role
+    return None

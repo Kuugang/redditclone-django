@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load role_lookup %}
 {% load env_extras %}
 {% load utils %}
 
@@ -28,7 +27,7 @@
                 </svg>
             </button>
             <div class = "flex flex-row justify-between w-full">
-                <form id = "create_event_form" method="POST" action="{% url 'community:create_event' community.name %}" class="w-[50%] flex flex-col gap-3 relative" enctype="multipart/form-data">
+                <form id = "create_event_form" method="POST" action="{% url 'community:event' community.name %}" class="w-[50%] flex flex-col gap-3 relative" enctype="multipart/form-data">
                     {% csrf_token %}
                     <h1 class="font-bold text-2xl">Create Event</h1>
                     <input type="hidden" name = "community_id" value = "{{community.id}}">
@@ -121,11 +120,9 @@
                     </div>
                 </form>
 
-                {% if community %}
                 <div class="w-[30%]">
-                    {% include 'components/community/community_right_bar.html'%}
+                    {% include 'components/community/community_right_bar.html' with community=community user_role=user_communities|get_community_role:community.id%}
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>

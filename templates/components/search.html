@@ -1,7 +1,7 @@
 <div class="max-w-md mx-auto w-[40%]">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-    <div class="relative border border-red-500">
-        <div class="relative flex flex-row gap-2">
+    <div class="relative text-dark_1 dark:text-white_1">
+        <div class="relative flex flex-row gap-2 z-20">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -10,22 +10,85 @@
                 </svg>
             </div>
 
-            <input id = "default-search" 
-                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            <input id="default-search"
+                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl  bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white_1"
                 placeholder="Search" required />
         </div>
 
-        <div id = "result_container" class="absolute border border-red-500 w-full">
-            <div id = "users"></div>
-            <div id = "communities"></div>
-            <div id = "posts"></div>
+        <div id="result_container"
+            class="absolute z-10 w-full bg-button_gray dark:bg-dark_4 dark:border-gray-600 rounded-b-2xl overflow-y-auto h-max max-h-[300px] hidden">
+            <div class="container hidden p-2">
+                <h1 class="font-bold">Users</h1>
+                <div id="search_users" class="flex flex-col gap-2"></div>
+            </div>
+
+            <div class="container hidden p-2">
+                <h1 class="font-bold">Communities</h1>
+                <div id="search_communities" class="flex flex-col gap-2"></div>
+            </div>
+
+            <div class="container hidden p-2">
+                <h1 class="font-bold">Posts</div>
+                <div id="search_posts" class="flex flex-col gap-2"></div>
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('default-search').addEventListener('input', async function(e){
-        setTimeout(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+        let search = false;
+        let timer = 1000;
+        let cooldown = 1000
+        let input_search = document.getElementById('default-search')
+        let result_container = document.getElementById('result_container')
+
+        let search_users_container = document.getElementById('search_users')
+        let search_communities_container = document.getElementById('search_communities')
+        let search_posts_container = document.getElementById('search_posts')
+
+        input_search.addEventListener('input', async function (e) {
+            search = true
+            timer = cooldown;
+
+            if (e.target.value.trim() == '') {
+                search = false
+                result_container.querySelectorAll('.container').forEach(container => {
+                    container.classList.add('hidden')
+                })
+            }
+        })
+
+        input_search.addEventListener('focusout', () => {
+            setTimeout(() => {
+                search = false
+                result_container.classList.add('hidden')
+                input_search.classList.remove('rounded-b-none')
+            }, 1000);
+        })
+
+        input_search.addEventListener('focusin', (e) => {
+            if (search_users_container.innerHTML.trim() || search_communities_container.innerHTML.trim() || search_posts_container.innerHTML.trim()) {
+                result_container.classList.remove('hidden')
+                input_search.classList.add('rounded-b-none')
+            }
+
+            if(input_search.value.trim() != '') {
+                getResults();
+            }
+        })
+
+        setInterval(() => {
+            if (search)
+                timer -= 1000
+            if (timer == 0 && search)
+                getResults();
+        }, 1000);
+
+
+        function getResults() {
+
             fetch('http://localhost:8000/account/search/', {
                 method: 'POST',
                 headers: {
@@ -33,45 +96,68 @@
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
                 body: JSON.stringify({
-                    'search': e.target.value
+                    'search': input_search.value
                 })
             })
-            .then(async response => {
-                response = await response.json()
-                
-                let users = response.users
-                let communities = response.communities
-                let posts = response.posts
-                let result_container = document.getElementById('result_container')
-                let users_container = document.getElementById('users')
-                let communities_container = document.getElementById('communities')
-                let posts_container = document.getElementById('posts')
+                .then(async response => {
+                    search = false;
+                    response = await response.json()
+                    let users = response.users
+                    let communities = response.communities
+                    let posts = response.posts
 
-                users_container.innerHTML = users.map(user => {
-                    return `
-                        <div class = 'flex flex-row gap-2'>
-                            <img src="${user.avatar.startsWith('http') ? user.avatar : '/static/' + user.avatar}" class="w-8 h-8 rounded-full" />
-                            <p class="text-xs text-dark_1">${user.username}</p>
-                         </div>
-                    `
+                    if (users.length ^ communities.length ^ search_posts.length != 0) {
+                        result_container.classList.remove('hidden')
+                        input_search.classList.add('rounded-b-none')
+                    }
+
+                    search_users_container.innerHTML = ''
+                    if (users.length > 0) {
+                        search_users_container.innerHTML += users.map(user => {
+                            return `
+                                <a href = "/account/profile/${user.username}" class='flex items-center gap-2 hover:bg-button_gray_hover py-2 dark:hover:bg-gray_2'>
+                                    ${user.avatar ? `<img src="${user.avatar.startsWith('http') ? user.avatar : '/static/' + user.avatar}" class="w-6 h-6 rounded-full">` : '<svg class = "w-6 h-6 rounded-full border border-black" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M30.8291 27.064C37.0423 27.064 42.0791 22.0272 42.0791 15.814C42.0791 9.60078 37.0423 4.56396 30.8291 4.56396C24.6159 4.56396 19.5791 9.60078 19.5791 15.814C19.5791 22.0272 24.6159 27.064 30.8291 27.064Z" fill="black"/><path d="M53.3291 45.814C53.3291 39.6006 48.2925 34.564 42.0791 34.564H19.5791C13.3659 34.564 8.3291 39.6006 8.3291 45.814V57.064H53.3291V45.814Z" fill="black"/></svg>'
+                                }
+                                     <p class="font-semibold text-xs">${user.username}</p>
+                                </a>
+                               `
+                        }).join('')
+                        result_container.querySelectorAll('.container')[0].classList.remove('hidden')
+                    } else {
+                        result_container.querySelectorAll('.container')[0].classList.add('hidden')
+                    }
+
+                    search_communities_container.innerHTML = ''
+                    if (communities.length > 0) {
+                        search_communities_container.innerHTML += communities.map(community => {
+                            return `
+                                <a href = "/community/${community.name}" class='flex items-center gap-2 hover:bg-button_gray_hover py-2 dark:hover:bg-gray_2'>
+                                    ${community.avatar ? `<img src="${community.avatar.startsWith('http') ? community.avatar : '/static/' + community.avatar}" class="w-6 h-6 rounded-full">` : '<svg class = "w-6 h-6 rounded-full border border-black" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M30.8291 27.064C37.0423 27.064 42.0791 22.0272 42.0791 15.814C42.0791 9.60078 37.0423 4.56396 30.8291 4.56396C24.6159 4.56396 19.5791 9.60078 19.5791 15.814C19.5791 22.0272 24.6159 27.064 30.8291 27.064Z" fill="black"/><path d="M53.3291 45.814C53.3291 39.6006 48.2925 34.564 42.0791 34.564H19.5791C13.3659 34.564 8.3291 39.6006 8.3291 45.814V57.064H53.3291V45.814Z" fill="black"/></svg>'
+                                }
+                                     <p class="font-semibold text-xs">${community.name}</p>
+                                </a>
+                               `
+                        }).join('')
+                        result_container.querySelectorAll('.container')[1].classList.remove('hidden')
+                    } else {
+                        result_container.querySelectorAll('.container')[1].classList.add('hidden')
+                    }
+
+                    search_posts_container.innerHTML = ''
+                    if (search_posts.length > 0) {
+                        search_posts_container.innerHTML += posts.map(post => {
+                            return `
+                                <a href = "/post/${post.id}" class='flex items-center gap-2 hover:bg-button_gray_hover py-2 dark:hover:bg-gray_2'>
+                                    <p class="font-semibold text-xs">${post.title}</p>
+                                </a>
+                               `
+                        }).join('')
+                        result_container.querySelectorAll('.container')[2].classList.remove('hidden')
+                    } else {
+                        result_container.querySelectorAll('.container')[2].classList.add('hidden')
+                    }
+
                 })
-                communities_container.innerHTML = communities.map(community => {
-                    return `
-                        <div class="flex flex-row gap-2 items-center">
-                            <img src="${community.profile_picture}" class="w-8 h-8 rounded-full" />
-                            <p class="text-xs text-dark_1">${community.name}</p>
-                        </div>
-                    `
-                })
-                posts_container.innerHTML = posts.map(post => {
-                    return `
-                        <div class="flex flex-row gap-2 items-center">
-                            <img src="${post.profile_picture}" class="w-8 h-8 rounded-full" />
-                            <p class="text-xs text-dark_1">${post.title}</p>
-                        </div>
-                    `
-                })
-            })
-        }, 1000)
+        }
     })
 </script>

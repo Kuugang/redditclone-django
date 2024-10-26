@@ -256,6 +256,17 @@
             document.getElementById(modalId).classList.add('hidden');
         }
 
+        function populate_values(elements, values) {
+            for (let i = 0; i < elements.length; i++) {
+                const element = document.getElementById(elements[i])
+                if(element.tagName === 'INPUT') {
+                    element.value = values[i];
+                } else {
+                    element.textContent = values[i];
+                }
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const createdAtElements = document.querySelectorAll("[data-created-at]");
             for (const createdAtElement of createdAtElements) {
@@ -264,7 +275,6 @@
             }
         })
     </script>
-
 
     {% block content %}
     {% endblock %}

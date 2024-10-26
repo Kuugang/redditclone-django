@@ -171,9 +171,68 @@ def check_community_name_availability(request):
     }
     return JsonResponse(response_data)
 
-def create_event(request, community_name):
+# FUCK THIS I HATE WEBDEV!
+def event(request, community_name):
+    if request.method == "GET":
+        event_id = request.GET.get('event_id')
+        if not event_id:
+            context = {}
+            if community_name:
+                community = get_object_or_404(models.Community, name=community_name)
+                community_rules = models.CommunityRule.objects.filter(community=community)
+                community_topics = models.CommunityTopic.objects.filter(community=community)
+                context['community'] = community
+                context['community_rules'] = community_rules
+                context['community_topics'] = community_topics
+                context['submit'] = True
+            return render(request, 'components/community/create_community_event.html', context)
+        edit = request.GET.get('edit')
+        
+        if edit == 'true':
+            event = models.CommunityEvent.objects.get(id=event_id)
+            event.start_time = event.start_time.strftime('%H:%M')
+            event.end_time = event.end_time.strftime('%H:%M')
+            return render(request, "components/community/edit_community_event.html", {"event": event})
+
+        event = models.CommunityEvent.objects.get(id=event_id)
+        return render(request, "components/community/community_event_detail.html", {"event": event})
+
     if request.method == "POST":
         data = dict(request.POST.items())
+        method = data.get('_method')
+
+        if method == "DELETE":
+            event_id = request.POST.get('event_id')
+
+            event = models.CommunityEvent.objects.filter(id=event_id).first()
+            if event:
+                event.delete()
+            return redirect('community:community', community_name=community_name)
+
+        # THIS EDIT IS NOT OPTIMAL, SHOULD ONLY UPDATE THE FIELDS THAT ARE CHANGED 
+        if method == "PUT":
+            data = dict(request.POST.items())
+            event_id = data.get('event_id')
+            event = models.CommunityEvent.objects.get(id=event_id)
+            if request.FILES.get('event_image'):
+                event_image_url = ""
+                if os.getenv("ENV") == "development":
+                    event_image_url = upload_local_image(request.FILES.get('event_image'), "eventImage")
+                else:
+                    event_image_url = upload_image(request.FILES.get("event_image"), "eventImage")
+                event.image = event_image_url
+            event.name = data.get('name')
+            event.description = data.get('description')
+            event.location = data.get('location')
+
+            event.start_date = datetime.strptime(data.get('event_start_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+            event.end_date = datetime.strptime(data.get('event_end_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+
+            event.start_time = data.get('event_start_time')
+            event.end_time = data.get('event_end_time')
+            event.save()
+            return redirect(f'/community/{community_name}/event?event_id={event.id}')
+
         community = models.Community.objects.get(id=uuid.UUID(data.get('community_id')))
         name = data.get("name")
         host = request.user
@@ -197,29 +256,9 @@ def create_event(request, community_name):
         event.save()
 
         return redirect('community:community', community_name=community.name)
-    else:
-        context = {}
-        if community_name:
-            community = get_object_or_404(models.Community, name=community_name)
-            community_rules = models.CommunityRule.objects.filter(community=community)
-            community_topics = models.CommunityTopic.objects.filter(community=community)
-            context['community'] = community
-            context['community_rules'] = community_rules
-            context['community_topics'] = community_topics
-            context['submit'] = True
-
-        return render(request, 'components/community/create_event.html', context)
+    
 
 def community_event_detail(request, community_name, event_id):
     event = models.CommunityEvent.objects.get(id=event_id)
     community_events = models.CommunityEvent.objects.filter(community=event.community)
     return render(request, "components/community/community_event_detail.html", {"event": event, "community_events": community_events})
-
-def delete_community_event(request):
-    event_id = request.POST.get('event_id')
-    community_name = request.POST.get('community_name')
-
-    event = models.CommunityEvent.objects.filter(id=event_id).first()
-    if event:
-        event.delete()
-    return redirect('community:community', community_name=community_name)

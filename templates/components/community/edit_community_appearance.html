@@ -273,7 +273,7 @@
             avatar_input.value = ""
         } else {
             banner = null
-            community_banner.src = "{{community.banner}}"
+            community_banner.src = "{{community.banner}}".startsWith('https') ? "{{community.banner}}" : "/static/" + "{{community.banner}}"
             banner_is_edited.textContent = ""
             banner_input.value = ""
         }
