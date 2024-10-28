@@ -11,7 +11,7 @@
             </div>
 
             <input id="default-search"
-                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl  bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white_1"
+                class="border border-gray-900 block w-full p-2 ps-8 text-xs text-dark_1 rounded-2xl  bg-button_gray hover:bg-button_gray_hover dark:bg-dark_4 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white_1 pl-8"
                 placeholder="Search" required />
         </div>
 
@@ -28,11 +28,11 @@
             </div>
 
             <div class="container hidden p-2">
-                <h1 class="font-bold">Posts</div>
-                <div id="search_posts" class="flex flex-col gap-2"></div>
+                <h1 class="font-bold">Posts
             </div>
-
+            <div id="search_posts" class="flex flex-col gap-2"></div>
         </div>
+
     </div>
 </div>
 
@@ -74,7 +74,7 @@
                 input_search.classList.add('rounded-b-none')
             }
 
-            if(input_search.value.trim() != '') {
+            if (input_search.value.trim() != '') {
                 getResults();
             }
         })
@@ -143,8 +143,7 @@
                         result_container.querySelectorAll('.container')[1].classList.add('hidden')
                     }
 
-                    search_posts_container.innerHTML = ''
-                    if (search_posts.length > 0) {
+                    if (posts.length > 0) {
                         search_posts_container.innerHTML += posts.map(post => {
                             return `
                                 <a href = "/post/${post.id}" class='flex items-center gap-2 hover:bg-button_gray_hover py-2 dark:hover:bg-gray_2'>
