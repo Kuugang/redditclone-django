@@ -1,4 +1,5 @@
 {% load topics %}
+{% load utils %}
 <div id="edit_community_topics" aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -23,6 +24,8 @@
                 </button>
             </div>
             <!-- Modal body -->
+            {% with community_topics=community|get_topics %}
+            {{community_topics}} 
             <div class="p-4 md:p-5 space-y-4">
                 <div class="flex flex-wrap max-h-[300px] overflow-auto">
                     <input name="community_id" type="hidden" value="{{ community.id }}">
@@ -30,12 +33,11 @@
                     {% for topic in all_topics %}
                     <div class="flex items-center mr-4 mb-2">
                         <input type="checkbox" id="t-{{ topic.id }}" name="topics" value="{{ topic.id }}"
-                            class="peer hidden edit_topic_checkbox" 
-                            {% if topic in topics %} checked {% endif %} />
+                            class="peer edit_topic_checkbox hidden"
+                            {% if topic.name in community_topics %} checked {% endif %} />
                         <label for="t-{{ topic.id }}"
                             class="bg-button_gray dark:text-dark_1 rounded-xl ml-2 px-2 py-1 peer-checked:bg-blue-500 transition-colors cursor-pointer border-xl">
-                            {{ topic.name }}
-                        </label>
+                            {{ topic.name }}</label>
                     </div>
                     {% endfor %}
                 </div>
@@ -48,6 +50,7 @@
                         class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
                 </div>
             </div>
+            {% endwith %}
         </form>
     </div>
 </div>

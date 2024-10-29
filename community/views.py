@@ -1,14 +1,17 @@
-import uuid, os
+import os
+import uuid
 from datetime import datetime
-from . import models
-from post.models import Post
-from django.shortcuts import render, redirect, get_object_or_404
+
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
 from common.utils import upload_image, upload_local_image
-
+from post.models import Post
 from redditclone.context_processors import context as context_processor_context
+
+from . import models
+
 
 def community(request, community_name):
     community = get_object_or_404(models.Community, name=community_name)

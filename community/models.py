@@ -1,6 +1,9 @@
-import uuid 
+import uuid
+
 from django.db import models
+
 from account.models import User
+
 
 # Create your models here.
 class Topic(models.Model):
