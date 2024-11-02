@@ -1,6 +1,6 @@
 {% load static %} {% load utils %}
 <nav
-  class="text-md fixed left-0 top-0 z-20 flex h-[10vh] w-full flex-row items-center justify-between border-b bg-white_1 p-3 px-6 shadow-md dark:border-gray_1 dark:bg-dark_3"
+  class="text-md bg-white_1 dark:bg-dark_3 dark:border-gray_1 fixed left-0 top-0 z-20 flex h-[10vh] w-full flex-row items-center justify-between border-b p-3 px-6 shadow-md"
 >
   <div class="flex flex-row items-center gap-2">
     <a
@@ -95,7 +95,7 @@
 
     <div
       id="drop_down_profile"
-      class="z-10 hidden w-56 rounded-md bg-white shadow dark:bg-dark_6"
+      class="dark:bg-dark_6 z-10 hidden w-56 rounded-md bg-white shadow"
     >
       <ul
         class="divide-y divide-gray-400 px-3 pt-3 text-sm text-gray-700 dark:text-gray-200"
@@ -200,7 +200,7 @@
     <button
       data-modal-target="sign_in_modal"
       data-modal-toggle="sign_in_modal"
-      class="font-md w-full rounded-2xl bg-button_red px-3 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:bg-button_red_hover hover:text-white"
+      class="font-md bg-button_red hover:bg-button_red_hover w-full rounded-2xl px-3 py-2 text-sm font-medium text-white transition-all duration-300 ease-in-out hover:text-white"
       type="button"
     >
       Log in
@@ -210,10 +210,9 @@
   </div>
 </nav>
 
-{% if not request.user.is_authenticated %} 
-{%include 'components/account/sign_in.html'%} 
-{%include 'components/account/sign_up.html'%} 
-{% endif %}
+{% if not request.user.is_authenticated %} {%include
+'components/account/sign_in.html'%} {%include
+'components/account/sign_up.html'%} {% endif %}
 
 <script>
   function toggleProfileOptions() {
