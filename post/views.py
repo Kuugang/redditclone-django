@@ -7,47 +7,28 @@ import json
 from django.core.serializers import serialize
 from . import models
 from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
+from django.core.exceptions import ValidationError
+
 
 # Utils
 from common.utils import upload_image, upload_local_image
 from django.utils.dateformat import format
 
-def get_replies(comment, post):
-        
-    formatted_date = format(comment['created_at'], 'M. j, Y, P')
-    comment_data = serialize('json', [comment])
-    comment_json = json.loads(comment_data)[0]['fields']
-    comment_json["id"] = json.loads(comment_data)[0]['pk']
-    comment_json["created_at"] = formatted_date
-    comment_json["replies"] = []
-
-    replies = models.Comment.objects.filter(post = post, parent = comment).count()
-
-    for reply in replies:
-        formatted_date = format(reply['created_at'], 'M. j, Y, P')
-        reply_data = serialize('json', [reply])
-        reply_json = json.loads(reply_data)[0]['fields']
-        reply_json["id"] = json.loads(reply_data)[0]['pk']
-        reply_json["created_at"] = formatted_date
-
-    return JsonResponse(reply_json)    
+ 
 
 def post(request, post_id):
-    post = get_object_or_404(models.Post, id=post_id)
-    # TODO 
-    root_comments = models.Comment.objects.filter(post = post, parent = None)
+    post_instance = get_object_or_404(models.Post, id=post_id)
+    root_comments = models.Comment.objects.filter(post=post_instance, parent=None)
+    child_comments = models.Comment.objects.filter(post=post_instance).exclude(parent=None)
+    
+    # If you want to do something with root_comments or log something, do it here
 
-    for comment in root_comments:
-        if comment != 0:
+    return render(request, 'components/post/post_detail.html', {
+        'post': post_instance,
+        'root_comments': root_comments,
+        'child_comments': child_comments
+    })
 
-            return
-
-    child_comments = models.Comment.objects.filter(post = post)
-
-
-
-  
-    return render(request, 'components/post/post_detail.html', {'post': post, 'root_comments' :root_comments, "child_comments" : child_comments})
 
 def submit(request, community_name=None):
     context = {}
@@ -119,15 +100,56 @@ def comment(request, post_id):
 
     return JsonResponse(comment_json)
 
+def delete_comment(request):
+    comment_id = request.POST.get("comment_id")
+    comment = get_object_or_404(models.Comment, id=uuid.UUID(str(comment_id)), user = request.user)
+    comment.delete()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+
+def reply_to_comment(request, comment_id):
+    if not request.headers.get('X-CSRFToken'):
+        return JsonResponse({'error': 'CSRF token missing'}, status=403)
+
+    data = json.loads(request.body)
+    content = data.get('content', '').strip()
+
+    if not content:
+        return JsonResponse({'error': 'Content is required'}, status=400)
+
+    parent_comment = models.Comment.objects.select_related('post', 'user').get(id=comment_id)
+
+    reply = models.Comment.objects.create(
+        content=content,
+        post=parent_comment.post,
+        parent=parent_comment,
+        user=request.user
+    )
+
+    formatted_date = format(reply.created_at, 'M. j, Y, P')
+
+    avatar = None
+    if hasattr(reply.user, 'avatar'):
+        
+        if isinstance(reply.user.avatar, str):
+            avatar = reply.user.avatar  
+        elif hasattr(reply.user.avatar, 'url'):
+            avatar = reply.user.avatar.url  
+    reply_json = {
+        'id': str(reply.id),
+        'content': reply.content,
+        'created_at': formatted_date,
+        'user': {
+            'username': reply.user.username,
+            'avatar': avatar,
+        },
+        'parent_id': str(parent_comment.id)
+    }
+
+    return JsonResponse(reply_json)
 
 
-def reply_to_comment(request, post_id, comment):
-    comment = models.Comment.objects.filter(user=request.user, comment=models.Comment.get(id=post_id))
-    print("comment: ", comment)
-    response_data = serializers.serialize('json', [comment])
-
-    return JsonResponse({'vote': response_data})
-
+   
 def vote(request, post_id, vote_type):
     vote = models.Vote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
 
