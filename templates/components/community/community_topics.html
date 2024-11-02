@@ -1,6 +1,7 @@
+{% load utils %}
 <div class="flex flex-row gap-1 relative">
-    {% for topic in topics %}
-    <p class="inline-block px-2 py-1 bg-blue-500 text-xs rounded-md">{{topic.name}}</p>
+    {% for topic in community|get_community_topics %}
+        <p class="inline-block px-2 py-1 bg-blue-500 text-xs rounded-md">{{topic}}</p>
     {% endfor %}
 
     <div class="absolute bottom-[68%] right-[0%]">

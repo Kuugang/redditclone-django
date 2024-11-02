@@ -1,10 +1,10 @@
+{% load utils %}
 <div class="w-full h-[1px] border-t "></div>
 
 <div class="flex flex-row gap-1 items-center font-medium">
     <h1 class="text-txt_color_3 dark:text-white_2 text-md">UPCOMING EVENTS</h1>
     {% if user_role == 'moderator' or user_role == 'admin' %}
-
-    <a href = "{% url 'community:create_event' community.name %}" class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_2 rounded-full p-2'>
+    <a href = "{% url 'community:event' community.name %}" class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_2 rounded-full p-2'>
 
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
@@ -14,10 +14,11 @@
 </div>
 
 <ol class="pl-2">
-    {% if community_events|length > 0 %}
-    {% for event in community_events %}
+    {% with events=community|get_community_events %}
+    {% if events|length > 0 %}
+    {% for event in events %}
     <li class="border-b rounded-t dark:border-gray-600 mb-2 italic">
-        <div onclick = "window.location.href = `{% url 'community:community_event_detail' event.community.name event.id %}`" class="flex flex-col gap-2 group">
+        <div onclick="window.location.href = `{% url 'community:event' event.community.name %}?event_id={{ event.id }}`" class="flex flex-col gap-2 group">
             <label for="t-{{event.id}}"
                 class="flex flex-row justify-between items-center rounded-lg w-full cursor-pointer">
                 <div class="flex flex-col gap-1">
@@ -27,7 +28,7 @@
                 <div class="flex flex-row gap-1 items-center">
                     {% if user_role == 'moderator' or user_role == 'admin' %}
                     <div>
-                        <button data-modal-target="edit_community_rule" data-modal-toggle="edit_community_rule"
+                        <button onclick = "event.stopPropagation()" data-modal-target="edit_community_rule" data-modal-toggle="edit_community_rule"
                             onclick="populate_edit_input_values('{{rule.name}}', '{{rule.description}}', '{{rule.id}}')">
                             <svg rpl="" fill="currentColor" height="14" icon-name="edit-outline" viewBox="0 0 20 20"
                                 width="14" xmlns="http://www.w3.org/2000/svg">
@@ -37,8 +38,7 @@
                             </svg>
                         </button>
                     </div>
-
-                    <button onclick = "event.stopPropagation(); populate_delete_community_event_input_values('{{event.id}}', '{{event.name}}')" data-modal-target="delete_community_event" data-modal-toggle="delete_community_event" type="button">
+                    <button onclick="event.stopPropagation(); populate_values(['input_event_id', 'txt_event_name'], ['{{event.id}}', '{{event.name}}'])" data-modal-target="delete_community_event" data-modal-toggle="delete_community_event" type="button">
                         <svg rpl="" fill="currentColor" height="14" icon-name="delete-outline" viewBox="0 0 20 20"
                             width="14" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -54,16 +54,9 @@
     {% endfor %}
     {% else %}
     <div class="flex flex-col items-center justify-center">
-        <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <rect width="100" height="100" fill="url(#pattern0_394_5762)"/>
-            <defs>
-            <pattern id="pattern0_394_5762" patternContentUnits="objectBoundingBox" width="1" height="1">
-            <use xlink:href="#image0_394_5762" transform="scale(0.01)"/>
-            </pattern>
-            <image id="image0_394_5762" width="100" height="100" xlink:href="data:image/png;base64,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"/>
-            </defs>
-            </svg>
+        {% include 'svg/cat_butt.html' %}
         <p class="text-txt_color_3 dark:text-white_2">Wow such empty</p>
     </div>
     {% endif %}
+    {% endwith %}
 </ol>

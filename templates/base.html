@@ -1,276 +1,362 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
     {% load static %}
     <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" /> -->
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <script src = "{% static 'js/tailwind.js'%}"></script>
-    <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}">
+    <script src="{% static 'js/tailwind.js'%}"></script>
+    <!-- <link rel="stylesheet" href="{% static 'css/output.css'%}"> -->
+    <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}" />
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> -->
-
-    {% block quill %}
-    {% endblock %}
+    {% block quill %} {% endblock %}
 
     <script>
-        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     </script>
 
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark_1: '#0E1113',
-                        dark_2: '#05090B',
-                        dark_3: '#101214',
-                        dark_4: '#333D42',
-                        dark_5: "#161A1D",
-                        dark_6: "#181C1F",
-                        gray_1: '#3C4244',
-                        gray_2: "#2B3336",
-                        gray_3: "#ffffff33",
-                        gray_4: "#A2A2A5",
-                        white_1: "#F3F3F2",
-                        white_2: "#717981",
-                        white_3: "#889375",
-                        white_4: "#F7F9F9",
-                        button_red: "#C82C00",
-                        button_red_hover: "#A61F00",
-                        button_gray: "#E5EBEE",
-                        button_gray_hover: "#DDE3E6",
-                        button_blue: "#0A449B",
-                        button_blue_hover: "#0A2F6C",
-                        txt_color_1: "#131212",
-                        txt_color_2: "#33363B",
-                        txt_color_3: "#697075",
-                        bg_1: "#F5F4F6",
-                        red: '#D83901',
-                        blue: '#6B5CFE'
-                    }
-                }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              dark_1: "#0E1113",
+              dark_2: "#05090B",
+              dark_3: "#101214",
+              dark_4: "#333D42",
+              dark_5: "#161A1D",
+              dark_6: "#181C1F",
+              gray_1: "#3C4244",
+              gray_2: "#2B3336",
+              gray_3: "#ffffff33",
+              gray_4: "#A2A2A5",
+              white_1: "#F3F3F2",
+              white_2: "#717981",
+              white_3: "#889375",
+              white_4: "#F7F9F9",
+              button_red: "#C82C00",
+              button_red_hover: "#A61F00",
+              button_gray: "#E5EBEE",
+              button_gray_hover: "#DDE3E6",
+              button_blue: "#0A449B",
+              button_blue_hover: "#0A2F6C",
+              txt_color_1: "#131212",
+              txt_color_2: "#33363B",
+              txt_color_3: "#697075",
+              bg_1: "#F5F4F6",
+              red: "#D83901",
+              blue: "#6B5CFE",
             },
-            darkMode: 'class',
-        }
+          },
+        },
+        darkMode: "class",
+      };
     </script>
     {% block extra_head %}{% endblock %}
-</head>
+  </head>
 
-<body class="dark:text-white dark:bg-dark_1 transition-colors">
+  <body class="transition-colors dark:bg-dark_1 dark:text-white">
     {% include 'components/navbar.html'%}
+
     <script>
-        function uuidv4() {
-          return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
-          );
-        }
-        function validateEmail(email) {
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            return emailPattern.test(email);
-        }
+      function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
+          (
+            +c ^
+            (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))
+          ).toString(16),
+        );
+      }
+      function validateEmail(email) {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailPattern.test(email);
+      }
 
-        function setupRemoveFilePreview(button, previewElement, previewContainer, fileInput, fileInputContainer) {
-            button.addEventListener("click", () => {
-                if (previewContainer) {
-                    previewContainer.classList.add('hidden');
-                }
-                if (fileInputContainer) {
-                    fileInputContainer.classList.remove('hidden');
-                }
-                if (previewElement) {
-                    previewElement.src = '';
-                }
-                fileInput.value = "";
-            })
-        }
+      function setupRemoveFilePreview(
+        button,
+        previewElement,
+        previewContainer,
+        fileInput,
+        fileInputContainer,
+      ) {
+        button.addEventListener("click", () => {
+          if (previewContainer) {
+            previewContainer.classList.add("hidden");
+          }
+          if (fileInputContainer) {
+            fileInputContainer.classList.remove("hidden");
+          }
+          if (previewElement) {
+            previewElement.src = "";
+          }
+          fileInput.value = "";
+        });
+      }
 
-        function setupFileInput(previewElement, previewContainer, fileInput, fileInputContainer) {
-            fileInput.addEventListener("change", function (event) {
-                var file = event.target.files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        previewElement.src = e.target.result;
-                        fileInputContainer.classList.add("hidden");
-                        previewContainer.classList.remove("hidden");
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function getCSRFToken() {
-            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        }
-
-        function remove_class(document, class_name) {
-            document.classList.remove(class_name);
-        }
-
-        function add_class(document, class_name) {
-            document.classList.add(class_name);
-        }
-
-        function showTab(n, class_name, prev_button_id, next_button_id, step_class_name) {
-            var x = document.getElementsByClassName(class_name);
-            x[n].classList.remove("hidden")
-
-            const prevBtn = document.getElementById(prev_button_id);
-            const nextBtn = document.getElementById(next_button_id);
-
-            if (n == 0) {
-                prevBtn.classList.add("hidden")
-            } else {
-                prevBtn.classList.remove("hidden")
-            }
-
-            if (n == (x.length - 1)) {
-                nextBtn.innerHTML = "Submit";
-            } else {
-                nextBtn.innerHTML = "Next";
-            }
-            if (step_class_name != null) {
-                fixStepIndicator(n, step_class_name)
-            }
-        }
-
-        // OPTIONAL
-        function fixStepIndicator(n, step_class_name) {
-            var i, x = document.getElementsByClassName(step_class_name);
-            for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
-            }
-            x[n].className += " active";
-        }
-
-        async function validate_form(tab_class_name, form_specific_validation_function, current_tab, step_class_name) {
-            var x, y, i, valid = true;
-            x = document.getElementsByClassName(tab_class_name);
-            y = x[current_tab].getElementsByTagName("input");
-            for (i = 0; i < y.length; i++) {
-                current_valid = true
-                if (y[i].classList.contains("optional")) {
-                    continue
-                }
-                if (y[i].value == "") {
-                    y[i].classList.add("ring-1", "ring-red-500", "ring-inset")
-                    valid = false;
-                    current_valid = false
-                }
-
-                if (form_specific_validation_function != null) {
-                    const result = await form_specific_validation_function(valid, current_valid, y, i)
-                    valid = result[0]
-                    current_valid = result[1]
-                }
-
-                if (current_valid) {
-                    y[i].classList.remove("ring-1", "ring-red-500", "ring-inset")
-                }
-            }
-
-            if (valid && step_class_name != null) {
-                document.getElementsByClassName(step_class_name)[current_tab].className += " finish";
-            }
-            return valid;
-        }
-
-
-
-        async function nextPrev(n, form_specific_validation_function, tab_class_name, form_id, prev_button_id, next_button_id, step_class_name, current_tab) {
-            var x = document.getElementsByClassName(tab_class_name);
-            if (n == 1 && !await validate_form(tab_class_name, form_specific_validation_function, current_tab, step_class_name)) return current_tab;
-
-            x[current_tab].classList.add("hidden")
-            current_tab = current_tab + n;
-
-            if (current_tab >= x.length) {
-                x[x.length - 1].classList.remove("hidden")
-                document.getElementById(form_id).submit();
-                nextBtn.disabled = true;
-                return false;
-            }
-            showTab(current_tab, tab_class_name, prev_button_id, next_button_id, step_class_name);
-            return current_tab
-        }
-
-        function parseDateString(dateString) {
-            const [month, day, year, time, period] = dateString.split(/[\s,]+/);
-            const months = {
-                'Jan.': 0, 'Feb.': 1, 'Mar.': 2, 'Apr.': 3, 'May': 4, 'Jun.': 5,
-                'Jul.': 6, 'Aug.': 7, 'Sept.': 8, 'Oct.': 9, 'Nov.': 10, 'Dec.': 11
+      function setupFileInput(
+        previewElement,
+        previewContainer,
+        fileInput,
+        fileInputContainer,
+      ) {
+        fileInput.addEventListener("change", function (event) {
+          var file = event.target.files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              previewElement.src = e.target.result;
+              fileInputContainer.classList.add("hidden");
+              previewContainer.classList.remove("hidden");
             };
-            const [hours, minutes] = time.split(':').map(Number);
-            const adjustedHours = period === 'p.m.' && hours !== 12 ? hours + 12 : (period === 'a.m.' && hours === 12 ? 0 : hours);
+            reader.readAsDataURL(file);
+          }
+        });
+      }
 
+      function getCSRFToken() {
+        return document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+      }
 
-            const utcDate = new Date(Date.UTC(year, months[month], day, adjustedHours, minutes));
-            
-            return utcDate;
-        } 
+      function remove_class(document, class_name) {
+        document.classList.remove(class_name);
+      }
 
-        function timeAgo(datetime) {
-            const currentDate = new Date();
-            const createdAt = new Date(parseDateString(datetime));
-            const timeDifference = currentDate.getTime() - createdAt.getTime();
+      function add_class(document, class_name) {
+        document.classList.add(class_name);
+      }
 
-            const minute = 60 * 1000;
-            const hour = minute * 60;
-            const day = hour * 24;
-            const month = day * 30;
-            const year = day * 365;
-            
+      function showTab(
+        n,
+        class_name,
+        prev_button_id,
+        next_button_id,
+        step_class_name,
+      ) {
+        var x = document.getElementsByClassName(class_name);
+        x[n].classList.remove("hidden");
 
-            if (timeDifference < minute) {
-                return "Just now";
-            } else if (timeDifference < hour) {
-                const minutes = Math.floor(timeDifference / minute);
-                return `${minutes} min. ago`;
-            } else if (timeDifference < day) {
-                const hours = Math.floor(timeDifference / hour);
-                return `${hours} hr. ago`;
-            } else if (timeDifference < month) {
-                const days = Math.floor(timeDifference / day);
-                return `${days} day${days > 0 ? 's' : ''} ago`;
-            } else if (timeDifference < year) {
-                const months = Math.floor(timeDifference / month);
-                return `${months} mon. ago`;
-            } else {
-                const years = Math.floor(timeDifference / year);
-                return `${years} yr. ago`;
-            }
+        const prevBtn = document.getElementById(prev_button_id);
+        const nextBtn = document.getElementById(next_button_id);
+
+        if (n == 0) {
+          prevBtn.classList.add("hidden");
+        } else {
+          prevBtn.classList.remove("hidden");
+        }
+
+        if (n == x.length - 1) {
+          nextBtn.innerHTML = "Submit";
+        } else {
+          nextBtn.innerHTML = "Next";
+        }
+        if (step_class_name != null) {
+          fixStepIndicator(n, step_class_name);
+        }
+      }
+
+      // OPTIONAL
+      function fixStepIndicator(n, step_class_name) {
+        var i,
+          x = document.getElementsByClassName(step_class_name);
+        for (i = 0; i < x.length; i++) {
+          x[i].className = x[i].className.replace(" active", "");
+        }
+        x[n].className += " active";
+      }
+
+      async function validate_form(
+        tab_class_name,
+        form_specific_validation_function,
+        current_tab,
+        step_class_name,
+      ) {
+        var x,
+          y,
+          i,
+          valid = true;
+        x = document.getElementsByClassName(tab_class_name);
+        y = x[current_tab].getElementsByTagName("input");
+        for (i = 0; i < y.length; i++) {
+          current_valid = true;
+          if (y[i].classList.contains("optional")) {
+            continue;
+          }
+          if (y[i].value == "") {
+            y[i].classList.add("ring-1", "ring-red-500", "ring-inset");
+            valid = false;
+            current_valid = false;
+          }
+
+          if (form_specific_validation_function != null) {
+            const result = await form_specific_validation_function(
+              valid,
+              current_valid,
+              y,
+              i,
+            );
+            valid = result[0];
+            current_valid = result[1];
+          }
+
+          if (current_valid) {
+            y[i].classList.remove("ring-1", "ring-red-500", "ring-inset");
+          }
+        }
+
+        if (valid && step_class_name != null) {
+          document.getElementsByClassName(step_class_name)[
+            current_tab
+          ].className += " finish";
+        }
+        return valid;
+      }
+
+      async function nextPrev(
+        n,
+        form_specific_validation_function,
+        tab_class_name,
+        form_id,
+        prev_button_id,
+        next_button_id,
+        step_class_name,
+        current_tab,
+      ) {
+        var x = document.getElementsByClassName(tab_class_name);
+        if (
+          n == 1 &&
+          !(await validate_form(
+            tab_class_name,
+            form_specific_validation_function,
+            current_tab,
+            step_class_name,
+          ))
+        )
+          return current_tab;
+
+        x[current_tab].classList.add("hidden");
+        current_tab = current_tab + n;
+
+        if (current_tab >= x.length) {
+          x[x.length - 1].classList.remove("hidden");
+          document.getElementById(form_id).submit();
+          nextBtn.disabled = true;
+          return false;
+        }
+        showTab(
+          current_tab,
+          tab_class_name,
+          prev_button_id,
+          next_button_id,
+          step_class_name,
+        );
+        return current_tab;
+      }
+
+      function parseDateString(dateString) {
+        const [month, day, year, time, period] = dateString.split(/[\s,]+/);
+        const months = {
+          "Jan.": 0,
+          "Feb.": 1,
+          "Mar.": 2,
+          "Apr.": 3,
+          May: 4,
+          "Jun.": 5,
+          "Jul.": 6,
+          "Aug.": 7,
+          "Sept.": 8,
+          "Oct.": 9,
+          "Nov.": 10,
+          "Dec.": 11,
         };
+        const [hours, minutes] = time.split(":").map(Number);
+        const adjustedHours =
+          period === "p.m." && hours !== 12
+            ? hours + 12
+            : period === "a.m." && hours === 12
+              ? 0
+              : hours;
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
+        const utcDate = new Date(
+          Date.UTC(year, months[month], day, adjustedHours, minutes),
+        );
+
+        return utcDate;
+      }
+
+      function timeAgo(datetime) {
+        const currentDate = new Date();
+        const createdAt = new Date(parseDateString(datetime));
+        const timeDifference = currentDate.getTime() - createdAt.getTime();
+
+        const minute = 60 * 1000;
+        const hour = minute * 60;
+        const day = hour * 24;
+        const month = day * 30;
+        const year = day * 365;
+
+        if (timeDifference < minute) {
+          return "Just now";
+        } else if (timeDifference < hour) {
+          const minutes = Math.floor(timeDifference / minute);
+          return `${minutes} min. ago`;
+        } else if (timeDifference < day) {
+          const hours = Math.floor(timeDifference / hour);
+          return `${hours} hr. ago`;
+        } else if (timeDifference < month) {
+          const days = Math.floor(timeDifference / day);
+          return `${days} day${days > 0 ? "s" : ""} ago`;
+        } else if (timeDifference < year) {
+          const months = Math.floor(timeDifference / month);
+          return `${months} mon. ago`;
+        } else {
+          const years = Math.floor(timeDifference / year);
+          return `${years} yr. ago`;
         }
+      }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.remove("hidden");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.add("hidden");
+      }
+
+      function populate_values(elements, values) {
+        for (let i = 0; i < elements.length; i++) {
+          const element = document.getElementById(elements[i]);
+          if (element.tagName === "INPUT") {
+            element.value = values[i];
+          } else {
+            element.textContent = values[i];
+          }
         }
+      }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const createdAtElements = document.querySelectorAll("[data-created-at]");
-            for (const createdAtElement of createdAtElements) {
-              const createdAt = createdAtElement.getAttribute("data-created-at");
-              createdAtElement.textContent = timeAgo(createdAt);
-            }
-        })
+      document.addEventListener("DOMContentLoaded", function () {
+        const createdAtElements =
+          document.querySelectorAll("[data-created-at]");
+        for (const createdAtElement of createdAtElements) {
+          const createdAt = createdAtElement.getAttribute("data-created-at");
+          createdAtElement.textContent = timeAgo(createdAt);
+        }
+      });
     </script>
 
-
-    {% block content %}
-    {% endblock %}
-
-
+    {% block content %} {% endblock %}
     <script src="{% static 'js/flowbite.min.js'%}"></script>
-</body>
+  </body>
 </html>

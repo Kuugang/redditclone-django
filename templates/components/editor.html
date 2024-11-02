@@ -1,61 +1,144 @@
+{% load static %} {% load env_extras %} {% load utils %}
 <div id="standalone-container" class="w-full">
-    <div id="toolbar-container">
-        <span class="ql-formats">
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-underline"></button>
-            <button class="ql-strike"></button>
-        </span>
-        <span class="ql-formats">
-            <select class="ql-color"></select>
-            <select class="ql-background"></select>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-script" value="sub"></button>
-            <button class="ql-script" value="super"></button>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-header" value="1"></button>
-            <button class="ql-header" value="2"></button>
-            <button class="ql-blockquote"></button>
-            <button class="ql-code-block"></button>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-list" value="ordered"></button>
-            <button class="ql-list" value="bullet"></button>
-            <button class="ql-indent" value="-1"></button>
-            <button class="ql-indent" value="+1"></button>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-direction" value="rtl"></button>
-            <select class="ql-align"></select>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-link"></button>
-            <button class="ql-image"></button>
-            <button class="ql-formula"></button>
-        </span>
-        <span class="ql-formats">
-            <button class="ql-clean"></button>
-        </span>
-    </div>
-    <div id="editor">
-    </div>
+  <div id="toolbar-container">
+    <span class="ql-formats">
+      <button class="ql-bold"></button>
+      <button class="ql-italic"></button>
+      <button class="ql-underline"></button>
+      <button class="ql-strike"></button>
+    </span>
+    <span class="ql-formats">
+      <select class="ql-color"></select>
+      <select class="ql-background"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-script" value="sub"></button>
+      <button class="ql-script" value="super"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-header" value="1"></button>
+      <button class="ql-header" value="2"></button>
+      <button class="ql-blockquote"></button>
+      <button class="ql-code-block"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-list" value="ordered"></button>
+      <button class="ql-list" value="bullet"></button>
+      <button class="ql-indent" value="-1"></button>
+      <button class="ql-indent" value="+1"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-direction" value="rtl"></button>
+      <select class="ql-align"></select>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-link"></button>
+      <button class="ql-image"></button>
+      <button class="ql-formula"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-clean"></button>
+    </span>
+  </div>
+  <div id="editor"></div>
 </div>
 
 <style>
-    html.dark .ql-editor.ql-blank::before {
-        color: white;
-    }
+  html.dark .ql-editor.ql-blank::before {
+    color: white;
+  }
 </style>
 <script>
-    // const quill = new Quill('#editor', {
-    //     modules: {
-    //         syntax: true,
-    //         toolbar: '#toolbar-container',
-    //     },
-    //     placeholder: 'Compose an epic...',
-    //     theme: 'snow',
+  let quill;
+  document.addEventListener("DOMContentLoaded", () => {
+    quill = new Quill("#editor", {
+      modules: {
+        toolbar: "#toolbar-container",
+      },
+      placeholder: "Compose an epic...",
+      theme: "snow",
+    });
 
-    // });
+    const Delta = Quill.import("delta");
+    let ongoingUploads = 0;
+
+    quill.on("text-change", function (delta, oldDelta, source) {
+      let uploaded = false;
+
+      delta.ops.forEach((op) => {
+        if (op.insert && op.insert.image && !uploaded) {
+          const imageData = op.insert.image;
+          const image = document.querySelector(`img[src="${imageData}"]`);
+
+          const base64Pattern = /^data:image\/(png|jpg|jpeg);base64,/;
+          if (base64Pattern.test(imageData)) {
+            image.classList.add("blur-sm");
+            ongoingUploads++;
+            const byteString = atob(imageData.split(",")[1]);
+            const mimeString = imageData
+              .split(",")[0]
+              .split(":")[1]
+              .split(";")[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+            }
+
+            const file = new Blob([ab], { type: mimeString });
+
+            uploadImage(file)
+              .then((res) => {
+                if (res && res.url) {
+                  if (image) {
+                    console.log(res.url);
+                    if ("{% get_env_var 'ENV' %}" === "development") {
+                      staticUrlPrefix = "{% static '' %}";
+                      url = staticUrlPrefix + res.url;
+                      image.src = url;
+                    } else {
+                      image.src = res.url;
+                    }
+                  }
+
+                  image.classList.remove("blur-sm");
+                  uploaded = true;
+                } else {
+                  console.error("Unexpected response structure:", res);
+                }
+              })
+              .catch((error) => {
+                console.error("Upload failed:", error);
+              })
+              .finally(() => {
+                ongoingUploads--;
+                if (ongoingUploads === 0) {
+                  console.log("All uploads complete");
+                }
+              });
+          }
+        }
+      });
+    });
+
+    async function uploadImage(file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/post/upload_post_image/", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": getCSRFToken(),
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      return data;
+    }
+  });
 </script>

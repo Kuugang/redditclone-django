@@ -14,6 +14,7 @@ urlpatterns = [
     path('delete_comment/',  (views.delete_comment), name='delete_comment'),
     path('reply/<uuid:comment_id>/', views.reply_to_comment, name='reply_to_comment'),
     path('delete/',  login_required(views.delete_post), name='delete_post'),
+    path('<uuid:post_id>/edit/',  login_required(views.edit_post), name='edit_post'),
 
     # Should probably make next 2 into 1 view
     path("save/", login_required(views.save_post), name="save_post"),

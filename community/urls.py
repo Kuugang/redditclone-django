@@ -14,7 +14,7 @@ urlpatterns = [
     path('edit_community_topics/', views.edit_community_topics, name='edit_community_topics'),
     path('check_community_name_availability/', views.check_community_name_availability, name='check_community_name_availability'),
     path('<str:community_name>/', views.community, name='community'),
-    path('<str:community_name>/create_event', views.create_event , name='create_event'),
-    path('<str:community_name>/event/<uuid:event_id>/', views.community_event_detail, name='community_event_detail'),
-    path('delete_community_event', views.delete_community_event, name='delete_community_event'),
+
+
+    path('<str:community_name>/event', views.event , name='event'),
 ]
