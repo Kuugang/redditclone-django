@@ -113,78 +113,21 @@
                                     class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm"
                                     onclick="cancelComment()">
                                     Cancel
+                                    {% if not user.is_authenticated %} disabled {% endif %}
                                 </button>
 
                                 <button
                                     style="padding: 5px 10px; border: none; background-color: #1a73e8; color: white; border-radius: 15px;"
                                     class="inline-flex items-center px-2 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 text-sm"
                                     onclick="submitComment('{{post.id}}')">
-                                    Comment
+                                    Comment  {% if not user.is_authenticated %} disabled {% endif %}
                                 </button>
                             </div>
                         </div>
 
                         <!-- comment section wiggy-->
                         <h3>Comments:</h3>
-                        <div id="comments-{{ post.id }}">
-                            <div class="comment-list flex flex-col gap-3">
-                                {% for comment in root_comments reversed %}
-                                <div id={{comment.id}} class="flex flex-col gap-2">
-                                    <div class="flex flex-row gap-2 items-start relative">
-                                        <div class="w-[30px] h-[30px] rounded-full relative ">
-                                            {% if comment.user.avatar%}
-                                            {% if comment.user.avatar|startswith:'https' %}
-                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
-                                                src="{{ comment.user.avatar}}" alt="{{user.username}}">
-                                            {% else %}
-                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
-                                                src="{% static comment.user.avatar %}" alt="{{ user.username}}">
-                                            {% endif %}
-                                            {% else %}
-                                            <div class="w-full h-full bg-black rounded-full"></div>
-                                            {% endif %}
-                                        </div>
-                                        <span class="flex flex-row gap-1 items-start">
-                                            <a href="{% url 'account:user_profile' post.user.username %}"
-                                                class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
-                                            <p class="text-xs">•</p>
-                                            <p data-created-at="{{comment.created_at}}" class="font-semibold text-xs">
-                                                {{comment.created_at}}</p>
-                                        </span>
-                                    </div>
-                                    <p></p>{{comment.content}}</p>
-                                </div>
-                                {% endfor %}
-                                
-                                {% for comment in child_comments reversed %}
-                                <div id={{comment.id}} class="flex flex-col gap-2">
-                                    <div class="flex flex-row gap-2 items-start relative">
-                                        <div class="w-[30px] h-[30px] rounded-full relative ">
-                                            {% if comment.user.avatar%}
-                                            {% if comment.user.avatar|startswith:'https' %}
-                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
-                                                src="{{ comment.user.avatar}}" alt="{{user.username}}">
-                                            {% else %}
-                                            <img class="w-[30px] h-[30px] rounded-full object-cover"
-                                                src="{% static comment.user.avatar %}" alt="{{ user.username}}">
-                                            {% endif %}
-                                            {% else %}
-                                            <div class="w-full h-full bg-black rounded-full"></div>
-                                            {% endif %}
-                                        </div>
-                                        <span class="flex flex-row gap-1 items-start">
-                                            <a href="{% url 'account:user_profile' post.user.username %}"
-                                                class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
-                                            <p class="text-xs">•</p>
-                                            <p data-created-at="{{comment.created_at}}" class="font-semibold text-xs">
-                                                {{comment.created_at}}</p>
-                                        </span>
-                                    </div>
-                                    <p></p>{{comment.content}}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+                        {% include 'components/post/comments.html' with post=post root_comments=root_comments %}
                     </div>
                 </div>
             </div>
@@ -198,12 +141,13 @@
 </div>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const postContents = document.querySelectorAll(".post-content");
-        postContents.forEach((postContent) => {
-            postContent.innerHTML = postContent.textContent;
-        });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const postContents = document.querySelectorAll(".post-content");
+    postContents.forEach((postContent) => {
+        postContent.innerHTML = postContent.textContent;
     });
+});
 
     function cancelComment() {
         document.getElementById('commentTextarea').value = '';
@@ -283,81 +227,122 @@
         });
     }
 
-    async function submitComment(postId) {
-        const commentBox = document.getElementById("commentBox");
-        if (commentBox.value.trim() === "") {
-            throw new Error("Comment box has no value")
-            return
-        }
-        // Send the POST request to submit the comment
-        try {
-            let data = new FormData()
-            data.append('comment', commentBox.value)
+    async function submitComment(postId, parentId = null) {
+    // Get the correct comment box based on parentId
+    const commentBox = parentId ? document.getElementById(`commentBox-${parentId}`) : document.getElementById("commentBox");
 
-            const response = await fetch(`/post/comment/${postId}`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}",
-                },
-                body: data
-            });
-
-            if (response.ok) {
-                const data = await response.json(); // Assuming the response contains the new comment details
-
-                const commentsSection = document.getElementById(`comments-${postId}`)
-                // Clear the comment box after submission
-                commentBox.value = "";
-                // Dynamically append the new comment to the comment section
-
-
-                if (!commentsSection) {
-                    commentsSection = document.createElement('div');
-                    commentsSection.id = `comments-${postId}`;
-                    document.querySelector('.comment-list').appendChild(commentsSection);
-                    console.error(`Comments section for post ${postId} not found`);
-                    return;
-                }
-
-                const newCommentItem = document.createElement("div");
-                newCommentItem.setAttribute("id", data.id)
-                const created_at = timeAgo(data.created_at)
-
-                newCommentItem.innerHTML = `
-        <div id = ${data.id} class="flex flex-col gap-2">
-            <div class="flex flex-row gap-2 items-start relative">
-                <div class="w-[30px] h-[30px] rounded-full relative ">
-                    {% if comment.user.avatar %}
-                        {% if comment.user.avatar|startswith:'https' %}
-                            <img class="w-[30px] h-[30px] rounded-full object-cover" src="{{ comment.user.avatar}}" alt="{{user.username}}">
-                        {% else %}
-                            <img class="w-[30px] h-[30px] rounded-full object-cover" src="{% static comment.user.avatar %}" alt="{{ user.username}}">
-                        {% endif %}
-                    {% else %}
-                    <div class="w-full h-full bg-black rounded-full"></div>
-                    {% endif %}
-                </div>
-                <span class="flex flex-row gap-1 items-start">
-                    <a href="{% url 'account:user_profile' post.user.username %}" class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
-                    <p class="text-xs">•</p>
-                    <p data-created-at="${timeAgo(data.created_at)}" class="font-semibold text-xs">${timeAgo(data.created_at)}</p>
-                </span>
-            </div>
-            <p></p>${data.content}</p>
-        </div>
-      `;
-
-                commentsSection.prepend(newCommentItem);
-                document.getElementById('buttonContainer').classList.add('hidden');
-                document.getElementById('comment_count').textContent = parseInt(document.getElementById('comment_count').textContent) + 1;
-            } else {
-                alert("Failed to post comment.");
-            }
-        } catch (error) {
-            console.error("Error submitting comment:", error);
-            alert("There was an error submitting your comment.");
-        }
-
+    if (commentBox.value.trim() === "") {
+        alert("Comment box has no value");
+        return;
     }
+
+    // Send the POST request to submit the comment
+    try {
+        let data = new FormData();
+        data.append('comment', commentBox.value);
+        if (parentId) {
+            data.append('parent_id', parentId); // Include parent ID if replying to a comment
+        }
+
+        const response = await fetch(`/post/comment/${postId}`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}", // Ensure CSRF token is correctly handled
+            },
+            body: data
+        });
+
+        if (response.ok) {
+            const data = await response.json(); // Assuming the response contains the new comment details
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            commentBox.value = ""; // Clear the comment box after submission
+
+            // Check if comments section exists
+            if (!commentsSection) {
+                console.error(`Comments section for post ${postId} not found`);
+                return;
+            }
+
+            const newCommentItem = document.createElement("div");
+            newCommentItem.setAttribute("id", data.id);
+            const created_at = timeAgo(data.created_at);
+
+
+            // Construct the new comment item HTML
+            newCommentItem.innerHTML = `
+                <div id="${data.id}" class="flex flex-col gap-2 ${parentId ? 'border-l-2 pl-2' : ''}">
+                    <div class="flex flex-row gap-2 items-start relative">
+                        <div class="w-[30px] h-[30px] rounded-full relative">
+                        {% if comment.user.avatar %}
+                            {% if comment.user.avatar|slice:":5" == "https" %}
+                                <img class="w-[30px] h-[30px] rounded-full object-cover" 
+                                     src="{{ comment.user.avatar }}" 
+                                     alt="{{ comment.user.username }}">
+                            {% else %}
+                                <img class="w-[30px] h-[30px] rounded-full object-cover" 
+                                     src="{% static comment.user.avatar %}" 
+                                     alt="{{ comment.user.username }}">
+                            {% endif %}
+                        {% else %}
+                            <div class="w-full h-full bg-black rounded-full"></div>
+                        {% endif %}
+                    </div>
+                        <span class="flex flex-row gap-1 items-start">
+                            <a href="{% url 'account:user_profile' post.user.username %}" class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
+                            <p class="text-xs">•</p>
+                            <p data-created-at="${timeAgo(data.created_at)}" class="font-semibold text-xs">${timeAgo(data.created_at)}</p>
+                        </span>
+                    </div>
+                    <p class="text-sm">${data.content}</p> <!-- Add the content of the comment -->
+                    <div class="flex flex-row gap-2 mt-1">
+                        <button class="text-xs text-pink-500 reply-button" 
+                                data-parent-id="${data.id}"
+                                onclick="showReplyBox('${data.id}')">
+                            Reply
+                        </button>
+                        <button class="text-xs text-green-500 edit-button" 
+                                data-comment-id="${data.id}">
+                            Edit
+                        </button>
+                        <button class="text-xs text-red-500 delete-button" 
+                                data-comment-id="${data.id}">
+                            Delete
+                        </button>
+                    </div>
+                 </div>
+                </div?
+            `;
+
+            // Append the new comment to the appropriate section
+            if (parentId) {
+                const parentComment = document.getElementById(parentId);
+                if (parentComment) {
+                    const childCommentsContainer = parentComment.querySelector('.child-comments');
+                    if (childCommentsContainer) {
+                        childCommentsContainer.prepend(newCommentItem);
+                    }
+                }
+            } else {
+                commentsSection.prepend(newCommentItem);
+            }
+
+            // Hide the button container after submission
+            const buttonContainer = parentId ? document.getElementById(`buttonContainer-${parentId}`) : document.getElementById('buttonContainer');
+            if (buttonContainer) {
+                buttonContainer.classList.add('hidden');
+            }
+
+            document.getElementById('comment_count').textContent = parseInt(document.getElementById('comment_count').textContent) + 1;
+
+        } else {
+            alert("Failed to post comment.");
+        }
+    } catch (error) {
+        console.error("Error submitting comment:", error);
+        alert("There was an error submitting your comment.");
+    }
+}
+
+
 </script>
 {% endblock %}
