@@ -1,7 +1,8 @@
 import os
-from django import template
-from post.models import Comment
 
+from django import template
+
+from post.models import Comment
 
 register = template.Library()
 
@@ -45,6 +46,10 @@ def get_community_rules(community):
 @register.filter
 def get_community_topics(community):
     return community.communitytopic_set.all()
+
+@register.filter
+def get_topics(community):
+    return community.communitytopic_set.select_related('topic').values_list('topic__name', flat=True)
 
 @register.filter
 def get_community_role(user_communities, community_id):

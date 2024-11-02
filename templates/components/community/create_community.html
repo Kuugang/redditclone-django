@@ -6,6 +6,7 @@
             action="{% url 'community:create_community' %}"
             class="text-dark_1 dark:text-white_1 bg-white dark:bg-dark_2 flex flex-col gap-4 justify-center p-4 px-8 text-sm relative rounded-lg">
             {% csrf_token %}
+
             <button type="button" id="btn_create_community_prev" class="hidden relative left-[0%]">
                 <svg width="29" height="30" viewBox="0 0 29 30" xmlns="http://www.w3.org/2000/svg">
                     <path
