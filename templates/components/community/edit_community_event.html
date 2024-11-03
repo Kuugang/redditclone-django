@@ -132,7 +132,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const edit_event_form = document.getElementById('edit_event_form');
-
         edit_event_form.elements['name'].value = "{{event.name}}"
         edit_event_form.elements['location'].value = "{{event.location}}"
         edit_event_form.elements['event_start_date'].value = "{{event.start_date}}"
@@ -144,7 +143,7 @@
 
         edit_event_form.querySelector('img[name=event_image_preview]').src = '{{event.image}}'.startsWith('https') ? "{{event.image}}" : "/static/"  + "{{event.image}}";
 
-        quill.root.innerHTML = "{{event.description | safe}}"
+        quill.root.innerHTML = `{{event.description|safe}}`
 
         const event_image_preview = document.getElementById('event_image_preview');
         const event_image_preview_container = document.getElementById('event_image_preview_container');

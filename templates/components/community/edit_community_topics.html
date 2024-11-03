@@ -25,7 +25,6 @@
             </div>
             <!-- Modal body -->
             {% with community_topics=community|get_topics %}
-            {{community_topics}} 
             <div class="p-4 md:p-5 space-y-4">
                 <div class="flex flex-wrap max-h-[300px] overflow-auto">
                     <input name="community_id" type="hidden" value="{{ community.id }}">

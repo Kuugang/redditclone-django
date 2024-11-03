@@ -108,8 +108,7 @@
       </div>
 
       <div id="comments" class="user_content_container hidden">
-        {% include 'components/account/user_comments.html' with
-        comments=user_comments %}
+        {% include 'components/account/user_comments.html' with comments=user_comments %}
       </div>
 
       {% if user_profile == user %}
@@ -122,8 +121,7 @@
       </div>
 
       <div id="downvotes" class="user_content_container hidden">
-        {% include 'components/post/posts.html' with posts=user_downvoted_posts
-        %}
+        {% include 'components/post/posts.html' with posts=user_downvoted_posts %}
       </div>
       {% endif %}
     </div>
