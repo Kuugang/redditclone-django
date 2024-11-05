@@ -6,8 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token }}" />
     {% load static %}
     <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" /> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}" />
+    <script src="{% static 'js/tailwind.js'%}"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> -->
     {% block quill %} {% endblock %}
 
@@ -53,8 +54,6 @@
               txt_color_2: "#33363B",
               txt_color_3: "#697075",
               bg_1: "#F5F4F6",
-              <!-- red: "#D83901", -->
-              <!-- blue: "#6B5CFE", -->
             },
           },
         },
@@ -270,7 +269,7 @@
           "Feb.": 1,
           "Mar.": 2,
           "Apr.": 3,
-          May: 4,
+          "May": 4,
           "Jun.": 5,
           "Jul.": 6,
           "Aug.": 7,
