@@ -39,8 +39,8 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         let search = false;
-        let timer = 1000;
-        let cooldown = 1000
+        let timer = 500;
+        let cooldown = 500;
         let input_search = document.getElementById('default-search')
         let result_container = document.getElementById('result_container')
 
@@ -65,7 +65,7 @@
                 search = false
                 result_container.classList.add('hidden')
                 input_search.classList.remove('rounded-b-none')
-            }, 1000);
+            }, 500);
         })
 
         input_search.addEventListener('focusin', (e) => {
@@ -81,10 +81,10 @@
 
         setInterval(() => {
             if (search)
-                timer -= 1000
+                timer -= 500 
             if (timer == 0 && search)
                 getResults();
-        }, 1000);
+        }, 500);
 
 
         function getResults() {
