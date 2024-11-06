@@ -5,52 +5,36 @@
 {% include 'components/post/post_control.html' %}
 {%endif %}
 
-<style>
-    .post-content img {
-        max-width: 100%;
-        height: 250px;
-    }
-
-    .post-content {
-        display: -webkit-box;
-        -webkit-line-clamp: 50;
-        line-clamp: 50;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
 
 <div class="flex flex-row gap-2 items-end">
     {% if community %}
-    <div class="rounded-full w-6 h-6">
-        {% if post.user.avatar %}
-        {% if post.user.avatar|startswith:'https' %}
-        <img class="w-full h-full rounded-full object-cover" src="{{ post.user.avatar }}" alt="Post author avatar" />
-        {% else %}
-        <img class="w-full h-full rounded-full object-cover" src="{% static post.user.avatar %}"
-            alt="Post author avatar" />
-        {% endif %}
-        {% else %}
-        <svg class="rounded-full object-cover" viewBox="0 0 43 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M21.5541 0.239041C20.1124 0.228164 18.6835 0.510109 17.3541 1.06779C16.0603 1.59654 14.9128 2.37279 13.9566 3.37404V3.38529L13.9528 3.39279C13.0228 4.40154 12.3028 5.61279 11.8003 6.99279C11.2866 8.36904 11.0391 9.87654 11.0391 11.4928C11.0391 13.124 11.2828 14.6465 11.8003 16.0265C12.3066 17.3803 13.0266 18.5765 13.9528 19.589L13.9566 19.5965C14.9091 20.5978 16.0491 21.3853 17.3353 21.9365V21.9478C18.6328 22.4765 20.0466 22.7353 21.5353 22.7353C23.0166 22.7353 24.4228 22.4765 25.7241 21.9478V21.9403C27.0103 21.389 28.1391 20.6015 29.0691 19.5965C30.0253 18.5915 30.7566 17.384 31.2666 16.0265C31.7841 14.6465 32.0316 13.124 32.0316 11.489H32.0691C32.0691 9.87654 31.8253 8.37279 31.3078 6.99654C30.8316 5.65525 30.0849 4.4261 29.1141 3.38529C28.1768 2.37494 27.0283 1.58366 25.7503 1.06779C24.421 0.509607 22.9958 0.227641 21.5541 0.239041ZM21.6441 30.2465C12.9553 30.2465 8.29031 31.0453 4.82156 33.659C3.08906 34.9715 1.94531 36.7528 1.30031 38.8265C0.655312 40.9003 0.452813 42.4828 0.445312 45.239L21.5541 45.2465H42.6628C42.6591 42.4865 42.4678 40.9003 41.8191 38.8265C41.1741 36.7528 40.0303 34.9753 38.2941 33.6665C34.8328 31.0528 30.3291 30.2465 21.6441 30.2465Z"
-                fill="#808080" />
-        </svg>
-        {% endif %}
-    </div>
-    <a href="{% url 'account:user_profile' post.user.username %}">u/{{ post.user.username }}</a>
+        <div class="rounded-full w-6 h-6">
+            {% if post.user.avatar %}
+                {% if post.user.avatar|startswith:'https' %}
+                    <img class="w-full h-full rounded-full object-cover" src="{{ post.user.avatar }}" alt="Post author avatar" />
+                {% else %}
+                    <img class="w-full h-full rounded-full object-cover" src="{% static post.user.avatar %}" alt="Post author avatar" />
+                {% endif %}
+            {% else %}
+                <svg class="rounded-full object-cover" viewBox="0 0 43 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M21.5541 0.239041C20.1124 0.228164 18.6835 0.510109 17.3541 1.06779C16.0603 1.59654 14.9128 2.37279 13.9566 3.37404V3.38529L13.9528 3.39279C13.0228 4.40154 12.3028 5.61279 11.8003 6.99279C11.2866 8.36904 11.0391 9.87654 11.0391 11.4928C11.0391 13.124 11.2828 14.6465 11.8003 16.0265C12.3066 17.3803 13.0266 18.5765 13.9528 19.589L13.9566 19.5965C14.9091 20.5978 16.0491 21.3853 17.3353 21.9365V21.9478C18.6328 22.4765 20.0466 22.7353 21.5353 22.7353C23.0166 22.7353 24.4228 22.4765 25.7241 21.9478V21.9403C27.0103 21.389 28.1391 20.6015 29.0691 19.5965C30.0253 18.5915 30.7566 17.384 31.2666 16.0265C31.7841 14.6465 32.0316 13.124 32.0316 11.489H32.0691C32.0691 9.87654 31.8253 8.37279 31.3078 6.99654C30.8316 5.65525 30.0849 4.4261 29.1141 3.38529C28.1768 2.37494 27.0283 1.58366 25.7503 1.06779C24.421 0.509607 22.9958 0.227641 21.5541 0.239041ZM21.6441 30.2465C12.9553 30.2465 8.29031 31.0453 4.82156 33.659C3.08906 34.9715 1.94531 36.7528 1.30031 38.8265C0.655312 40.9003 0.452813 42.4828 0.445312 45.239L21.5541 45.2465H42.6628C42.6591 42.4865 42.4678 40.9003 41.8191 38.8265C41.1741 36.7528 40.0303 34.9753 38.2941 33.6665C34.8328 31.0528 30.3291 30.2465 21.6441 30.2465Z"
+                        fill="#808080" />
+                </svg>
+            {% endif %}
+        </div>
+        <a href="{% url 'account:user_profile' post.user.username %}">u/{{ post.user.username }}</a>
     {% else %}
-    <a href="{% url 'community:community' post.community.name %}" class="flex flex-row gap-1 items-end">
-        {%if post.community.avatar|startswith:'https'%}
-        <img class="w-7 h-7 rounded-full" src="{{post.community.avatar}}" alt="Community avatar" />
-        {% else %}
-        <img class="w-7 h-7 rounded-full" src="{% static post.community.avatar %}" alt="Community avatar" />
-        {% endif %}
-        <p>
-            r/{{ post.community.name }}
-        </p>
-    </a>
+        <a href="{% url 'community:community' post.community.name %}" class="flex flex-row gap-1 items-end">
+            {%if post.community.avatar|startswith:'https'%}
+                <img class="w-7 h-7 rounded-full" src="{{post.community.avatar}}" alt="Community avatar" />
+            {% else %}
+                <img class="w-7 h-7 rounded-full" src="{% static post.community.avatar %}" alt="Community avatar" />
+            {% endif %}
+            <p>
+                r/{{ post.community.name }}
+            </p>
+        </a>
     {% endif %}
     <p>•</p>
     <p data-created-at="{{ post.created_at }}">{{ post.created_at }}</p>

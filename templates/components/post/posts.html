@@ -1,7 +1,10 @@
 <div class = "posts-container flex flex-col gap-4">
   {% for post in posts %}
     <div
-        onclick="window.location.href=`{% url 'post:post' post.id %}`"
+        data-post-id = "{{post.id}}"
+        data-post-title = "{{post.title}}"
+        data-post-content = "{{post.content}}"
+        onclick='window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
         class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
         id="{{post.id}}"
     >
@@ -9,12 +12,3 @@
     </div>
   {% endfor %}
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const postContents = document.querySelectorAll(".posts-container")[0].querySelectorAll(".post-content");
-        postContents.forEach((postContent) => {
-            postContent.innerHTML = postContent.textContent;
-        });
-    });
-</script>

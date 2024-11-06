@@ -59,12 +59,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const postContents = document.querySelectorAll(".post-content");
-        postContents.forEach((postContent) => {
-            postContent.innerHTML = postContent.textContent;
-        });
-    });
+
 
     async function vote(button, postId, voteType) {
         await fetch(`/post/vote/${postId}/${voteType}`, {

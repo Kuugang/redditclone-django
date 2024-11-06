@@ -10,9 +10,11 @@
       <div
         class="bg-bg_1 dark:bg-dark_2 sticky top-[15vh] inline-block flex h-min max-h-[85vh] max-w-sm flex-col gap-3 overflow-auto rounded-lg border p-6 shadow-md dark:border-gray-700"
       >
-        <div class="flex w-full flex-row justify-between">
-          <h1 class="text-sm font-semibold">RECENT POSTS</h1>
-          <button>Clear</button>
+        <div class="flex w-full flex-row justify-between text-sm font-semibold">
+          <h1 class="text-base font-bold">Recent Posts</h1>
+          <button onclick="clearRecentPost()">Clear</button>
+        </div>
+        <div id = "recent_posts" class="flex flex-col gap-2">
         </div>
       </div>
     </div>

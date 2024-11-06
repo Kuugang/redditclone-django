@@ -343,12 +343,71 @@
         }
       }
 
+      function addRecentPost(post_id, post_title, post_content){
+        let recent_posts = localStorage.getItem("recent_posts");
+        if(recent_posts == null){
+            recent_posts = [];
+        }else{
+            recent_posts = JSON.parse(recent_posts);
+        }
+        const postExists = recent_posts.some(post => post.post_id === post_id);
+        if (!postExists) {
+            let post = { post_id, post_title, post_content };
+            recent_posts.unshift(post);
+            if(recent_posts.length > 10){
+                recent_posts.pop();
+            }
+            localStorage.setItem("recent_posts", JSON.stringify(recent_posts));
+            addRecentPostItem(post);
+        }
+      };
+
+      function addRecentPostItem(post){
+        const recentPostsContainer = document.getElementById("recent_posts");
+        const recentPostItem = document.createElement("div");
+        recentPostItem.classList.add("recent_post_item", "max-h-[55px]", "line-clamp-2", "border-b", "border-gray-300", "py-2");
+        recentPostItem.classList.add("recent_post_item");
+        recentPostItem.innerHTML = `
+            <a href="/post/${post.post_id}">
+                <p class="font-bold">${post.post_title}</p>
+                ${post.post_content}
+            </a>
+        `;
+        recentPostItem.querySelectorAll("p")[1].classList.add("text-xs", "line-clamp-1");
+        recentPostsContainer.prepend(recentPostItem);
+      }
+
+      function clearRecentPost(){
+        localStorage.removeItem("recent_posts");
+        const recentPostsContainer = document.getElementById("recent_posts");
+        recentPostsContainer.innerHTML = "";
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         const createdAtElements =
           document.querySelectorAll("[data-created-at]");
         for (const createdAtElement of createdAtElements) {
           const createdAt = createdAtElement.getAttribute("data-created-at");
           createdAtElement.textContent = timeAgo(createdAt);
+        }
+
+        const postContents = document.querySelectorAll(".post-content");
+        postContents.forEach((postContent) => {
+            postContent.innerHTML = postContent.textContent;
+            postContent.classList.add("line-clamp-50", "overflow-hidden", "text-ellipsis");
+        });
+        const postImages = document.querySelectorAll(".post-content img");
+        postImages.forEach((postImage) => {
+            postImage.classList.add("max-w-[300px]");
+        });
+
+        const recentPosts = localStorage.getItem("recent_posts");
+        if(recentPosts){
+            const recentPostsArray = JSON.parse(recentPosts);
+            const recentPostsContainer = document.getElementById("recent_posts");
+            recentPostsArray.reverse().forEach(post => {
+                addRecentPostItem(post);
+            });
         }
       });
     </script>

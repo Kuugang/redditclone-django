@@ -16,7 +16,7 @@
         </div>
 
         <div id="result_container"
-            class="absolute z-10 w-full bg-button_gray dark:bg-dark_4 dark:border-gray-600 rounded-b-2xl overflow-y-auto h-max max-h-[300px] hidden">
+            class="absolute z-10 w-full bg-button_gray dark:bg-dark_4 dark:border-gray-600 rounded-b-2xl overflow-y-auto h-max max-h-[300px] hidden px-3">
             <div class="container hidden p-2">
                 <h1 class="font-bold">Users</h1>
                 <div id="search_users" class="flex flex-col gap-2"></div>
@@ -30,7 +30,7 @@
             <div class="container hidden p-2">
                 <h1 class="font-bold">Posts
             </div>
-            <div id="search_posts" class="flex flex-col gap-2"></div>
+            <div id="search_posts" class="flex flex-col gap-2 px-4"></div>
         </div>
 
     </div>
@@ -143,6 +143,7 @@
                         result_container.querySelectorAll('.container')[1].classList.add('hidden')
                     }
 
+                    search_posts_container.innerHTML = "";
                     if (posts.length > 0) {
                         search_posts_container.innerHTML += posts.map(post => {
                             return `
