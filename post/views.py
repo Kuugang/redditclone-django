@@ -171,10 +171,16 @@ def vote(request, post_id, vote_type):
 
 def delete_post(request):
     post_id = request.POST.get("post_id")
-    post = get_object_or_404(models.Post, id=uuid.UUID(str(post_id)), user = request.user)
+    post = get_object_or_404(models.Post, id=uuid.UUID(str(post_id)), user=request.user)
     post.delete()
 
-    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
+    referer_url = request.META.get('HTTP_REFERER', '')
+
+    if "community" in referer_url:
+        community_name = post.community.name 
+        return redirect('community:community', community_name=community_name)
+    else:
+        return redirect('dashboard')
 
 def save_post(request):
     post_id = request.POST.get('post_id')

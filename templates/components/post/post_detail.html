@@ -3,6 +3,10 @@
 {% load static %}
 {% load utils %}
 
+<link rel="stylesheet" href="{% static 'css/quill.snow.css' %}" />
+<link rel="stylesheet" href="{% static 'css/quill.bubble.css' %}" />
+
+{% include 'components/post/delete_post_modal.html' %}
 
 <div id="{{ post.id }}">
     <div class="flex flex-row w-full relative top-[10vh]">
@@ -11,7 +15,7 @@
             <div class="flex flex-row justify-between">
                 <div class="w-full flex flex-row justify-between items-start px-8">
                     <div class="flex flex-row gap-4 max-w-2xl">
-                        <div>
+                        <div class="flex flex-col gap-4">
                             <button onclick="history.back()" type="button"
                                 class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                                 <svg pl="" fill="currentColor" height="16" icon-name="left-outline" viewBox="0 0 20 20"
@@ -21,6 +25,20 @@
                                     </path>
                                 </svg>
                             </button>
+
+                            {% if request.user == post.user %}
+                            <a href="{% url 'post:edit_post' post.id %}"
+                                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                                {% include 'svg/pencil.html'%}
+                            </a>
+
+                            <button onclick="event.stopPropagation(); document.querySelector('#delete-post-modal').querySelector('input[name=post_id]').value = '{{post.id}}'"
+                                data-modal-target="delete-post-modal" data-modal-toggle="delete-post-modal"
+                                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                                {% include 'svg/trashcan.html'%}
+                            </button>
+
+                            {% endif %}
                         </div>
                         <div class="flex flex-col gap-6">
                             <div class="flex flex-col gap-3">
@@ -45,7 +63,7 @@
                                 </div>
                                 <h1 class="font-bold text-xl">{{ post.title }}</h1>
                             </div>
-                            <span class="post-content">{{ post.content }}</span>
+                            <span class="ql-editor post-content">{{ post.content }}</span>
                             <!-- VOTES AND COMMENTS -->
                             <!-- VOTES-->
 
@@ -313,7 +331,6 @@
         alert("There was an error submitting your comment.");
     }
 }
-
 
 </script>
 {% endblock %}

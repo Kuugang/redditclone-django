@@ -314,7 +314,7 @@ async function savePost(button, postId) {
         method: "POST",
         body: data,
         headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
+            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
     }).then(async (response) => {
         button.dataset.saved = 1
@@ -331,7 +331,7 @@ async function unsavePost(button, postId) {
         method: "POST",
         body: data,
         headers: {
-            "X-CSRFToken": "{{ csrf_token }}",
+            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
     }).then(async (response) => {
         button.dataset.saved = 0

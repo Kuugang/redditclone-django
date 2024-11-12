@@ -3,8 +3,8 @@
 {% load static %}
 {% load utils %}
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" />
+<link rel="stylesheet" href="{% static 'css/quill.snow.css' %}" />
+<link rel="stylesheet" href="{% static 'css/quill.bubble.css' %}" />
 
 <div class="flex flex-row w-full relative top-[10vh]">
     {% include 'components/leftbar.html'%}
