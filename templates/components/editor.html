@@ -1,3 +1,6 @@
+<script defer src="https://cdn.jsdelivr.net/gh/hunghg255/quill-resize-module/dist/quill-resize-image.min.js"></script>
+
+
 {% load static %} {% load env_extras %} {% load utils %}
 <div id="standalone-container" class="w-full">
   <div id="toolbar-container">
@@ -51,9 +54,15 @@
 <script>
   let quill;
   document.addEventListener("DOMContentLoaded", () => {
+    Quill.register("modules/resize", window.QuillResizeImage);
     quill = new Quill("#editor", {
       modules: {
         toolbar: "#toolbar-container",
+        resize: {
+          locale: {
+            center: "center",
+          },
+        },
       },
       placeholder: "Compose an epic...",
       theme: "snow",
@@ -129,7 +138,7 @@
         method: "POST",
         body: formData,
         headers: {
-          "X-CSRFToken": getCSRFToken(),
+            "X-CSRFToken": "{{ csrf_token }}",
         },
       });
 

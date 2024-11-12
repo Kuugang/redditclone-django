@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Community, CommunityMember
+from .models import Community, CommunityMember, CommunityPostReport
 # Register your models here.
 
 admin.site.register(CommunityMember)
+admin.site.register(CommunityPostReport)
 @admin.register(Community)
 
 class CommunityAdmin(admin.ModelAdmin):

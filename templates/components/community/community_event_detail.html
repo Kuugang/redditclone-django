@@ -3,11 +3,8 @@
 {% load static %}
 {% load utils %}
 
-<style>
-    .post-content img {
-        max-height: 200px;
-    }
-</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" />
 
 <div class="flex flex-row w-full relative top-[10vh]">
     {% include 'components/leftbar.html'%}
@@ -20,9 +17,15 @@
                             class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                             {% include 'svg/back.html'%}
                         </button>
-
+                        
+                        {% if request.user == event.host %}
                         <button
-                            onclick="event.stopPropagation(); populate_values(['input_event_id', 'txt_event_name'], ['{{event.id}}', '{{event.name}}'])"
+                            onclick="
+                                event.stopPropagation();
+                                let modal = document.querySelector('#delete_community_event'); 
+                                modal.querySelector('input[name=event_id]').value = '{{event.id}}'; 
+                                modal.querySelector('input[name=event_name]').value = '{{event.name}}';
+                            "
                             class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center"
                             data-modal-target="delete_community_event" data-modal-toggle="delete_community_event"
                             >
@@ -33,6 +36,7 @@
                             class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                             {% include 'svg/pencil.html'%}
                         </a>
+                        {% endif %}
 
                     </div>
                     <div class="flex flex-col gap-3">
@@ -110,7 +114,7 @@
                 <div class="w-[50%] px-6">
 
                     <h1 class="text-2xl font-bold">{{event.name}}</h1>
-                    <p class="post-content">{{event.description}}</p>
+                    <p class="event-description ql-editor">{{event.description}}</p>
                 </div>
                     {% include 'components/community/community_right_bar.html' with community=event.community user_role=user_communities|get_community_role:event.community.id%}
             </div>
@@ -122,14 +126,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const postContents = document.querySelectorAll('.post-content');
-        postContents.forEach(postContent => {
-            postContent.innerHTML = postContent.textContent;
-        });
-
-        // <p id = "mini_calendar_month" class="relative text-xs">OCT</p>
-        // <p id = "mini_calendar_day">16</p>
-
         mini_calendar_month = document.getElementById('mini_calendar_month').textContent = "{{event.start_date|date:'M'}}";
         mini_calendar_day = document.getElementById('mini_calendar_day').textContent = "{{event.start_date|date:'d'}}";
     });

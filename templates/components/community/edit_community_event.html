@@ -132,7 +132,8 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const edit_event_form = document.getElementById('edit_event_form');
-        edit_event_form.elements['name'].value = "{{event.name}}"
+
+        edit_event_form.elements['name'].value = "{{ event.name|escapejs }}";
         edit_event_form.elements['location'].value = "{{event.location}}"
         edit_event_form.elements['event_start_date'].value = "{{event.start_date}}"
 

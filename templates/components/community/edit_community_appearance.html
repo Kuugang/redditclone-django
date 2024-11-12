@@ -186,14 +186,13 @@
         is_toggled_edit_control = !is_toggled_edit_control
 
         if (is_toggled_edit_control) {
-            add_class(edit_community_appearance, "top-[87%]")
-            add_class(arrow, 'rotate-180')
-            remove_class(arrow, 'rotate-0')
+            edit_community_appearance.classList.add("top-[87%]")
+            arrow.classList.remove('rotate-0')
+            arrow.classList.add('rotate-180')
         } else {
-            remove_class(edit_community_appearance, "top-[87%]")
-
-            add_class(arrow, 'rotate-0')
-            remove_class(arrow, 'rotate-180')
+            edit_community_appearance.classList.remove("top-[87%]")
+            arrow.classList.remove('rotate-180')
+            arrow.classList.add('rotate-0')
         }
     }
 
@@ -201,17 +200,17 @@
         const edit_community_appearance = document.getElementById('edit_community_appearance')
 
         if (value) {
-            add_class(edit_community_appearance, "top-[55%]")
-            remove_class(edit_community_appearance, "top-[100%]")
-            remove_class(btn_navigate_back, "hidden")
+            edit_community_appearance.classList.remove("top-[100%]")
+            edit_community_appearance.classList.add("top-[55%]")
+            btn_navigate_back.classList.remove("hidden")
         } else {
-            remove_class(edit_community_appearance, "top-[55%]")
-            add_class(edit_community_appearance, "top-[100%]")
-            add_class(btn_navigate_back, "hidden")
+            edit_community_appearance.classList.remove("top-[55%]")
+            edit_community_appearance.classList.add("top-[100%]")
+            btn_navigate_back.classList.add("hidden")
 
-            remove_class(edit_community_appearance, "top-[87%]")
-            remove_class(arrow, 'rotate-180')
-            add_class(arrow, 'rotate-0')
+            edit_community_appearance.classList.remove("top-[87%]")
+            arrow.classList.remove('rotate-180')
+            arrow.classList.add('rotate-0')
             is_toggled_edit_control = false
         }
     }

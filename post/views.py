@@ -6,9 +6,10 @@ from django.shortcuts import render, redirect
 import json
 from django.core.serializers import serialize
 from . import models
-from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent
-from django.core.exceptions import ValidationError
 
+from community.models import Community, CommunityTopic, CommunityRule, CommunityEvent, CommunityPostReport
+
+from django.core.exceptions import ValidationError
 
 # Utils
 from common.utils import upload_image, upload_local_image
@@ -213,11 +214,12 @@ def edit_post(request, post_id):
 def report_post(request):
     data = dict(request.POST.items())
     post_id = data.get("post_id")
+
     post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
     category = data.get("category")
     description = data.get("description")
 
-    report = models.Report(user=request.user, post=post, category = category, description = description)
+    report = CommunityPostReport(reporter=request.user, post=post, category = category, description = description)
     report.save()
 
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))

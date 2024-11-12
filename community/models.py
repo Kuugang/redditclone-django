@@ -139,7 +139,6 @@ class CommunityPostReport(models.Model):
         OTHER = 'other', 'Other'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE)
     post = models.ForeignKey('post.Post', on_delete=models.CASCADE)
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.PENDING)

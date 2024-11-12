@@ -209,6 +209,7 @@ def check_community_name_availability(request):
 
 
 # FUCK THIS I HATE WEBDEV!
+# EXPERIMENT RANI BATI ANG CONCLUSION
 def event(request, community_name):
     if request.method == "GET":
         event_id = request.GET.get("event_id")
@@ -231,7 +232,7 @@ def event(request, community_name):
             )
         edit = request.GET.get("edit")
 
-        if edit == "true":
+        if edit == "true" and request.user.is_authenticated:
             event = models.CommunityEvent.objects.get(id=event_id)
             event.start_time = event.start_time.strftime("%H:%M")
             event.end_time = event.end_time.strftime("%H:%M")
@@ -248,7 +249,7 @@ def event(request, community_name):
             {"event": event},
         )
 
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_authenticated:
         data = dict(request.POST.items())
         method = data.get("_method")
 
