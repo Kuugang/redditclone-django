@@ -209,3 +209,15 @@ def edit_post(request, post_id):
         post.save()
 
         return redirect('post:post', post_id=post.id)
+
+def report_post(request):
+    data = dict(request.POST.items())
+    post_id = data.get("post_id")
+    post = models.Post.objects.get(id=uuid.UUID(str(post_id)))
+    category = data.get("category")
+    description = data.get("description")
+
+    report = models.Report(user=request.user, post=post, category = category, description = description)
+    report.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))

@@ -4,7 +4,9 @@
         data-post-id = "{{post.id}}"
         data-post-title = "{{post.title}}"
         data-post-content = "{{post.content}}"
-        onclick='window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
+
+        onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
+
         class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
         id="{{post.id}}"
     >
@@ -12,3 +14,8 @@
     </div>
   {% endfor %}
 </div>
+
+{% if user.is_authenticated %}
+    {% include 'components/post/delete_post_modal.html' %}
+    {% include 'components/post/report_post_modal.html' %}
+{% endif %}

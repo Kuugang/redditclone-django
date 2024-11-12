@@ -5,7 +5,6 @@
 {% include 'components/post/post_control.html' %}
 {%endif %}
 
-
 <div class="flex flex-row gap-2 items-end">
     {% if community %}
         <div class="rounded-full w-6 h-6">
@@ -115,7 +114,6 @@
     {% endif %}
 </div>
 
-{% include 'components/post/delete_post_modal.html' %}
 
 <script>
     async function vote(button, postId, voteType) {

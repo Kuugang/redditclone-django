@@ -5,11 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token }}" />
     {% load static %}
-    <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" /> -->
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}" />
+
+    <!-- HTML Meta Tags -->
+    <title>Tidder</title>
+    <meta name="description" content="Reddit Clone">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://complete-tick-cleanly.ngrok-free.app">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tidder">
+    <meta property="og:description" content="Reddit Clone">
+    <meta property="og:image" content="https://opengraph.b-cdn.net/production/images/25785e68-de73-4761-b85d-d851e46e7e07.png?token=Cxtyc7nIE5T6XMeyCxNeai8tR6vjyQq2kJJhaDTHLfk&height=240&width=240&expires=33267304195">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="complete-tick-cleanly.ngrok-free.app">
+    <meta property="twitter:url" content="https://complete-tick-cleanly.ngrok-free.app">
+    <meta name="twitter:title" content="Tidder">
+    <meta name="twitter:description" content="Reddit Clone">
+    <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/images/25785e68-de73-4761-b85d-d851e46e7e07.png?token=Cxtyc7nIE5T6XMeyCxNeai8tR6vjyQq2kJJhaDTHLfk&height=240&width=240&expires=33267304195">
+
+
     <script src="{% static 'js/tailwind.js'%}"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> -->
+
+    <!-- Flowbite -->
+    <link rel="stylesheet" href="{% static 'css/flowbite.min.css'%}" />
+    <script src="{% static 'js/flowbite.min.js'%}"></script>
+
+    <!-- Toast -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     {% block quill %} {% endblock %}
 
     <script>
@@ -54,6 +80,15 @@
               txt_color_2: "#33363B",
               txt_color_3: "#697075",
               bg_1: "#F5F4F6",
+            },
+            keyframes: {
+              slideIn: {
+                '0%': { opacity: '0', transform: 'translateX(100%)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+            },
+            animation: {
+              slideIn: 'slideIn 0.3s ease-out forwards',
             },
           },
         },
@@ -383,6 +418,33 @@
         recentPostsContainer.innerHTML = "";
       }
 
+
+      function warningToast(message) {
+        const toast = document.createElement("div");
+        toast.classList.add("fixed", "top-3", "right-3", "z-50", "animate-slideIn");
+        toast.innerHTML += `
+        <div id="toast-danger" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
+                </svg>
+                <span class="sr-only">Error icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal">${message}</div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-danger" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+        `
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.remove();
+        }, 2000);
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         const createdAtElements =
           document.querySelectorAll("[data-created-at]");
@@ -410,9 +472,9 @@
             });
         }
       });
+
     </script>
 
     {% block content %} {% endblock %}
-    <script src="{% static 'js/flowbite.min.js'%}"></script>
   </body>
 </html>

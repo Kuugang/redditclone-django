@@ -1,8 +1,8 @@
 import uuid
 
 from django.db import models
-
 from account.models import User
+# from post.models import Post
 
 
 # Create your models here.
@@ -122,3 +122,47 @@ class CommunityEventParticipant(models.Model):
     participant = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class CommunityPostReport(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        REVIEWED = 'reviewed', 'Reviewed'
+        RESOLVED = 'resolved', 'Resolved'
+
+    class ReportCategory(models.TextChoices):
+        SPAM = 'spam', 'Spam'
+        HATE_SPEECH = 'hate_speech', 'Hate speech'
+        VIOLENCE = 'violence', 'Violence'
+        HARASSMENT = 'harassment', 'Harassment'
+        NUDITY = 'nudity', 'Nudity'
+        FALSE_INFORMATION = 'false_information', 'False information'
+        OTHER = 'other', 'Other'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    post = models.ForeignKey('post.Post', on_delete=models.CASCADE)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=8, choices=Status.choices, default=Status.PENDING)
+    category = models.CharField(max_length=17, choices=ReportCategory.choices)
+    description = models.TextField(max_length=1024)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+# class CommunityBan(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     community = models.ForeignKey(Community, on_delete=models.CASCADE)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     reason = models.TextField(max_length = 1024)
+
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     timespan = models.DurationField()
+
+#     class Meta:
+#         unique_together = ('community', 'user')
+#         constraints = [
+#             models.UniqueConstraint(fields=['community', 'user'], name='unique_community_ban')
+#         ]

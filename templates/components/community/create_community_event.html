@@ -35,7 +35,7 @@
                         class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
                     <input name="location" type="text" placeholder="Location"
                         class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
-                    <div id="date-range-picker" date-rangepicker class="flex items-center">
+                    <div class="flex items-center"  date-rangepicker >
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -119,7 +119,7 @@
                         <button id="submit-button" class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
                     </div>
                 </form>
-
+                
                 <div class="w-[30%]">
                     {% include 'components/community/community_right_bar.html' with community=community user_role=user_communities|get_community_role:community.id%}
                 </div>
@@ -127,7 +127,7 @@
         </div>
     </div>
 </div>
-<script>
+<script type = "module">
     document.addEventListener("DOMContentLoaded", () => {
         const event_image_preview = document.getElementById('event_image_preview');
         const event_image_preview_container = document.getElementById('event_image_preview_container');
@@ -145,6 +145,53 @@
             description.value = editor_content
             document.getElementById('create_event_form').submit()
         });
-    })
+
+        // const startDateElement = document.getElementById('datepicker-range-start');
+        // const endDateElement = document.getElementById('datepicker-range-end');
+
+        // // Define common options for both date pickers (start and end)
+        // const options = {
+        //     autohide: true,
+        //     format: 'mm/dd/yyyy', // Customize date format
+        //     orientation: 'bottom', // Position of the datepicker relative to the input
+        //     buttons: true, // Display today/clear buttons
+        //     title: 'Select Date', // Set a title for the date picker
+        //     minDate: new Date(), // Optional: Set minimum selectable date as today
+        //     maxDate: new Date(new Date().getFullYear(), 11, 31), // Optional: Set max date to the end of the year
+        //     onShow: () => console.log('Datepicker is shown'), // Callback for when datepicker shows
+        //     onHide: () => console.log('Datepicker is hidden'), // Callback for when datepicker hides
+        // };
+
+        // const startDatePicker = new Datepicker(startDateElement, options);
+        // const endDatePicker = new Datepicker(endDateElement, options);
+
+        // let startDate;
+        // let endDate;
+        // startDateElement.addEventListener('changeDate', (event) => {
+        //     startDate = event.detail.date;
+        //     if(endDate && startDate > endDate){
+        //         warningToast("Start date should be less than the end date");
+        //         startDatePicker.setDate(endDate);
+        //         return;
+        //     }
+        // });
+
+        // endDateElement.addEventListener('changeDate', (event) => {
+        // event.preventDefault();
+        // const selectedEndDate = event.detail.date;
+
+        // if (!startDate) {
+        //     startDate = selectedEndDate;
+        //     startDatePicker.setDate(startDate);
+        // } else if (selectedEndDate < startDate) {
+        //     warningToast("End date should be greater than the start date");
+        //     endDatePicker.setDate(startDate);
+        // } else {
+        //     endDate = selectedEndDate;
+        //     endDatePicker.setDate(endDate);
+        // }
+        // })
+
+    });
 </script>
 {% endblock %}

@@ -19,4 +19,5 @@ urlpatterns = [
     # Should probably make next 2 into 1 view
     path("save/", login_required(views.save_post), name="save_post"),
     path("unsave/", login_required(views.unsave_post), name="unsave_post"),
+    path("report_post/", login_required(views.report_post), name="report_post"),
 ]

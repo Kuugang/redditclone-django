@@ -4,6 +4,7 @@ from .models import Community, CommunityMember
 
 admin.site.register(CommunityMember)
 @admin.register(Community)
+
 class CommunityAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'visibility', 'about', 'avatar', 'banner', 'created_at', 'updated_at')
     search_fields = ('name',)
