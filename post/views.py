@@ -152,7 +152,7 @@ def reply_to_comment(request, comment_id):
 
    
 def vote(request, post_id, vote_type):
-    vote = models.Vote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
+    vote = models.PostVote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
 
     if vote:
         if vote[0].vote == vote_type:
@@ -162,7 +162,7 @@ def vote(request, post_id, vote_type):
             vote = vote[0]
             vote.save()
     else:
-        vote = models.Vote(user=request.user, post=models.Post.objects.get(id=post_id), vote=vote_type)
+        vote = models.PostVote(user=request.user, post=models.Post.objects.get(id=post_id), vote=vote_type)
         vote.save()
 
     return JsonResponse(

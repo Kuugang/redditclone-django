@@ -2,7 +2,7 @@ import os
 
 from django import template
 
-from post.models import Comment
+from post.models import Comment, PostVote
 
 register = template.Library()
 
@@ -26,8 +26,8 @@ def startswith(value, arg):
 
 @register.filter
 def get_vote_counts(post):
-    upvotes = post.vote_set.filter(vote="upvote").count()
-    downvotes = post.vote_set.filter(vote="downvote").count()
+    upvotes = PostVote.objects.filter(post=post, vote="upvote").count()
+    downvotes = PostVote.objects.filter(post=post, vote="downvote").count()
     return upvotes - downvotes
 
 @register.filter

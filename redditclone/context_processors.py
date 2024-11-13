@@ -1,5 +1,5 @@
 from community.models import Community
-from post.models import Comment, Vote
+from post.models import Comment, PostVote
 from post.models import Post
 from account.models import Follower
 
@@ -19,8 +19,8 @@ def context(request):
 
     user_saved_posts = Post.objects.filter(usersavedpost__user=request.user.id).order_by('-usersavedpost__created_at')
 
-    user_upvotes = Vote.objects.filter(user=request.user.id, vote="upvote")
-    user_downvotes = Vote.objects.filter(user=request.user.id, vote="downvote")
+    user_upvotes = PostVote.objects.filter(user=request.user.id, vote="upvote")
+    user_downvotes = PostVote.objects.filter(user=request.user.id, vote="downvote")
 
     user_commented_posts = sorted(set(comment.post for comment in user_comments), key=lambda x: x.created_at, reverse=True)
     user_upvoted_posts = sorted(set(vote.post for vote in user_upvotes), key=lambda x: x.created_at, reverse=True)

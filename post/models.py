@@ -29,29 +29,6 @@ class UserSavedPost(models.Model):
             models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_save')
         ]
 
-# TODO: CHANGE
-# class PostVote
-# class CommnentVote
-
-class Vote(models.Model):
-    class VoteType(models.TextChoices):
-        UPVOTE = 'upvote', 'Upvote'
-        DOWNVOTE = 'downvote', 'Downvote'
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    vote = models.CharField(max_length=8, choices=VoteType.choices)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('user', 'post')
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_vote')
-        ]
-
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -62,3 +39,34 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class Vote(models.Model):
+    class VoteType(models.TextChoices):
+        UPVOTE = 'upvote', 'Upvote'
+        DOWNVOTE = 'downvote', 'Downvote'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote = models.CharField(max_length=8, choices=VoteType.choices)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class PostVote(Vote):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post_vote')
+        ]
+
+class CommentVote(Vote):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'comment'], name='unique_user_comment_vote')
+        ]
