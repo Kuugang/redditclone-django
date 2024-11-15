@@ -32,7 +32,10 @@
             {% endif %}
     </h1>
 
-    <button onclick="event.stopPropagation(); vote(this.parentElement, '{{post.id}}', 'downvote')" 
+    <button onclick="
+            event.stopPropagation(); 
+            vote(this.parentElement, '{% if post %}post{% else %}comment{%endif%}', '{%if post %}{{post.id}}{% else %}{{comment.id}}{%endif%}', 'downvote')
+        " 
         {% if not user.is_authenticated %} 
             data-modal-target="sign_in_modal"
             data-modal-toggle="sign_in_modal"

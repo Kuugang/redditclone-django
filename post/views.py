@@ -167,7 +167,6 @@ def vote(request, content_id, vote, type):
             vote_object = models.PostVote(user=request.user, post=models.Post.objects.get(id=content_id), vote=vote)
         else:
             vote_object = models.CommentVote(user=request.user, comment=models.Comment.objects.get(id=content_id), vote=vote)
-        vote_object.save()
 
     return JsonResponse(
         {'status': True}

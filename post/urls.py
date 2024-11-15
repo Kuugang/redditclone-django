@@ -13,6 +13,8 @@ urlpatterns = [
     # let url = `/post/vote/${contentId}/${voteType}`
     path('vote/<uuid:content_id>/<str:vote>/<str:type>/', views.vote, name='vote_post'),
 
+
+
     path('comment/<uuid:post_id>',  views.comment, name='comment'),
     path('delete_comment/',  (views.delete_comment), name='delete_comment'),
     path('reply/<uuid:comment_id>/', views.reply_to_comment, name='reply_to_comment'),

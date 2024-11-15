@@ -340,11 +340,8 @@ async function unsavePost(button, postId) {
     });
 }
 
-async function vote(buttonsContainer, type, contentId, voteType) {
-
-    // path('vote/<uuid:content_id>/<str:vote>/<st>', views.vote, name='vote_post'),
-
-    let url = `/post/vote/${contentId}/${voteType}`
+async function vote(buttonsContainer, type, contentId, vote) {
+    let url = `/post/vote/${contentId}/${vote}/${type}/`;
 
     await fetch(url, {
         method: "POST",
@@ -362,7 +359,7 @@ async function vote(buttonsContainer, type, contentId, voteType) {
         let downvote = buttonsContainer.querySelectorAll("button")[1]
 
         if (voted == "upvote") {
-            if (voteType == "upvote") {
+            if (vote == "upvote") {
                 current_vote_count -= 1
                 vote_count.dataset.voted = ""
                 buttonsContainer.classList.remove("bg-red-500")
@@ -376,7 +373,7 @@ async function vote(buttonsContainer, type, contentId, voteType) {
                 buttonsContainer.classList.add("bg-blue-500")
             }
         } else if (voted == "downvote") {
-            if (voteType == "downvote") {
+            if (vote == "downvote") {
                 current_vote_count += 1
                 vote_count.dataset.voted = ""
                 buttonsContainer.classList.remove("bg-blue-500")
@@ -392,7 +389,7 @@ async function vote(buttonsContainer, type, contentId, voteType) {
         } else {
             buttonsContainer.classList.remove("bg-button_gray")
             buttonsContainer.classList.add("text-white")
-            if (voteType == "downvote") {
+            if (vote == "downvote") {
                 current_vote_count -= 1
                 vote_count.dataset.voted = "downvote"
                 buttonsContainer.classList.add("bg-blue-500")
