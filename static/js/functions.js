@@ -340,8 +340,13 @@ async function unsavePost(button, postId) {
     });
 }
 
-async function vote(buttonsContainer, postId, voteType) {
-    await fetch(`/post/vote/${postId}/${voteType}`, {
+async function vote(buttonsContainer, type, contentId, voteType) {
+
+    // path('vote/<uuid:content_id>/<str:vote>/<st>', views.vote, name='vote_post'),
+
+    let url = `/post/vote/${contentId}/${voteType}`
+
+    await fetch(url, {
         method: "POST",
         headers: {
             "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')

@@ -47,12 +47,11 @@ def submit(request, community_name=None):
 
     return render(request, 'components/post/submit.html', context)
 
-def create_post(request):
+def create_post(request, community_name):
     data = dict(request.POST.items())
     title = data.get("title")
     content = data.get("content")
-    community = data.get("community")
-    community = models.Community.objects.get(id=community)
+    community = models.Community.objects.get(name=community_name)
     # TODO
     # flairs = data.get("flairs")
 
@@ -149,21 +148,26 @@ def reply_to_comment(request, comment_id):
 
     return JsonResponse(reply_json)
 
-
-   
-def vote(request, post_id, vote_type):
-    vote = models.PostVote.objects.filter(user=request.user, post=models.Post.objects.get(id=post_id))
-
-    if vote:
-        if vote[0].vote == vote_type:
-            vote[0].delete()
-        else:
-            vote[0].vote = vote_type
-            vote = vote[0]
-            vote.save()
+# SHOULD PROBABLY MAKE THIS INTO 1 VIEW
+def vote(request, content_id, vote, type):
+    if type == "post":
+        vote_object = models.PostVote.objects.filter(user=request.user, post=models.Post.objects.get(id=content_id))
     else:
-        vote = models.PostVote(user=request.user, post=models.Post.objects.get(id=post_id), vote=vote_type)
-        vote.save()
+        vote_object = models.CommentVote.objects.filter(user=request.user, comment=models.Comment.objects.get(id=content_id))
+
+    if vote_object:
+        if vote_object[0].vote == vote:
+            vote_object[0].delete()
+        else:
+            vote_object[0].vote = vote 
+            vote_object = vote[0]
+            vote_object.save()
+    else:
+        if type == "post":
+            vote_object = models.PostVote(user=request.user, post=models.Post.objects.get(id=content_id), vote=vote)
+        else:
+            vote_object = models.CommentVote(user=request.user, comment=models.Comment.objects.get(id=content_id), vote=vote)
+        vote_object.save()
 
     return JsonResponse(
         {'status': True}

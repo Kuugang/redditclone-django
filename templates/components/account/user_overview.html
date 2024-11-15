@@ -49,7 +49,14 @@
                         <span class = "post-content">{{ content.content }}</span>
                     </div>
                 </div>
-                <h1>TODO VOTES</h1>
+
+                <div class="flex flex-row gap-2 mt-4">
+                    {% include 'components/post/vote_control.html' with comment=content %}
+
+                    <!-- TODO GET NUMBER OF CHILD COMMENTS HUHU  -->
+                
+                </div>
+
             </div>
         {% else %}
             {% include 'components/post/post_item.html' with post=content%}

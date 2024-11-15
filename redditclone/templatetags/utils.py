@@ -2,7 +2,7 @@ import os
 
 from django import template
 
-from post.models import Comment, PostVote
+from post.models import Comment, PostVote, CommentVote
 
 register = template.Library()
 
@@ -18,16 +18,16 @@ def get_image_url(path):
 def startswith(value, arg):
     return value.startswith(arg)
 
-# @register.filter
-# def get_vote_counts(value, arg):
-#     counts = len(value) - len(arg)
-#     return counts
-# wiggy nis jake bisag walay downvote na attribute sa post anion o
-
 @register.filter
-def get_vote_counts(post):
+def get_post_vote_counts(post):
     upvotes = PostVote.objects.filter(post=post, vote="upvote").count()
     downvotes = PostVote.objects.filter(post=post, vote="downvote").count()
+    return upvotes - downvotes
+
+@register.filter
+def get_comment_vote_counts(comment):
+    upvotes = CommentVote.objects.filter(comment=comment, vote="upvote").count()
+    downvotes = CommentVote.objects.filter(comment=comment, vote="downvote").count()
     return upvotes - downvotes
 
 @register.filter
