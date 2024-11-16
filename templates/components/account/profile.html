@@ -10,13 +10,13 @@
           <div class="relative h-20 w-20 rounded-full border">
             {% if user_profile.avatar%} {% if user_profile.avatar|startswith:'https' %}
             <img
-              class="h-full w-full rounded-full object-cover"
+              class="img-modal h-full w-full rounded-full object-cover"
               src="{{user_profile.avatar}}"
               alt="{{user_profile.username}}"
             />
             {% else %}
             <img
-              class="h-full w-full rounded-full object-cover"
+              class="img-modal h-full w-full rounded-full object-cover"
               src="{% static user_profile.avatar %}"
               alt="{{ user_profile.username}}"
             />
@@ -135,13 +135,13 @@
           <img
             src="{{ user_profile.banner }}"
             alt="Profile banner"
-            class="h-[120px] h-full w-[300px] w-full rounded-lg object-contain"
+            class="img-modal h-[120px] h-full w-[300px] w-full rounded-lg object-contain"
           />
           {% else %}
           <img
             src="{% static user_profile.banner %}"
             alt="Profile Banner"
-            class="h-full w-full rounded-lg object-contain"
+            class="img-modal h-full w-full rounded-lg object-contain"
           />
           {% endif %} 
           {% endif %} 

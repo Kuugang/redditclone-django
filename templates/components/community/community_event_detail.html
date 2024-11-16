@@ -37,16 +37,15 @@
                             {% include 'svg/pencil.html'%}
                         </a>
                         {% endif %}
-
                     </div>
                     <div class="flex flex-col gap-3">
                         <div>
 
                             {% if event.image|startswith:'https'%}
-                            <img class="w-72 h-72 object-cover rounded-md shadow-md" src="{{ event.image }}"
+                            <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{{ event.image }}"
                                 alt="Event image">
                             {% else %}
-                            <img class="w-72 h-72 object-cover rounded-md shadow-md" src="{% static event.image %}"
+                            <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{% static event.image %}"
                                 alt="Event image">
                             {% endif %}
                         </div>

@@ -107,12 +107,22 @@
 
 <body class="transition-colors dark:bg-dark_1 dark:text-white">
     {% include 'components/navbar.html'%}
+    {% include 'components/image_modal.html'%}
 
     {% block content %} {% endblock %}
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll(".img-modal").forEach((img) => {
+                img.dataset.modalTarget = "image-modal";
+                img.dataset.modalToggle = "image-modal";
+
+                img.addEventListener("click", function(){
+                    document.getElementById("image-modal").querySelector("img").src = this.src;
+                })
+            });
+
             const createdAtElements =
                 document.querySelectorAll("[data-created-at]");
             for (const createdAtElement of createdAtElements) {
