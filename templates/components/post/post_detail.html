@@ -68,7 +68,7 @@
                             <!-- VOTES-->
 
                             <div class="flex flex-row gap-2 mt-4">
-                                {% include 'components/post/vote_control.html' %}
+                                {% include 'components/post/vote_control.html' with content=post type='post'%}
 
                                 <!-- COMMENTS -->
                                 <div class="px-2 py-1 rounded-xl bg-button_gray hover:bg-button_gray_hover">
@@ -94,17 +94,17 @@
 
                                 <div id="commentControl"
                                     class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right">
-                                    <button
-                                        style="margin-right: 10px; padding: 5px 10px; border: none; background-color: white; border-radius: 15px;"
-                                        class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm"
-                                        onclick="cancelComment()">
-                                        Cancel
-                                    </button>
 
                                     <button
                                         style="padding: 5px 10px; border: none; background-color: #1a73e8; color: white; border-radius: 15px;"
                                         class="inline-flex items-center px-2 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 text-sm"
-                                        onclick="submitComment('{{post.id}}')">
+                                        {% if user.is_authenticated %}
+                                            onclick="submitComment('{{post.id}}')"
+                                        {% else %}
+                                            data-modal-target="sign_in_modal"
+                                            data-modal-toggle="sign_in_modal"
+                                        {% endif %}
+                                        >
                                         Comment
                                     </button>
                                 </div>
@@ -112,6 +112,7 @@
 
                             <!-- comment section wiggy-->
                             {% include 'components/post/comments.html' with post=post root_comments=root_comments %}
+
                         </div>
                     </div>
                     {% include 'components/community/community_right_bar.html' with community=post.community%}

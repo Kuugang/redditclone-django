@@ -15,47 +15,40 @@ from django.core.exceptions import ValidationError
 from common.utils import upload_image, upload_local_image
 from django.utils.dateformat import format
 
-def get_child_comments(comment):
+def get_child_comments(comment, depth=0):
     comments = models.Comment.objects.filter(parent=comment.id)
     child_comments = []
 
     if comments:
-        for index, child in enumerate(comments):
+        for child in comments:
             child_comment_data = {
-                index: child,
-                'children': get_child_comments(child) 
+                'comment' : child,
+                'depth': depth,
+                'children': get_child_comments(child, depth=depth+1), 
             }
             child_comments.append(child_comment_data)
 
     return child_comments
 
-def get_comment(comment):
-    comment_data = {
-        comment : comment,
-    }
-
-    child_comments = get_child_comments(comment)
-
-    if child_comments:
-        comment_data['children'] = child_comments
-
-    return comment_data
-
 def post(request, post_id):
     post_instance = get_object_or_404(models.Post, id=post_id)
     root_comments = models.Comment.objects.filter(post=post_instance, parent=None)
 
-    comments_data = []
+    comments = []
     for comment in root_comments:
-        comment_data = get_comment(comment)
-        comments_data.append(comment_data)
-    
-    print(comments_data)
+        comment_data = {
+            'comment': comment,
+            'depth' : 0,
+            'children': get_child_comments(comment, 1)
+        }
+        comments.append(comment_data)
+
+    comments.reverse()
 
     return render(request, 'components/post/post_detail.html', {
         'post': post_instance,
         'root_comments': root_comments,
-        'child_comments': {} 
+        'comments': comments
     })
 
 
@@ -186,8 +179,9 @@ def vote(request, content_id, vote, type):
         if vote_object[0].vote == vote:
             vote_object[0].delete()
         else:
+            print("WTA")
             vote_object[0].vote = vote 
-            vote_object = vote[0]
+            vote_object[0].save()
     else:
         if type == "post":
             vote_object = models.PostVote(user=request.user, post=models.Post.objects.get(id=content_id), vote=vote)

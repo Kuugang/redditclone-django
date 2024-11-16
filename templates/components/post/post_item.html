@@ -46,7 +46,7 @@
 <!-- VOTES -->
 
 <div class="flex flex-row gap-2 mt-4">
-    {% include 'components/post/vote_control.html' %}
+    {% include 'components/post/vote_control.html' with content=post type='post' %}
 
     <!-- COMMENTS -->
     <div class="flex flex-row gap-2 px-3 py-1 rounded-xl bg-button_gray">
