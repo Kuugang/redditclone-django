@@ -15,19 +15,47 @@ from django.core.exceptions import ValidationError
 from common.utils import upload_image, upload_local_image
 from django.utils.dateformat import format
 
- 
+def get_child_comments(comment):
+    comments = models.Comment.objects.filter(parent=comment.id)
+    child_comments = []
+
+    if comments:
+        for index, child in enumerate(comments):
+            child_comment_data = {
+                index: child,
+                'children': get_child_comments(child) 
+            }
+            child_comments.append(child_comment_data)
+
+    return child_comments
+
+def get_comment(comment):
+    comment_data = {
+        comment : comment,
+    }
+
+    child_comments = get_child_comments(comment)
+
+    if child_comments:
+        comment_data['children'] = child_comments
+
+    return comment_data
 
 def post(request, post_id):
     post_instance = get_object_or_404(models.Post, id=post_id)
     root_comments = models.Comment.objects.filter(post=post_instance, parent=None)
-    child_comments = models.Comment.objects.filter(post=post_instance).exclude(parent=None)
+
+    comments_data = []
+    for comment in root_comments:
+        comment_data = get_comment(comment)
+        comments_data.append(comment_data)
     
-    # If you want to do something with root_comments or log something, do it here
+    print(comments_data)
 
     return render(request, 'components/post/post_detail.html', {
         'post': post_instance,
         'root_comments': root_comments,
-        'child_comments': child_comments
+        'child_comments': {} 
     })
 
 
@@ -148,7 +176,6 @@ def reply_to_comment(request, comment_id):
 
     return JsonResponse(reply_json)
 
-# SHOULD PROBABLY MAKE THIS INTO 1 VIEW
 def vote(request, content_id, vote, type):
     if type == "post":
         vote_object = models.PostVote.objects.filter(user=request.user, post=models.Post.objects.get(id=content_id))
@@ -161,12 +188,12 @@ def vote(request, content_id, vote, type):
         else:
             vote_object[0].vote = vote 
             vote_object = vote[0]
-            vote_object.save()
     else:
         if type == "post":
             vote_object = models.PostVote(user=request.user, post=models.Post.objects.get(id=content_id), vote=vote)
         else:
             vote_object = models.CommentVote(user=request.user, comment=models.Comment.objects.get(id=content_id), vote=vote)
+        vote_object.save()
 
     return JsonResponse(
         {'status': True}

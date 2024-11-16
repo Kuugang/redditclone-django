@@ -152,9 +152,16 @@
                                 </a>
                                `
                         }).join('')
+
                         result_container.querySelectorAll('.container')[2].classList.remove('hidden')
                     } else {
                         result_container.querySelectorAll('.container')[2].classList.add('hidden')
+                    }
+
+
+                    if (search_users_container.innerHTML.trim() || search_communities_container.innerHTML.trim() || search_posts_container.innerHTML.trim()) {
+                        result_container.classList.remove('hidden')
+                        input_search.classList.add('rounded-b-none')
                     }
 
                 })

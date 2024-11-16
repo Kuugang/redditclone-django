@@ -14,7 +14,7 @@
         <div class="p-10 w-[85%] relative left-[15%] ">
             <div class="flex flex-row justify-between">
                 <div class="w-full flex flex-row justify-between items-start px-8">
-                    <div class="flex flex-row gap-4 max-w-2xl">
+                    <div class="flex flex-row gap-4 max-w-2xl w-full">
                         <div class="flex flex-col gap-4">
                             <button onclick="history.back()" type="button"
                                 class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
@@ -84,15 +84,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full mt-2 rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
-                                <textarea id="commentBox" placeholder="Add a comment..."
-                                    class="w-full p-2 transition-all h-10 resize-none"
-                                    style="width: 100%; border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"
-                                    onfocus="document.getElementById('buttonContainer').classList.remove('hidden'); this.parentElement.classList.add('border-gray-500')"
-                                    onblur="this.parentElement.classList.remove('border-gray-500')"></textarea>
 
-                                <div id="buttonContainer"
-                                    class="hidden justify-end p-2.5 border-t-none bg-white transition-all float-right">
+                            <div class="w-full mt-2 rounded-lg border border-gray-300">
+                                <textarea id="commentBox" placeholder="Add a comment..."
+                                    class="w-full border-none outline-none p-6 resize-none min-h-12 shadow-none focus:ring-0"
+                                    style="width: 100%; border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"
+                                    onfocus="this.parentElement.classList.add('border-gray-500')"
+                                    onblur="this.parentElement.classList.remove('border-gray-500');"></textarea>
+
+                                <div id="commentControl"
+                                    class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right">
                                     <button
                                         style="margin-right: 10px; padding: 5px 10px; border: none; background-color: white; border-radius: 15px;"
                                         class="inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm"
@@ -110,7 +111,6 @@
                             </div>
 
                             <!-- comment section wiggy-->
-                            <h3>Comments:</h3>
                             {% include 'components/post/comments.html' with post=post root_comments=root_comments %}
                         </div>
                     </div>
@@ -122,127 +122,5 @@
 </div>
 </div>
 </div>
-<script>
-    function cancelComment() {
-        document.getElementById('commentTextarea').value = '';
-    }
 
-    
-    async function submitComment(postId, parentId = null) {
-    // Get the correct comment box based on parentId
-    const commentBox = parentId ? document.getElementById(`commentBox-${parentId}`) : document.getElementById("commentBox");
-
-    if (commentBox.value.trim() === "") {
-        alert("Comment box has no value");
-        return;
-    }
-
-    // Send the POST request to submit the comment
-    try {
-        let data = new FormData();
-        data.append('comment', commentBox.value);
-        if (parentId) {
-            data.append('parent_id', parentId); // Include parent ID if replying to a comment
-        }
-
-        const response = await fetch(`/post/comment/${postId}`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}", // Ensure CSRF token is correctly handled
-            },
-            body: data
-        });
-
-        if (response.ok) {
-            const data = await response.json(); // Assuming the response contains the new comment details
-            const commentsSection = document.getElementById(`comments-${postId}`);
-            commentBox.value = ""; // Clear the comment box after submission
-
-            // Check if comments section exists
-            if (!commentsSection) {
-                console.error(`Comments section for post ${postId} not found`);
-                return;
-            }
-
-            const newCommentItem = document.createElement("div");
-            newCommentItem.setAttribute("id", data.id);
-            const created_at = timeAgo(data.created_at);
-
-
-            // Construct the new comment item HTML
-            newCommentItem.innerHTML = `
-                <div id="${data.id}" class="flex flex-col gap-2 ${parentId ? 'border-l-2 pl-2' : ''}">
-                    <div class="flex flex-row gap-2 items-start relative">
-                        <div class="w-[30px] h-[30px] rounded-full relative">
-                        {% if comment.user.avatar %}
-                            {% if comment.user.avatar|slice:":5" == "https" %}
-                                <img class="w-[30px] h-[30px] rounded-full object-cover" 
-                                     src="{{ comment.user.avatar }}" 
-                                     alt="{{ comment.user.username }}">
-                            {% else %}
-                                <img class="w-[30px] h-[30px] rounded-full object-cover" 
-                                     src="{% static comment.user.avatar %}" 
-                                     alt="{{ comment.user.username }}">
-                            {% endif %}
-                        {% else %}
-                            <div class="w-full h-full bg-black rounded-full"></div>
-                        {% endif %}
-                    </div>
-                        <span class="flex flex-row gap-1 items-start">
-                            <a href="{% url 'account:user_profile' post.user.username %}" class="font-semibold text-sm leading-none">{{ post.user.username }}</a>
-                            <p class="text-xs">•</p>
-                            <p data-created-at="${timeAgo(data.created_at)}" class="font-semibold text-xs">${timeAgo(data.created_at)}</p>
-                        </span>
-                    </div>
-                    <p class="text-sm">${data.content}</p> <!-- Add the content of the comment -->
-                    <div class="flex flex-row gap-2 mt-1">
-                        <button class="text-xs text-pink-500 reply-button" 
-                                data-parent-id="${data.id}"
-                                onclick="showReplyBox('${data.id}')">
-                            Reply
-                        </button>
-                        <button class="text-xs text-green-500 edit-button" 
-                                data-comment-id="${data.id}">
-                            Edit
-                        </button>
-                        <button class="text-xs text-red-500 delete-button" 
-                                data-comment-id="${data.id}">
-                            Delete
-                        </button>
-                    </div>
-                 </div>
-                </div?
-            `;
-
-            // Append the new comment to the appropriate section
-            if (parentId) {
-                const parentComment = document.getElementById(parentId);
-                if (parentComment) {
-                    const childCommentsContainer = parentComment.querySelector('.child-comments');
-                    if (childCommentsContainer) {
-                        childCommentsContainer.prepend(newCommentItem);
-                    }
-                }
-            } else {
-                commentsSection.prepend(newCommentItem);
-            }
-
-            // Hide the button container after submission
-            const buttonContainer = parentId ? document.getElementById(`buttonContainer-${parentId}`) : document.getElementById('buttonContainer');
-            if (buttonContainer) {
-                buttonContainer.classList.add('hidden');
-            }
-
-            document.getElementById('comment_count').textContent = parseInt(document.getElementById('comment_count').textContent) + 1;
-
-        } else {
-            alert("Failed to post comment.");
-        }
-    } catch (error) {
-        console.error("Error submitting comment:", error);
-        alert("There was an error submitting your comment.");
-    }
-}
-
-</script>
 {% endblock %}

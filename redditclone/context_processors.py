@@ -30,8 +30,8 @@ def context(request):
     user_upvoted_posts = sorted(set(vote.post for vote in user_post_upvotes), key=lambda x: x.created_at, reverse=True)
     user_downvoted_posts = sorted(set(vote.post for vote in user_post_downvotes), key=lambda x: x.created_at, reverse=True)
 
-    user_upvoted_comments = sorted(set(vote.post for vote in user_comment_upvotes), key=lambda x: x.created_at, reverse=True)
-    user_downvoted_comments = sorted(set(vote.post for vote in user_comment_downvotes), key=lambda x: x.created_at, reverse=True)
+    user_upvoted_comments = sorted(set(vote.comment for vote in user_comment_upvotes), key=lambda x: x.created_at, reverse=True)
+    user_downvoted_comments = sorted(set(vote.comment for vote in user_comment_downvotes), key=lambda x: x.created_at, reverse=True)
 
 
     user_following = Follower.objects.filter(follower=request.user.id).values_list('user', flat=True)

@@ -32,9 +32,9 @@
                     <input type="hidden" name = "event_id" value = "{{event.id}}">
                     <input type="hidden" name = "_method" value = "PUT">
                     <input name="name" type="text" placeholder="Title"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
                     <input name="location" type="text" placeholder="Location"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
                     <div id="date-range-picker" date-rangepicker class="flex items-center">
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

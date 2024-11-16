@@ -31,9 +31,9 @@
                     <h1 class="font-bold text-2xl">Create Event</h1>
                     <input type="hidden" name = "community_id" value = "{{community.id}}">
                     <input name="name" type="text" placeholder="Title"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
                     <input name="location" type="text" placeholder="Location"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
                     <div class="flex items-center"  date-rangepicker >
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">

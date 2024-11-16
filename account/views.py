@@ -22,7 +22,7 @@ from common.utils import upload_image, upload_local_image
 
 # Models
 from post.models import Post, Comment, Vote
-from community.models import Community
+from community.models import Community, CommunityMember
 from . import models
 
 
@@ -120,8 +120,26 @@ def check_availability(request):
     return JsonResponse(response_data)
 
 def dashboard(request):
-    posts = Post.objects.all().order_by('-created_at')
+    user = request.user  # Get the logged-in user
+
+    # Get private communities where the user is a member
+    if(user.is_authenticated):
+        private_communities = CommunityMember.objects.filter(
+            user=user,
+            community__visibility=Community.Visibility.PRIVATE
+        ).values_list('community', flat=True)
+
+        posts = Post.objects.filter(
+            community__visibility__in=[Community.Visibility.PUBLIC, Community.Visibility.RESTRICTED]
+        ) | Post.objects.filter(community__id__in=private_communities)
+    else:
+        posts = Post.objects.filter(community__visibility=Community.Visibility.PUBLIC or Community.Visibility.RESTRICTED)
+
+    # Order posts by creation date
+    posts = posts.order_by('-created_at')
+
     return render(request, 'dashboard.html', {'posts': posts})
+
 
 
 def profile(request):
