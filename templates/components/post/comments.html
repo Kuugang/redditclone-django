@@ -1,7 +1,7 @@
 {% load static %}
-<ul id = "commentsSection" class="flex flex-col gap-4">
+<div id = "commentsSection" class="flex flex-col gap-4">
     {% for comment in comments %}
         {% include "components/post/comment_item.html" with comment=comment %}
     {% endfor %}
-</ul>
+</div>
 {% include 'components/post/delete_comment_modal.html' %}

@@ -403,22 +403,21 @@ async function vote(buttonsContainer, type, contentId, vote) {
     });
 }
 
-async function submitComment(postId, parentId = null){
-    const commentBox = parentId ? document.getElementById(`commentBox-${parentId}`) : document.getElementById("commentBox");
-    let comment = commentBox.value;
+async function submitComment(postId, parentId = null, commentBox = null){
+    if(commentBox == null){
+        commentBox = document.getElementById("commentBox");
+    }
 
-    commentBox.value = "";
+    comment = commentBox.value;
+
+    if(commentBox){
+        commentBox.value = "";
+    }
 
     let data = new FormData();
-
     data.append("comment", comment);
-    if (parentId) {
+    if (parentId)
         data.append('parent_id', parentId);
-    }
-
-    if (parentId != null) {
-        data.append("parent_id", parentId);
-    }
 
     await fetch(`/post/comment/${postId}`, {
         method: "POST",
@@ -431,11 +430,10 @@ async function submitComment(postId, parentId = null){
         if (response.status == 200) {
             let comment = document.createElement('div');
             comment.classList.add('pl-4', 'flex', 'flex-col', 'gap-4', 'border-l');
+            comment.setAttribute("id", 'comment-'+ data.id)
             
             let profilePicture = document.querySelector("#btn_drop_down_profile").querySelector("img").src;            
-            let username = document.querySelector("#username")
-
-            console.log(data)
+            let username = document.querySelector("#username").textContent.substring(2)
 
             comment.innerHTML = `
                 <div class="flex flex-col gap-2">
@@ -447,7 +445,7 @@ async function submitComment(postId, parentId = null){
                         <div class="flex flex-row gap-2 items-center">
                             <a href="/account/profile/${username}" 
                                class="font-semibold text-sm">
-                                ${username.textContent}
+                                ${username}
                             </a>
                             <p class="text-xs text-gray-500">•</p>
                             <p class="text-xs text-gray-500" data-created-at="${data.created_at}">
@@ -490,14 +488,14 @@ async function submitComment(postId, parentId = null){
 
                         <button 
                             class="flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-xl bg-button_gray hover:bg-button_gray_hover"
-                            onclick="showCommentReplyBox(this.parentElement.parentElement, '${data.id}')">
+                            onclick="showCommentReplyBox(this.parentElement.parentElement, '${postId}', '${data.id}')">
                             <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor" height="20" icon-name="comment-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10 19H1.871a.886.886 0 0 1-.798-.52.886.886 0 0 1 .158-.941L3.1 15.771A9 9 0 1 1 10 19Zm-6.549-1.5H10a7.5 7.5 0 1 0-5.323-2.219l.54.545L3.451 17.5Z"></path>
                             </svg>
                             <h1 class="text-xs">Reply</h1>
                         </button>
 
-                        <button onclick="event.stopPropagation()"
+                        <button id = "dropdownButton-${data.id}" onclick="event.stopPropagation()"
                             data-dropdown-toggle="dropdown-${data.id}"
                             class="">
                             <svg rpl="" fill="currentColor" height="16" icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
@@ -509,7 +507,7 @@ async function submitComment(postId, parentId = null){
 
                         <div id="dropdown-${data.id}"
                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton-${data.id}">
                                 <li>
                                     <button onclick="event.stopPropagation(); document.querySelector('#delete-comment-modal').querySelector('input[name=comment_id]').value = '${data.id}'"
                                         data-modal-target="delete-comment-modal" data-modal-toggle="delete-comment-modal"
@@ -529,25 +527,29 @@ async function submitComment(postId, parentId = null){
                         </div>
                     </div>
                 </div>
+                <div class="children flex flex-col gap-4">
+
+                </div>
             `
 
             if (parentId) {
-                const parentComment = document.getElementById(`comment${parentId}`);
-                parentComment.appendChild(comment);
+                const childrenContainer = document.getElementById(`comment-${parentId}`).querySelector(".children");
+                childrenContainer.prepend(comment);
+                commentBox.parentElement.parentElement.remove()
             } else {
                 document.querySelector("#commentsSection").prepend(comment);
             }
-
         }
     });
 }
 
-function showCommentReplyBox(container, postId, commentId, parentId = null) {
+function showCommentReplyBox(container, postId, commentId) {
     let div = document.createElement('div');
-
+    let opened = container.dataset.opened;
+    if(opened == 1)return;
     let textarea = `
             <div class="w-full rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
-                <textarea id = "commentBox-${parentId}" placeholder="Add a reply..."
+                <textarea placeholder="Add a reply..."
                           class="w-full p-2 transition-all h-10 resize-none"
                           style="border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"></textarea>
                 <div id="" class="justify-end p-2.5 border-t-none bg-white float-right">
@@ -565,14 +567,14 @@ function showCommentReplyBox(container, postId, commentId, parentId = null) {
 
     div.querySelector('.cancel-button').addEventListener('click', () => {
         div.remove();
+        container.dataset.opened = 0
     });
 
-    if(parentId.trim() !== "")
-        parentId = null
-
     div.querySelectorAll('button')[1].addEventListener('click', async () => {
-        submitComment(postId, parentId);
+        await submitComment(postId, commentId, div.querySelector("textarea"));
+        container.dataset.opened = 0;
     })
 
     container.appendChild(div)
+    container.dataset.opened = 1 
 }

@@ -27,7 +27,7 @@ def get_child_comments(comment, depth=0):
                 'children': get_child_comments(child, depth=depth+1), 
             }
             child_comments.append(child_comment_data)
-
+    child_comments.reverse()
     return child_comments
 
 def post(request, post_id):
@@ -100,15 +100,29 @@ def upload_post_image(request):
 def comment(request, post_id):
     post_instance = get_object_or_404(models.Post, id=post_id)
     content = request.POST.get("comment")
+    parent_id = request.POST.get("parent_id")
+
+
+    if(parent_id):
+        parent  = get_object_or_404(models.Comment, id=uuid.UUID(str(parent_id)), user = request.user)
+
+        comment = models.Comment.objects.create(
+            user=request.user,
+            post=post_instance,
+            content=content,
+            parent = parent
+        )
+    else:
+        comment = models.Comment.objects.create(
+            user=request.user,
+            post=post_instance,
+            content=content,
+        )
+    comment.save()
     
     if not content:
         return JsonResponse({"error": "Comment content is required"}, status=400)
 
-    comment = models.Comment.objects.create(
-        user=request.user,
-        post=post_instance,
-        content=content
-    )
 
     comment_object = models.Comment.objects.filter(id=comment.id).values('created_at')[0]
     formatted_date = format(comment_object['created_at'], 'M. j, Y, P')
@@ -118,56 +132,15 @@ def comment(request, post_id):
     comment_json["id"] = json.loads(comment_data)[0]['pk']
     comment_json["created_at"] = formatted_date
 
-
     return JsonResponse(comment_json)
 
 def delete_comment(request):
     comment_id = request.POST.get("comment_id")
     comment = get_object_or_404(models.Comment, id=uuid.UUID(str(comment_id)), user = request.user)
-    comment.delete()
+    comment.is_deleted = True
+    comment.save()
 
     return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
-
-def reply_to_comment(request, comment_id):
-    if not request.headers.get('X-CSRFToken'):
-        return JsonResponse({'error': 'CSRF token missing'}, status=403)
-
-    data = json.loads(request.body)
-    content = data.get('content', '').strip()
-
-    if not content:
-        return JsonResponse({'error': 'Content is required'}, status=400)
-
-    parent_comment = models.Comment.objects.select_related('post', 'user').get(id=comment_id)
-
-    reply = models.Comment.objects.create(
-        content=content,
-        post=parent_comment.post,
-        parent=parent_comment,
-        user=request.user
-    )
-
-    formatted_date = format(reply.created_at, 'M. j, Y, P')
-
-    avatar = None
-    if hasattr(reply.user, 'avatar'):
-        
-        if isinstance(reply.user.avatar, str):
-            avatar = reply.user.avatar  
-        elif hasattr(reply.user.avatar, 'url'):
-            avatar = reply.user.avatar.url  
-    reply_json = {
-        'id': str(reply.id),
-        'content': reply.content,
-        'created_at': formatted_date,
-        'user': {
-            'username': reply.user.username,
-            'avatar': avatar,
-        },
-        'parent_id': str(parent_comment.id)
-    }
-
-    return JsonResponse(reply_json)
 
 def vote(request, content_id, vote, type):
     if type == "post":

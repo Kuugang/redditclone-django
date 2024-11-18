@@ -57,3 +57,21 @@ def get_community_role(user_communities, community_id):
         if community.id == community_id:
             return community.role
     return None
+
+@register.filter
+def has_non_deleted_children(comments):
+    """
+    Recursively checks if any comment or its children are not deleted.
+    :param comments: List of dictionaries, each containing a comment and its children.
+    :return: True if there is at least one non-deleted comment in the tree, False otherwise.
+    """
+    def recursive_check(comments_list):
+        for comment in comments_list:
+            if not comment['comment'].is_deleted:
+                return True
+            if comment['children']:
+                if recursive_check(comment['children']):
+                    return True
+        return False
+
+    return recursive_check(comments)
