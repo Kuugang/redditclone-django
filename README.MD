@@ -1,23 +1,8 @@
 
-# Reddit Clone 🚀
+# Reddit Clone
 
-<div style="display: flex; gap: 10px; align-items: center;">
-    <a href="https://github.com/Kuugang/redditclone-django/graphs/contributors">
-        <img src="https://img.shields.io/github/contributors/Kuugang/redditclone-django.svg?style=for-the-badge" alt="Contributors">
-    </a>
-    <a href="https://github.com/Kuugang/redditclone-django/network/members">
-        <img src="https://img.shields.io/github/forks/Kuugang/redditclone-django.svg?style=for-the-badge" alt="Forks">
-    </a>
-    <a href="https://github.com/Kuugang/redditclone-django/stargazers">
-        <img src="https://img.shields.io/github/stars/Kuugang/redditclone-django.svg?style=for-the-badge" alt="Stargazers">
-    </a>
-    <a href="https://github.com/Kuugang/redditclone-django/issues">
-        <img src="https://img.shields.io/github/issues/Kuugang/redditclone-django.svg?style=for-the-badge" alt="Issues">
-    </a>
-    <a href="https://github.com/Kuugang/redditclone-django/blob/master/LICENSE.txt">
-        <img src="https://img.shields.io/github/license/Kuugang/redditclone-django.svg?style=for-the-badge" alt="MIT License">
-    </a>
-</div>
+
+[![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![MIT License][license-shield]][license-url]
 
   
 
@@ -38,20 +23,7 @@ A full-featured Reddit-like web application built with Django, offering users th
   
 
 ## 🛠 Tech Stack
-
-<div> 
-	<a href="https://www.djangoproject.com/"> 
-		<img  src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
-		 </a>
-	<a  href="https://tailwindcss.com/"> 
-		<img  src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white"  alt="Tailwind"> </a> 
-	<a  href="https://www.postgresql.org/"> 
-		<img  src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"  alt="PostgreSQL"> </a> 
-	<a  href="https://html.com/"> 
-		<img  src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML"> </a> 
-	<a  href="https://www.javascript.com/"> 
-		<img  src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"  alt="Javascript"> </a> 
-</div>
+[![Django][Django.com]][Django-url] [![Tailwind][Tailwindcss.com]][Tailwind-url]  [![PostgreSQL][PostgreSQL.com]][PostgreSQL-url] [![HTML][HTML.com]][HTML-url]  [![Javascript][Javascript.com]][Javascript-url]
 
   
 

@@ -1,4 +1,4 @@
-## 📋 Functional Requirements
+## [ 📋Functional Requirements](https://docs.google.com/document/d/1OBhGfcnl1p7q2mNk7ouD_MtqcvwcncpvMveAfiy7PMk/edit)
 
 ### Post System
 **Requirements:**
