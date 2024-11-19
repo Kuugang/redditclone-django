@@ -37,5 +37,5 @@
     {%include 'components/community/community_events.html' %}
 </div>
 {% if user_role == 'moderator' or user_role == 'admin' %}
-{% include 'components/community/delete_community_event_modal.html' %}
+{% include 'components/modals/delete_community_event_modal.html' %}
 {% endif %}

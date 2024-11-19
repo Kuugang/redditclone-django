@@ -19,7 +19,7 @@
     {% include 'components/leftbar.html'%}
     <div class="p-10 relative left-[15%] w-[85%]">
         <div class = "flex flex-row justify-between w-full">
-            <form method="POST" action="{% url 'post:create_post' community.name %}" class="w-[50%] flex flex-col gap-3 relative">
+            <form method="POST" {%if community%} action="{% url 'post:create_post' community.name %}" {%endif%} class="w-[50%] flex flex-col gap-3 relative">
                 {% csrf_token %}
                 <h1 class="font-bold text-xl">Create Post</h1>
                 <div class="relative max-w-fit" id="custom-dropdown">
@@ -68,10 +68,12 @@
                 </div>
                 <input type="hidden" name="content" id="hidden_content">
 
-                <div class="flex justify-end">
-                    <button id="submit-button" type="submit"
-                        class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
-                </div>
+                {% if community %}
+                    <div class="flex justify-end">
+                        <button id="submit-button" type="submit"
+                            class="bg-blue-500 text-white py-2 px-4 rounded-md">Submit</button>
+                    </div>
+                {% endif %}
             </form>
 
             {% if community %}

@@ -3,8 +3,11 @@ import os
 from django import template
 
 from post.models import Comment, PostVote, CommentVote
+from common.utils import get_child_comments
+
 
 register = template.Library()
+
 
 @register.simple_tag
 def get_image_url(path):
@@ -32,12 +35,31 @@ def get_comment_vote_counts(comment):
 
 @register.filter
 def get_comment_counts(post):
-    count = Comment.objects.filter(post=post).count()
+    count = Comment.objects.filter(post=post, is_deleted = False).count()
     return count
+
+
+@register.filter
+def get_children_count(comment):
+    def get_children_count_helper(comment):
+        count = len(comment['children'])
+        for child in comment['children']: 
+            count += get_children_count_helper(child)
+        return count
+
+    children = get_child_comments(comment, 1)
+    
+    total_count = len(children) 
+
+    for child in children:
+        total_count += get_children_count_helper(child)
+
+    return total_count
+
 
 @register.filter
 def get_community_events(community):
-    return community.communityevent_set.all()
+    return community.communityevent_set.all().order_by('-start_date')
 
 @register.filter
 def get_community_rules(community):
@@ -60,11 +82,6 @@ def get_community_role(user_communities, community_id):
 
 @register.filter
 def has_non_deleted_children(comments):
-    """
-    Recursively checks if any comment or its children are not deleted.
-    :param comments: List of dictionaries, each containing a comment and its children.
-    :return: True if there is at least one non-deleted comment in the tree, False otherwise.
-    """
     def recursive_check(comments_list):
         for comment in comments_list:
             if not comment['comment'].is_deleted:

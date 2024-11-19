@@ -208,7 +208,7 @@ def user_profile(request, username):
         user_posts = [post for post in user_posts if post.community_id not in private_communities_user_not_in]
 
 
-    user_comments = Comment.objects.filter(user=user.id).order_by('-created_at')
+    user_comments = Comment.objects.filter(user=user.id, is_deleted = False).order_by('-created_at')
     if request.user != user:
         user_comments = [comment for comment in user_comments if comment.post.community_id not in private_communities_user_not_in]
 

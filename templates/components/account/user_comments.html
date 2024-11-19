@@ -44,7 +44,11 @@
                     <span class = "post-conten">{{ comment.content }}</span>
                 </div>
             </div>
-            <h1>TODO VOTES</h1>
+
+            <div class="flex flex-row gap-2 mt-4">
+                {% include 'components/post/vote_control.html' with content=comment type='comment' %}
+                {% include 'components/post/comment_control.html' with content=comment %}
+            </div>
         </div>
     </div>
     {% endfor %}

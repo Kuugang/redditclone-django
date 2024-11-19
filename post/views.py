@@ -12,23 +12,10 @@ from community.models import Community, CommunityTopic, CommunityRule, Community
 from django.core.exceptions import ValidationError
 
 # Utils
-from common.utils import upload_image, upload_local_image
+from common.utils import upload_image, upload_local_image, get_child_comments
 from django.utils.dateformat import format
 
-def get_child_comments(comment, depth=0):
-    comments = models.Comment.objects.filter(parent=comment.id)
-    child_comments = []
 
-    if comments:
-        for child in comments:
-            child_comment_data = {
-                'comment' : child,
-                'depth': depth,
-                'children': get_child_comments(child, depth=depth+1), 
-            }
-            child_comments.append(child_comment_data)
-    child_comments.reverse()
-    return child_comments
 
 def post(request, post_id):
     post_instance = get_object_or_404(models.Post, id=post_id)

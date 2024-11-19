@@ -1,4 +1,5 @@
 import requests, os, uuid
+from post.models import Comment
 
 
 def get_request_data(request, inputs, files):
@@ -51,3 +52,19 @@ def upload_image(image, bucket: str):
 
     else:
         return None
+
+
+def get_child_comments(comment, depth=0):
+    comments = Comment.objects.filter(parent=comment.id)
+    child_comments = []
+
+    if comments:
+        for child in comments:
+            child_comment_data = {
+                'comment' : child,
+                'depth': depth,
+                'children': get_child_comments(child, depth=depth+1), 
+            }
+            child_comments.append(child_comment_data)
+    child_comments.reverse()
+    return child_comments

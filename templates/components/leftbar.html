@@ -10,10 +10,10 @@
             <p>Home</p>
         </a>
 
-        <button
+        <!-- <button
             class="hover:bg-button_gray_hover dark:hover:bg-gray_1 flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full">
             <p>Popular</p>
-        </button>
+        </button> -->
     </div>
 
     <hr class="border-r border-[#ffffff33]" />
@@ -64,7 +64,7 @@
     {%endif%}
 </div>
 {% if user.is_authenticated %}
-{% include 'components/community/create_community.html'%}
+{% include 'components/modals/create_community_modal.html'%}
 {% endif %}
 
 <script>

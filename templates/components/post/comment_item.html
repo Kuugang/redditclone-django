@@ -66,19 +66,19 @@
             <p class="text-sm">{{ comment.comment.content }}</p>
             <div class="flex flex-row gap-4 mt-4">
                 {% include 'components/post/vote_control.html' with content=comment.comment type='comment' %}
-                    <button 
-                        class="flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-xl bg-button_gray hover:bg-button_gray_hover"
-                        {% if not user.is_authenticated %} 
-                            data-modal-target="sign_in_modal"
-                            data-modal-toggle="sign_in_modal"
-                        {% else %}
-                            onclick="showCommentReplyBox(this.parentElement.parentElement, '{{comment.comment.post.id}}', '{{comment.comment.id}}')"
-                        {% endif %}>
-                        <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor" height="20" icon-name="comment-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 19H1.871a.886.886 0 0 1-.798-.52.886.886 0 0 1 .158-.941L3.1 15.771A9 9 0 1 1 10 19Zm-6.549-1.5H10a7.5 7.5 0 1 0-5.323-2.219l.54.545L3.451 17.5Z"></path>
-                        </svg>
-                        <h1 class="text-xs">Reply</h1>
-                    </button>
+                <button 
+                    class="flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-xl dark:bg-dark_3 border dark:border-white_3"
+                    {% if not user.is_authenticated %} 
+                        data-modal-target="sign_in_modal"
+                        data-modal-toggle="sign_in_modal"
+                    {% else %}
+                        onclick="showCommentReplyBox(this.parentElement.parentElement, '{{comment.comment.post.id}}', '{{comment.comment.id}}')"
+                    {% endif %}>
+                    <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor" height="20" icon-name="comment-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19H1.871a.886.886 0 0 1-.798-.52.886.886 0 0 1 .158-.941L3.1 15.771A9 9 0 1 1 10 19Zm-6.549-1.5H10a7.5 7.5 0 1 0-5.323-2.219l.54.545L3.451 17.5Z"></path>
+                    </svg>
+                    <h1 class="text-xs">Reply</h1>
+                </button>
                 <button id = "dropdownButton-{{comment.comment.id}}" onclick="event.stopPropagation()"
                     data-dropdown-toggle="dropdown-{{comment.comment.id}}"
                     type="button">

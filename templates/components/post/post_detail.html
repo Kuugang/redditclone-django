@@ -6,14 +6,14 @@
 <link rel="stylesheet" href="{% static 'css/quill.snow.css' %}" />
 <link rel="stylesheet" href="{% static 'css/quill.bubble.css' %}" />
 
-{% include 'components/post/delete_post_modal.html' %}
+{% include 'components/modals/delete_post_modal.html' %}
 
 <div id="{{ post.id }}">
     <div class="flex flex-row w-full relative top-[10vh]">
         {% include 'components/leftbar.html'%}
         <div class="p-10 w-[85%] relative left-[15%] ">
-            <div class="flex flex-row justify-between">
-                <div class="w-full flex flex-row justify-between items-start px-8">
+            <div class="flex flex-row justify-between ">
+                <div class="w-full flex flex-row justify-between items-start px-8 ">
                     <div class="flex flex-row gap-4 max-w-2xl w-full">
                         <div class="flex flex-col gap-4">
                             <button onclick="history.back()" type="button"
@@ -40,7 +40,7 @@
 
                             {% endif %}
                         </div>
-                        <div class="flex flex-col gap-6">
+                        <div class="flex flex-col gap-6 w-full">
                             <div class="flex flex-col gap-3">
                                 <div class="flex flex-row items-center gap-2 w-full">
                                     <div class="rounded-full w-10 h-10 bg-gray-200">
@@ -69,20 +69,7 @@
 
                             <div class="flex flex-row gap-2 mt-4">
                                 {% include 'components/post/vote_control.html' with content=post type='post'%}
-
-                                <!-- COMMENTS -->
-                                <div class="px-2 py-1 rounded-xl bg-button_gray hover:bg-button_gray_hover">
-                                    <div class="flex flex-row gap-2">
-                                        <button onclick="comment('{{post.id}}')" class="z-50" {% if not user.is_authenticated %} disabled {% endif %}>
-                                        </button>
-                                        <button {% if not user.is_authenticated %} disabled {% endif %}>
-                                            <svg rpl="" aria-hidden="true" class="icon-comment" fill="currentColor" height="20" icon-name="comment-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10 19H1.871a.886.886 0 0 1-.798-.52.886.886 0 0 1 .158-.941L3.1 15.771A9 9 0 1 1 10 19Zm-6.549-1.5H10a7.5 7.5 0 1 0-5.323-2.219l.54.545L3.451 17.5Z"></path>
-                                            </svg>
-                                        </button>
-                                        <h1 id="comment_count">{{ post|get_comment_counts}}</h1>
-                                    </div>
-                                </div>
+                                {% include 'components/post/comment_control.html' with content=post %}
                             </div>
 
                             <div class="w-full mt-2 rounded-lg border border-gray-300">

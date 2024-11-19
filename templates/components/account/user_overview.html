@@ -12,7 +12,6 @@
         class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
         id="{{content.id}}"
     >
-
         {% if content.post %}
             <div class="flex flex-col gap-2 items-start">
                 <a
@@ -51,9 +50,8 @@
                 </div>
 
                 <div class="flex flex-row gap-2 mt-4">
-                    {% include 'components/post/vote_control.html' with comment=content %}
-
-                    <!-- TODO GET NUMBER OF CHILD COMMENTS HUHU  -->
+                    {% include 'components/post/vote_control.html' with content=content type='comment' %}
+                    {% include 'components/post/comment_control.html' with content=content %}
                 </div>
 
             </div>
