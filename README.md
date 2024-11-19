@@ -10,7 +10,6 @@
 
 A full-featured Reddit-like web application built with Django, offering users the ability to create posts, comments, and interact within different subreddits.
 
-  
 
 📝 [Functional Requirements](https://github.com/Kuugang/redditclone-django/blob/main/REQUIREMENTS.md)
 
@@ -23,16 +22,16 @@ A full-featured Reddit-like web application built with Django, offering users th
   
 
 ## 🛠 Tech Stack
-[![Django][Django.com]][Django-url] [![Tailwind][Tailwindcss.com]][Tailwind-url]  [![PostgreSQL][PostgreSQL.com]][PostgreSQL-url] [![HTML][HTML.com]][HTML-url]  [![Javascript][Javascript.com]][Javascript-url]
+[![Django][Django.com]][Django-url] [![PostgreSQL][PostgreSQL.com]][PostgreSQL-url] [![HTML][HTML.com]][HTML-url]  [![Javascript][Javascript.com]][Javascript-url] [![Tailwind][Tailwindcss.com]][Tailwind-url]  
 
   
 
 ## 📦 Prerequisites
 <div>
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/pip-3775A9?style=for-the-badge&logo=pypi&logoColor=white" alt="pip">
   <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/pip-3775A9?style=for-the-badge&logo=pypi&logoColor=white" alt="pip">
 </div>
   
 
