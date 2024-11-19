@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'redditclone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DATABASE_NAME") if os.getenv("ENV") == 'production' else "redditclone-django",
-        'USER': os.getenv("DATABASE_USER") if os.getenv("ENV") == 'production' else "postgres",
-        'PASSWORD': os.getenv("DATABASE_PASSWORD") if os.getenv("ENV") == 'production' else "020104",
-        'HOST': os.getenv("DATABASE_HOST") if os.getenv("ENV") == 'production' else "localhost",
-        'PORT': os.getenv("DATABASE_PORT") if os.getenv("ENV") == 'production' else "5432",
+        'NAME': os.getenv("DATABASE_NAME"),
+        'USER': os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+        'HOST': os.getenv("DATABASE_HOST"),
+        'PORT': os.getenv("DATABASE_PORT")
     }
 }
 
