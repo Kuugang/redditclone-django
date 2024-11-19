@@ -16,6 +16,7 @@ urlpatterns = [
 
 
     path('comment/<uuid:post_id>',  views.comment, name='comment'),
+    path('comment/edit/<uuid:comment_id>',  views.edit_comment, name='edit_comment'),
     path('delete_comment/',  (views.delete_comment), name='delete_comment'),
     path('delete/',  login_required(views.delete_post), name='delete_post'),
     path('<uuid:post_id>/edit/',  login_required(views.edit_post), name='edit_post'),

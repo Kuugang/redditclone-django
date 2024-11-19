@@ -121,6 +121,14 @@ def comment(request, post_id):
 
     return JsonResponse(comment_json)
 
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(models.Comment, id=uuid.UUID(str(comment_id)))
+    content = request.POST.get("comment")
+    comment.content = content
+    comment.save()
+
+    return JsonResponse({'success': True})
+
 def delete_comment(request):
     comment_id = request.POST.get("comment_id")
     comment = get_object_or_404(models.Comment, id=uuid.UUID(str(comment_id)), user = request.user)

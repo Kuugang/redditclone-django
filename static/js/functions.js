@@ -1,3 +1,5 @@
+const { doc } = require("prettier");
+
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
         (
@@ -567,9 +569,8 @@ function showCommentReplyBox(container, postId, commentId) {
     if(opened == 1)return;
     let textarea = `
             <div class="w-full rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
-                <textarea placeholder="Add a reply..."
-                          class="w-full p-2 transition-all h-10 resize-none"
-                          style="border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"></textarea>
+                <textarea class="w-full p-2 transition-all h-16 resize-none"
+                      style="border: none; outline: none; padding: 10px; resize: none; box-shadow: none;" placeholder="Add a reply..."></textarea>
                 <div id="" class="justify-end p-2.5 border-t-none bg-white float-right">
                     <button class="cancel-button inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm">
                         Cancel
@@ -595,4 +596,53 @@ function showCommentReplyBox(container, postId, commentId) {
 
     container.appendChild(div)
     container.dataset.opened = 1 
+}
+
+function showEditCommentTextArea(commentId){
+    let commentContainer = document.getElementById(`comment-${commentId}`).querySelector(".comment_container");
+    let commentTag = commentContainer.querySelector("p");
+    let comment = commentTag.textContent.trim();
+    console.log(comment)
+
+    let editor = `
+        <div class="w-full rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
+            <textarea class="w-full p-2 transition-all h-16 resize-none"
+                      style="border: none; outline: none; padding: 10px; resize: none; box-shadow: none;">${comment}</textarea>
+            <div class="justify-end pb-2.5 border-t-none bg-white float-right">
+                <button class="btn-cancel inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm">
+                    Cancel
+                </button>
+                <button class="btn-save inline-flex items-center px-2 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 text-sm">
+                    Save
+                </button>
+            </div>
+        </div>
+    `;
+    commentTag.remove();
+    commentContainer.innerHTML = editor;
+
+    let cancelButton = commentContainer.querySelector(".btn-cancel");
+    let saveButton = commentContainer.querySelector(".btn-save");
+
+    cancelButton.addEventListener('click', () => {
+        commentContainer.innerHTML = `<p>${comment}</p>`;
+    });
+
+    saveButton.addEventListener('click', async () => {
+        let comment = commentContainer.querySelector("textarea").value;
+        let data = new FormData();
+        data.append("comment", comment);
+        await fetch(`/post/comment/edit/${commentId}`, {
+            method: "POST",
+            body: data,
+            headers: {
+                "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+        }).then(async (response) => {
+            const data = await response.json();
+            if (response.status == 200) {
+                commentContainer.innerHTML = `<p>${comment}</p>`;
+            }
+        });
+    });
 }

@@ -63,7 +63,9 @@
                 </div>
             </div>
 
-            <p class="text-sm">{{ comment.comment.content }}</p>
+            <div class="comment_container">
+                <p class="text-sm">{{ comment.comment.content }}</p>
+            </div>
             <div class="flex flex-row gap-4 mt-4">
                 {% include 'components/post/vote_control.html' with content=comment.comment type='comment' %}
                 <button 
@@ -92,6 +94,17 @@
                 <div id="dropdown-{{comment.comment.id}}"
                     class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton-{{comment.comment.id}}">
+
+                        <li>
+                            <button onclick="event.stopPropagation();  showEditCommentTextArea('{{comment.comment.id}}');"
+                                class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                {% include 'svg/pencil.html'%}
+                                <p>
+                                    Edit comment
+                                </p>
+                            </button>
+                        </li>
+
                         <li>
                             <button onclick="event.stopPropagation(); document.querySelector('#delete-comment-modal').querySelector('input[name=comment_id]').value = '{{comment.comment.id}}'"
                                 data-modal-target="delete-comment-modal" data-modal-toggle="delete-comment-modal"
@@ -107,6 +120,8 @@
                                 </p>
                             </button>
                         </li>
+
+
                     </ul>
                 </div>
 
