@@ -27,3 +27,4 @@ urlpatterns = [
 ]
 
 handler404 = 'account.views.custom_404'
+handler500 = 'account.views.custom_500'

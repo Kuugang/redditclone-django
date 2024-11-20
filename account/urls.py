@@ -25,4 +25,7 @@ urlpatterns = [
     path("follow/<str:user>", login_required(views.follow), name="follow"),
     path("unfollow/<str:user>", login_required(views.unfollow), name="unfollow"),
     path("search/", views.search, name="search"),
+
+    # Test view
+    path('raise-500/', views.raise_500, name='raise_500'),
 ]
