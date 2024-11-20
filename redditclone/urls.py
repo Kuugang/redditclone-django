@@ -25,3 +25,5 @@ urlpatterns = [
     path("post/", include("post.urls", namespace="post")),
     path("", accounts_views.dashboard, name="dashboard"),
 ]
+
+handler404 = 'account.views.custom_404'

@@ -1,6 +1,8 @@
 import os, uuid
+from uuid import UUID
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render
+from django.http import Http404
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import json
@@ -15,29 +17,32 @@ from django.core.exceptions import ValidationError
 from common.utils import upload_image, upload_local_image, get_child_comments
 from django.utils.dateformat import format
 
+import logging
 
+logger = logging.getLogger(__name__)
 
 def post(request, post_id):
+    try:
+        UUID(str(post_id), version=4)
+    except ValueError:
+        raise Http404("Invalid post ID format")
+
     post_instance = get_object_or_404(models.Post, id=post_id)
     root_comments = models.Comment.objects.filter(post=post_instance, parent=None)
-
     comments = []
     for comment in root_comments:
         comment_data = {
             'comment': comment,
-            'depth' : 0,
+            'depth': 0,
             'children': get_child_comments(comment, 1)
         }
         comments.append(comment_data)
-
     comments.reverse()
-
     return render(request, 'components/post/post_detail.html', {
         'post': post_instance,
         'root_comments': root_comments,
         'comments': comments
     })
-
 
 def submit(request, community_name=None):
     context = {}
@@ -147,7 +152,6 @@ def vote(request, content_id, vote, type):
         if vote_object[0].vote == vote:
             vote_object[0].delete()
         else:
-            print("WTA")
             vote_object[0].vote = vote 
             vote_object[0].save()
     else:

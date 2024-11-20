@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Q
 from django.core.serializers import serialize
 import json
@@ -24,7 +24,6 @@ from common.utils import upload_image, upload_local_image
 from post.models import Post, Comment, Vote
 from community.models import Community, CommunityMember
 from . import models
-
 
 
 User = get_user_model()
@@ -140,8 +139,6 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', {'posts': posts})
 
-
-
 def profile(request):
     return render(request, 'components/account/profile.html')
 
@@ -181,7 +178,7 @@ def edit_banner(request):
     return redirect('account:profile_settings')
 
 def user_profile(request, username):
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
 
     query = """
         SELECT c.*, cm.role
@@ -293,3 +290,6 @@ def search(request):
         return JsonResponse(response_data, safe=False)
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)

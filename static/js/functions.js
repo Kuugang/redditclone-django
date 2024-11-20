@@ -276,6 +276,7 @@ function addRecentPost(post_id, post_title, post_content) {
 function addRecentPostItem(post) {
     const recentPostsContainer = document.getElementById("recent_posts");
     const recentPostItem = document.createElement("div");
+    recentPostItem.setAttribute("id", `recent_post_${post.post_id}`);
     recentPostItem.classList.add("recent_post_item", "max-h-[55px]", "line-clamp-2", "border-b", "border-gray-300", "py-2");
     recentPostItem.classList.add("recent_post_item");
     recentPostItem.innerHTML = `
