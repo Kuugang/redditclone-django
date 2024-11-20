@@ -8,7 +8,7 @@
 
 ## Overview
 
-A full-featured Reddit-like web application built with Django, offering users the ability to create posts, comments, and interact within different subreddits.
+A Reddit-like web application built with Django, offering users the ability to create posts, comments, and interact within different subreddits.
 
 
 📝 [Functional Requirements](https://github.com/Kuugang/redditclone-django/blob/main/REQUIREMENTS.md)
@@ -79,13 +79,20 @@ DATABASE_PASSWORD = 'YOUR DATABASE PASSWORD'
 GOOGLE_OAUTH_CLIENT_ID= 'YOUR GOOGLE WEB APP OAUTH CLIENT ID'
 ```
   
-6. Run migrations and row seeding
+6. Run migrations and seeding
 
 ```bash
 python manage.py migrate
 python manage.py populate_topics
 ```
-7. Start the development server
+
+7. Collect static files
+
+```bash
+python manage.py collectstatic
+```
+
+8. Start the development server
 
 ```bash
 python manage.py runserver
