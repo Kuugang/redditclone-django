@@ -102,7 +102,7 @@
                   if (image) {
                     console.log(res.url);
                     if ("{% get_env_var 'ENV' %}" === "development") {
-                      staticUrlPrefix = "{% static '' %}";
+                      staticUrlPrefix = "{{MEDIA_URL}}";
                       url = staticUrlPrefix + res.url;
                       image.src = url;
                     } else {

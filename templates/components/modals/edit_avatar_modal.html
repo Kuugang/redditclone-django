@@ -92,7 +92,7 @@
                 {% else %}
                 <img
                   class="h-full w-full rounded-full object-cover"
-                  src="{% static user.avatar %}"
+                  src="{{MEDIA_URL}}{{user.avatar }}"
                   alt="{{ user.username}}"
                 />
                 {% endif %}

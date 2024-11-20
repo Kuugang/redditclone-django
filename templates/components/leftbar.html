@@ -52,7 +52,7 @@
                         {% if community.avatar|startswith:'https' %}
                             <img class="w-full h-full rounded-full object-cover" src="{{community.avatar}}" alt="{{ community.name }}">
                         {% else %}
-                            <img class="w-full h-full rounded-full object-cover" src="{% static community.avatar %}" alt="{{ community.name }}">
+                            <img class="w-full h-full rounded-full object-cover" src="{{MEDIA_URL}}{{community.avatar}}" alt="{{ community.name }}">
                         {% endif %}
                     {% endif %}
                 </div>

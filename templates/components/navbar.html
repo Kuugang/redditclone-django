@@ -70,7 +70,7 @@
       {% else %}
       <img
         class="h-[30px] w-[30px] rounded-full object-cover"
-        src="{% static user.avatar %}"
+        src="{{MEDIA_URL}}{{user.avatar}}"
         alt="{{ user.username}}"
       />
       {% endif %} {% else %}
@@ -104,7 +104,7 @@
               {% else %}
               <img
                 class="h-[30px] w-[30px] rounded-full object-cover"
-                src="{% static user.avatar %}"
+                src="{{MEDIA_URL}}{{user.avatar }}"
                 alt="{{ user.username}}"
               />
               {% endif %} {% else %}

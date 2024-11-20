@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %} {% load static %} {% load utils %}
+{% extends 'base.html' %} {% block content %} 
+{% load static %} {% load utils %}
 
 <div class="relative top-[10vh] flex w-full flex-row">
   {% include 'components/leftbar.html'%}
@@ -17,8 +18,7 @@
             {% else %}
             <img
               class="img-modal h-full w-full rounded-full object-cover"
-              src="{% static user_profile.avatar %}"
-              alt="{{ user_profile.username}}"
+              src="{{ MEDIA_URL }}{{ user_profile.avatar }}" alt="User Avatar"
             />
             {% endif %} 
             {% else %}
@@ -139,7 +139,7 @@
           />
           {% else %}
           <img
-            src="{% static user_profile.banner %}"
+            src="{{MEDIA_URL}}{{user_profile.banner }}"
             alt="Profile Banner"
             class="img-modal h-full w-full rounded-lg object-contain"
           />

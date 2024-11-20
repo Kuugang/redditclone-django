@@ -16,7 +16,7 @@
                 {% if community.banner|startswith:'https' %}
                     <img id="community_banner" src="{{ community.banner }}" alt="Community Banner" class='img-modal object-cover w-full h-full rounded-lg' />
                 {% else %}
-                    <img id="community_banner" src="{% static community.banner %}" alt="Community Banner" class='img-modal object-cover w-full h-full rounded-lg' />
+                    <img id="community_banner" src="{{MEDIA_URL}}{{community.banner}}" alt="Community Banner" class='img-modal object-cover w-full h-full rounded-lg' />
                 {% endif %}
 
 
@@ -40,7 +40,7 @@
                             {% if community.avatar|startswith:'https' %}
                                 <img id="community_avatar" src="{{community.avatar}}" class="img-modal w-full h-full rounded-full object-cover" />
                             {% else %}
-                                <img id="community_avatar" src="{% static community.avatar %}" class="img-modal w-full h-full rounded-full object-cover" />
+                                <img id="community_avatar" src="{{MEDIA_URL}}{{ community.avatar }}" class="img-modal w-full h-full rounded-full object-cover" />
 
                             {% endif %}
                         {% if user_role == 'moderator' or user_role == 'admin' %}

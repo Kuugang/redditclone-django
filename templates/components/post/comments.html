@@ -1,7 +1,15 @@
 {% load static %}
 <div id = "commentsSection" class="flex flex-col gap-4">
-    {% for comment in comments %}
-        {% include "components/post/comment_item.html" with comment=comment %}
-    {% endfor %}
+    {% if comments|length == 0 %}
+        <div class="flex flex-col items-center justify-center">
+            {% include 'svg/cat_butt.html' %}
+            <p class="text-txt_color_3 dark:text-white_2">Wow such empty</p>
+        </div>
+    {% else %}
+
+        {% for comment in comments %}
+            {% include "components/post/comment_item.html" with comment=comment %}
+        {% endfor %}
+    {% endif %}
 </div>
 {% include 'components/modals/delete_comment_modal.html' %}

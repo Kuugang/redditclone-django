@@ -45,7 +45,7 @@
                             <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{{ event.image }}"
                                 alt="Event image">
                             {% else %}
-                            <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{% static event.image %}"
+                            <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{{MEDIA_URL}}{{event.image }}"
                                 alt="Event image">
                             {% endif %}
                         </div>
@@ -58,7 +58,7 @@
                                     alt="Community avatar">
                                 {% else %}
                                 <img class="w-full h-full rounded-full object-cover"
-                                    src="{% static event.community.avatar %}" alt="Community avatar">
+                                    src="{{MEDIA_URL}}{{event.community.avatar }}" alt="Community avatar">
                                 {% endif %}
                             </div>
                             r/{{event.community.name}}
@@ -99,7 +99,7 @@
                                 {%if event.host.avatar|startswith:'https'%}
                                 <img class="w-7 h-7 rounded-full" src="{{event.host.avatar}}" alt="Host avatar">
                                 {% else %}
-                                <img class="w-7 h-7 rounded-full" src="{% static event.host.avatar %}" alt="Host avatar">
+                                <img class="w-7 h-7 rounded-full" src="{{MEDIA_URL}}{{event.host.avatar }}" alt="Host avatar">
                                 {% endif %}
                                 {% else %}
                                 <div class="w-7 h-7 bg-black rounded-full"></div>

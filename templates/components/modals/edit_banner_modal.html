@@ -93,7 +93,7 @@
                 {% else %}
                 <img
                   class="h-full w-full object-cover"
-                  src="{% static user.banner %}"
+                  src="{{MEDIA_URL}}{{ user.banner }}"
                   alt="{{ user.username}}"
                 />
                 {% endif %}

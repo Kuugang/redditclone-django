@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from account import views as accounts_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,7 +26,7 @@ urlpatterns = [
     path("community/", include("community.urls", namespace="community")),
     path("post/", include("post.urls", namespace="post")),
     path("", accounts_views.dashboard, name="dashboard"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'account.views.custom_404'
 handler500 = 'account.views.custom_500'

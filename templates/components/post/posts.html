@@ -1,18 +1,25 @@
 <div class = "posts-container flex flex-col gap-4">
-  {% for post in posts %}
-    <div
-        data-post-id = "{{post.id}}"
-        data-post-title = "{{post.title}}"
-        data-post-content = "{{post.content}}"
+    {% if posts|length == 0 %}
+        <div class="flex flex-col items-center justify-center">
+            {% include 'svg/cat_butt.html' %}
+            <p class="text-txt_color_3 dark:text-white_2">Wow such empty</p>
+        </div>
+    {% else %}
+        {% for post in posts %}
+          <div
+              data-post-id = "{{post.id}}"
+              data-post-title = "{{post.title}}"
+              data-post-content = "{{post.content}}"
 
-        onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
+              onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
 
-        class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
-        id="{{post.id}}"
-    >
-        {% include 'components/post/post_item.html' with post=post %}
-    </div>
-  {% endfor %}
+              class="flex flex-col border dark:border-white_2 p-3 max-h-[400px] rounded-2xl hover:bg-white_1 dark:hover:bg-dark_3 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+              id="{{post.id}}"
+          >
+              {% include 'components/post/post_item.html' with post=post %}
+          </div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 {% if user.is_authenticated %}

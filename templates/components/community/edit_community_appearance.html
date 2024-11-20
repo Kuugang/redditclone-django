@@ -267,12 +267,13 @@
     function remove_image() {
         if (current_edit === "Avatar") {
             avatar = null
-            community_avatar.src = "{{community.avatar}}"
+            community_avatar.src = "{{community.avatar}}".startsWith('https') ? "{{community.avatar}}" : "/media/" + "{{community.avatar}}"
+
             avatar_is_edited.textContent = ""
             avatar_input.value = ""
         } else {
             banner = null
-            community_banner.src = "{{community.banner}}".startsWith('https') ? "{{community.banner}}" : "/static/" + "{{community.banner}}"
+            community_banner.src = "{{community.banner}}".startsWith('https') ? "{{community.banner}}" : "/media/" + "{{community.banner}}"
             banner_is_edited.textContent = ""
             banner_input.value = ""
         }

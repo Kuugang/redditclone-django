@@ -12,7 +12,7 @@
                 {% if post.user.avatar|startswith:'https' %}
                     <img class="w-full h-full rounded-full object-cover" src="{{ post.user.avatar }}" alt="Post author avatar" />
                 {% else %}
-                    <img class="w-full h-full rounded-full object-cover" src="{% static post.user.avatar %}" alt="Post author avatar" />
+                    <img class="w-full h-full rounded-full object-cover" src="{{MEDIA_URL}}{{post.user.avatar}}" alt="Post author avatar" />
                 {% endif %}
             {% else %}
                 <svg class="rounded-full object-cover" viewBox="0 0 43 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@
             {%if post.community.avatar|startswith:'https'%}
                 <img class="w-7 h-7 rounded-full" src="{{post.community.avatar}}" alt="Community avatar" />
             {% else %}
-                <img class="w-7 h-7 rounded-full" src="{% static post.community.avatar %}" alt="Community avatar" />
+                <img class="w-7 h-7 rounded-full" src="{{MEDIA_URL}}{{post.community.avatar}}" alt="Community avatar" />
             {% endif %}
             <p>
                 r/{{ post.community.name }}

@@ -22,7 +22,7 @@
                 {% else %}
                     <img
                         class="w-7 h-7 rounded-full"
-                        src="{% static comment.post.community.avatar %}"
+                        src="{{MEDIA_URL}}{{ comment.post.community.avatar }}"
                         alt="Community avatar"
                     />
                 {% endif %} 

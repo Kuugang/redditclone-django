@@ -140,7 +140,7 @@
         edit_event_form.elements['event_end_time'].value = "{{event.end_time}}"
         edit_event_form.elements['description'].value = "{{event.description}}"
 
-        edit_event_form.querySelector('img[name=event_image_preview]').src = '{{event.image}}'.startsWith('https') ? "{{event.image}}" : "/static/"  + "{{event.image}}";
+        edit_event_form.querySelector('img[name=event_image_preview]').src = '{{event.image}}'.startsWith('https') ? "{{event.image}}" : "/media/"  + "{{event.image}}";
 
         quill.root.innerHTML = `{{event.description|safe}}`
 
