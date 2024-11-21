@@ -101,7 +101,15 @@
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="transition-colors dark:bg-dark_1 dark:text-white">
+<body 
+    class="
+        transition-colors dark:bg-dark_1 dark:text-white 
+        [&::-webkit-scrollbar]:w-2
+        [&::-webkit-scrollbar-track]:bg-gray-100
+        [&::-webkit-scrollbar-thumb]:bg-gray-300
+        dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+        dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
+    ">
     {% include 'components/navbar.html'%}
     {% include 'components/image_modal.html'%}
 

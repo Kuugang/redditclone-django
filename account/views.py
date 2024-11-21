@@ -245,8 +245,26 @@ def search(request):
         query = data.get('search', '')
         
         users = User.objects.filter(Q(username__icontains=query) | Q(display_name__icontains=query))
-        communities = Community.objects.filter(name__icontains=query)
-        posts = Post.objects.filter(title__icontains=query)
+
+        if(request.user.is_authenticated):
+            communities = CommunityMember.objects.filter(
+                user=request.user,
+                community__visibility=Community.Visibility.PRIVATE
+            ).values_list('community', flat=True)
+
+            print(communities)
+
+            posts = Post.objects.filter(
+                community__visibility__in=[Community.Visibility.PUBLIC, Community.Visibility.RESTRICTED]
+            ) | Post.objects.filter(community__id__in=communities)
+        else:
+            posts = Post.objects.filter(community__visibility=Community.Visibility.PUBLIC or Community.Visibility.RESTRICTED)
+            communities = Community.objects.filter(
+                name__icontains=query,
+                visibility__in=[Community.Visibility.PUBLIC, Community.Visibility.RESTRICTED]
+            )
+
+        # posts = Post.objects.filter(title__icontains=query)
 
         user_data = serialize('json', users)
         community_data = serialize('json', communities)
