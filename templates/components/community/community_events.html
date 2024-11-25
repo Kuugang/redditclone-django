@@ -2,7 +2,7 @@
 <div class="w-full h-[1px] border-t "></div>
 
 <div class="flex flex-row gap-1 items-center font-medium">
-    <h1 class="text-txt_color_3 dark:text-white_2 text-md">UPCOMING EVENTS</h1>
+    <h1 class="text-txt_color_3 dark:text-white_2 text-md">EVENTS</h1>
     {% if user_role == 'moderator' or user_role == 'admin' %}
     <a href = "{% url 'community:event' community.name %}" class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_2 rounded-full p-2'>
 

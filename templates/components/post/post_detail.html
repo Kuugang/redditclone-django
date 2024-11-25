@@ -72,15 +72,15 @@
                                 {% include 'components/post/comment_control.html' with content=post %}
                             </div>
 
-                            <div class="w-full mt-2 rounded-lg border border-gray-300">
+                            <div class="w-full mt-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
                                 <textarea id="commentBox" placeholder="Add a comment..."
-                                    class="w-full border-none outline-none p-6 resize-none min-h-12 shadow-none focus:ring-0"
-                                    style="width: 100%; border: none; outline: none; padding: 10px; resize: none; min-height: 80px; box-shadow: none;"
+                                    class="w-full border-none outline-none p-6 min-h-12 shadow-none focus:ring-0 text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                    style="width: 100%; border: none; outline: none; padding: 10px; min-height: 80px; box-shadow: none;"
                                     onfocus="this.parentElement.classList.add('border-gray-500')"
                                     onblur="this.parentElement.classList.remove('border-gray-500');"></textarea>
 
                                 <div id="commentControl"
-                                    class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right">
+                                    class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right border-gray-300 dark:border-gray-600 dark:bg-gray-700">
 
                                     <button
                                         style="padding: 5px 10px; border: none; background-color: #1a73e8; color: white; border-radius: 15px;"
