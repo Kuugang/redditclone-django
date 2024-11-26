@@ -5,9 +5,11 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
+from django.db.models import Q
 
 from common.utils import upload_image, upload_local_image
 from post.models import Post
+from account.models import User
 from redditclone.context_processors import context as context_processor_context
 
 from . import models
@@ -89,6 +91,14 @@ def join_community(request, community_name):
         community=community, user=request.user, role="member"
     )
     member.save()
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))
+
+def leave_community(request, community_name):
+    community = models.Community.objects.get(name=community_name)
+    member = models.CommunityMember.objects.get(
+        community=community, user=request.user
+    )
+    member.delete()
     return redirect(request.META.get("HTTP_REFERER", "dashboard"))
 
 
@@ -341,3 +351,87 @@ def community_event_detail(request, community_name, event_id):
         "components/community/community_event_detail.html",
         {"event": event, "community_events": community_events},
     )
+
+def invite_users_to_community(request):
+    data = dict(request.POST.items())
+    community_id = data.get("community_id")
+    user_ids = request.POST.getlist("user_ids")
+    print(user_ids)
+
+    community = models.Community.objects.get(id=community_id)
+
+    for user_id in user_ids:
+        user = models.User.objects.get(id=uuid.UUID(user_id))
+        invite = models.CommunityInvite(community=community, sender=request.user, receiver=user)
+        invite.save()
+
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))
+
+def lookup_community_invite_eligible_users(request):
+    community_id = request.GET.get("community_id")
+    print(community_id)
+    username_query = request.GET.get("username_query", "")
+    
+    try:
+        community = models.Community.objects.get(id=community_id)
+    except models.Community.DoesNotExist:
+        return JsonResponse({
+            'error': 'Community not found',
+            'users': []
+        }, status=404)
+
+    member_ids = models.CommunityMember.objects.filter(
+        community=community
+    ).values_list('user_id', flat=True)
+
+    invited_user_ids = models.CommunityInvite.objects.filter(
+        community=community, 
+    ).values_list('receiver_id', flat=True)
+
+    excluded_ids = set(list(member_ids) + list(invited_user_ids))
+    
+    eligible_users = User.objects.exclude(id__in=excluded_ids)
+
+    if username_query:
+        eligible_users = eligible_users.filter(
+            Q(username__icontains=username_query) | 
+            Q(display_name__icontains=username_query)
+        )
+
+    eligible_users = eligible_users[:50]
+
+    user_data = [
+        {
+            'id': user.id,
+            'username': user.username,
+            'display_name': user.display_name,
+            'avatar': user.avatar
+        } for user in eligible_users
+    ]
+
+    return JsonResponse({
+        'users': user_data,
+        'total_count': len(user_data)
+    })
+
+def community_invites(request):
+    invites = models.CommunityInvite.objects.filter(receiver=request.user)
+    return render(
+        request,
+        "components/community/community_invites.html",
+        {"invites": invites},
+    )
+
+def accept_community_invite(request, invite_id):
+    invite = models.CommunityInvite.objects.get(id=invite_id)
+    member = models.CommunityMember(
+        community=invite.community, user=request.user, role="member"
+    )
+    member.save()
+    invite.delete()
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))
+
+def reject_community_invite(request, invite_id):
+    invite = models.CommunityInvite.objects.get(id=invite_id)
+    invite.delete()
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))

@@ -244,14 +244,59 @@ def search(request):
         data = json.loads(request.body)
         query = data.get('search', '')
         
+        # Communities
+        public_communities = Community.objects.filter(
+            Q(name__icontains=query) & 
+            Q(visibility=Community.Visibility.PUBLIC)
+        )
+        
+        restricted_communities = Community.objects.filter(
+            Q(name__icontains=query) & 
+            Q(visibility=Community.Visibility.RESTRICTED)
+        )
+        
+        # Communities filter for logged-in users
+        if request.user.is_authenticated:
+            private_communities = Community.objects.filter(
+                Q(name__icontains=query) & 
+                Q(visibility=Community.Visibility.PRIVATE) &
+                Q(communitymember__user=request.user)
+            )
+            communities = public_communities | restricted_communities | private_communities
+        else:
+            communities = public_communities | restricted_communities
+        
+        # Users
         users = User.objects.filter(Q(username__icontains=query) | Q(display_name__icontains=query))
-        communities = Community.objects.filter(name__icontains=query)
-        posts = Post.objects.filter(title__icontains=query)
-
+        
+        # Posts
+        public_posts = Post.objects.filter(
+            Q(title__icontains=query) & 
+            Q(community__visibility=Community.Visibility.PUBLIC)
+        )
+        
+        restricted_posts = Post.objects.filter(
+            Q(title__icontains=query) & 
+            Q(community__visibility=Community.Visibility.RESTRICTED)
+        )
+        
+        # Posts filter for logged-in users
+        if request.user.is_authenticated:
+            private_posts = Post.objects.filter(
+                Q(title__icontains=query) & 
+                Q(community__visibility=Community.Visibility.PRIVATE) &
+                Q(community__communitymember__user=request.user)
+            )
+            posts = public_posts | restricted_posts | private_posts
+        else:
+            posts = public_posts | restricted_posts
+        
+        # Serialize data
         user_data = serialize('json', users)
         community_data = serialize('json', communities)
         post_data = serialize('json', posts)
-
+        
+        # Parse JSON
         user_data = json.loads(user_data)
         community_data = json.loads(community_data)
         post_data = json.loads(post_data)

@@ -7,10 +7,18 @@
 <div class="flex flex-row relative top-[10vh]">
     {% include 'components/leftbar.html' %}
 
-    <div class="p-10 flex flex-col w-[85%] relative left-[15%] min-h-[90vh]">
-        <p class="font-bold text-md">r/{{community_name}} is private</p>
-        <p class="text-sm">This community is private and only approved members can view and take part in its discussions.</p>
-    </div> 
+    <div class="relative left-[15%] flex w-[85%] flex-row gap-10 p-10 items-center justify-center border h-[90vh]">
+        <div class="flex justify-center items-center w-full h-full">
+            <center class="mt-24 m-auto">
+                <img class = "w-1/2" src="{% static 'images/cat_sad.gif'%}" alt="">
+                <div class="">
+                    <p class="text-4xl block">r/{{community_name}} is private</p>
+                    <p class="text-base">This community is private and only approved members can view and take part in its discussions.</p>
+                </div>
+            </center>
+        </div>
+  </div>
+
 
 </div>
 {% endblock %}

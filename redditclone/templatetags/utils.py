@@ -3,6 +3,8 @@ import os
 from django import template
 
 from post.models import Comment, PostVote, CommentVote
+from account.models import User
+from community.models import Community, CommunityMember, CommunityInvite
 from common.utils import get_child_comments
 
 
@@ -92,3 +94,24 @@ def has_non_deleted_children(comments):
         return False
 
     return recursive_check(comments)
+
+@register.filter
+def get_users():
+    users = User.objects.all()
+    return users
+
+@register.filter
+def community_invite_eligible_users(community):
+    member_ids = CommunityMember.objects.filter(
+        community=community
+    ).values_list('user_id', flat=True)
+
+    invited_user_ids = CommunityInvite.objects.filter(
+        community=community, 
+    ).values_list('receiver_id', flat=True)
+
+    excluded_ids = set(list(member_ids) + list(invited_user_ids))
+    
+    eligible_users = User.objects.exclude(id__in=excluded_ids)
+
+    return eligible_users

@@ -84,15 +84,36 @@
                         </svg>
                         <p>Create Post</p>
                     </div>
-                    {% if community not in user_communities%}
-                        <button 
-                        {% if user.is_authenticated %}
-                            onClick="window.location.href=`{% url 'community:join_community' community.name %}`";
-                        {% else %}
-                            data-modal-target="sign_in_modal" data-modal-toggle="sign_in_modal"
-                        {% endif %}
-                        class='px-2 py-1 border border-black rounded-lg'>Join</button>
+
+                    {% if user_role == 'moderator' or user_role == 'admin' %}
+                    <div 
+                        data-modal-target="invite_members" data-modal-toggle="invite_members"
+                        class='bg-button_gray hover:bg-button_gray_hover flex flex-row gap-2 rounded-2xl border border-white px-3 py-2 items-center cursor-pointer'>
+                        <svg rpl="" fill="currentColor" height="20" icon-name="add-outline" viewBox="0 0 20 20"
+                            width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
+                        </svg>
+                        <p>Invite Members</p>
+                    </div>
                     {% endif %}
+
+
+                    {% if not user.is_authenticated %}
+                        <button 
+                            data-modal-target="sign_in_modal" data-modal-toggle="sign_in_modal"
+                            class='px-2 py-1 border border-black rounded-2xl'>Join</button>
+                    {% else  %}
+                        {% if community not in user_communities%}
+                        <button 
+                            onClick="window.location.href=`{% url 'community:join_community' community.name %}`";
+                            class='px-2 py-1 border border-black rounded-2xl'>Join</button>
+                        {% elif user_role != 'admin' %}
+                        <button 
+                            onClick="window.location.href=`{% url 'community:leave_community' community.name %}`";
+                            class='px-2 py-1 border border-black rounded-2xl'>Joined</button>
+                        {% endif %}
+                    {% endif %}
+
                 </div>
             </div>
             {% endif %}
@@ -115,6 +136,10 @@
 {%include 'components/modals/delete_community_rule_modal.html'%}
 {%include 'components/modals/create_community_rule_modal.html'%}
 {%include 'components/modals/edit_community_rule_modal.html'%}
+
+{% if user_role == 'moderator' or user_role == 'admin' %}
+    {%include 'components/modals/invite_members_modal.html'%}
+{%endif%}
 
 {% endwith %}
 {% endblock %}

@@ -14,7 +14,6 @@ urlpatterns = [
     path('vote/<uuid:content_id>/<str:vote>/<str:type>/', views.vote, name='vote_post'),
 
 
-
     path('comment/<uuid:post_id>',  views.comment, name='comment'),
     path('comment/edit/<uuid:comment_id>',  views.edit_comment, name='edit_comment'),
     path('delete_comment/',  (views.delete_comment), name='delete_comment'),

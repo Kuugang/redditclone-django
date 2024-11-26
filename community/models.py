@@ -165,3 +165,11 @@ class CommunityPostReport(models.Model):
 #         constraints = [
 #             models.UniqueConstraint(fields=['community', 'user'], name='unique_community_ban')
 #         ]
+
+class CommunityInvite(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

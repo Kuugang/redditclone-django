@@ -122,6 +122,13 @@
 </div>
 
 {% include 'components/modals/delete_community_event_modal.html' with community=event.community %}
+{%include 'components/modals/edit_community_topics_modal.html' with community=event.community%}
+{%include 'components/community/edit_community_appearance.html' with community=event.community%}
+{%include 'components/modals/edit_community_details_modal.html' with community=event.community %}
+
+{%include 'components/modals/delete_community_rule_modal.html' with community=event.community%}
+{%include 'components/modals/create_community_rule_modal.html' with community=event.community%}
+{%include 'components/modals/edit_community_rule_modal.html' with community=event.community%}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
