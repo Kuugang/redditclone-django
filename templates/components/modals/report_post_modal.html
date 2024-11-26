@@ -5,14 +5,14 @@
         <form method="POST" action="{% url 'post:report_post' %}">
             {% csrf_token %}
             <input type="hidden" name = "post_id" >
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow">
                 <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-gray-900">
                         Submit a report 
                     </h3>
                     <button type="button" onclick = "event.stopPropagation();"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                         data-modal-hide="report-post-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
@@ -25,9 +25,9 @@
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4">
 
-                    <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Reason for report</label>
+                    <label for="category" class="block text-sm font-medium text-gray-700">Reason for report</label>
                     <select id="category" name="category" 
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:focus:ring-gray-700 dark:focus:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md shadow-sm px-2 py-1">
+                        class="block w-full mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md shadow-sm px-2 py-1">
                         <option value="spam">Spam</option>
                         <option value="hate_speech">Hate speech</option>
                         <option value="violence">Violence</option>
@@ -37,23 +37,23 @@
                         <option value="other">Other</option>
                     </select>
 
-                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Description</label>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                     <textarea id="description" name="description" rows="3"
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:focus:ring-gray-700 dark:focus:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md shadow-sm px-2 py-1"
+                        class="block w-full mt-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md shadow-sm px-2 py-1"
                         placeholder="Please provide more details about the issue"></textarea>
 
-                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    <p class="text-base leading-relaxed text-gray-500">
                         Thanks for looking out for yourself and your fellow users by reporting things that break the rules. Let us know what's happening, and we'll look into it. 
                     </p>
                 </div>
                 <!-- Modal footer -->
 
-                <div class="flex flex-row items-end justify-end p-4 md:p-5 rounded-b dark:border-gray-600">
+                <div class="flex flex-row items-end justify-end p-4 md:p-5 rounded-b">
                     <button type="submit"
-                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Confirm
+                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Confirm
                     </button>
                     <button onclick = "event.stopPropagation();" data-modal-hide="report-post-modal" type="button"
-                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close</button>
+                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Close</button>
                 </div>
             </div>
         </form>

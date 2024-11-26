@@ -18,7 +18,7 @@
     {% include 'components/leftbar.html'%}
     <div class="p-10 relative left-[15%] w-[85%]">
         <div class="flex flex-row gap-4 items-start">
-            <button onclick="history.back()" type="button" class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+            <button onclick="history.back()" type="button" class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                 <svg rpl="" fill="currentColor" height="16" icon-name="left-outline" viewBox="0 0 20 20" width="16"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="m13.058 19.442-9-9a.624.624 0 0 1 0-.884l9-9 .884.884L5.384 10l8.558 8.558-.884.884Z">
@@ -31,49 +31,49 @@
                     <h1 class="font-bold text-2xl">Create Event</h1>
                     <input type="hidden" name = "community_id" value = "{{community.id}}">
                     <input name="name" type="text" placeholder="Title"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
+                        class="border px-3 py-2 rounded-md " maxlength="255" required />
                     <input name="location" type="text" placeholder="Location"
-                        class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " maxlength="255" required />
+                        class="border px-3 py-2 rounded-md " maxlength="255" required />
                     <div class="flex items-center"  date-rangepicker >
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                 <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                 </svg>
                             </div>
-                            <input id="datepicker-range-start" name="event_start_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select event date start" required>
+                            <input id="datepicker-range-start" name="event_start_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Select event date start" required>
                         </div>
                         <span class="mx-4 text-gray-500">to</span>
                         <div class="relative">
                           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                               <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                               <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                               </svg>
                           </div>
-                          <input id="datepicker-range-end" name="event_end_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select event date end" required>
+                          <input id="datepicker-range-end" name="event_end_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Select event date end" required>
                       </div>
                     </div>
                     <div class="flex flex-row gap-2">
                         <div>
-                            <label for="event_start-time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start time:</label>
+                            <label for="event_start-time" class="block mb-2 text-sm font-medium text-gray-900">Start time:</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                                <input type="time" name = "event_start_time" id="start-time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="00:00" required />
+                                <input type="time" name = "event_start_time" id="start-time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="00:00" required />
                             </div>
                         </div>
                         <div>
-                            <label for="event_end_time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End time:</label>
+                            <label for="event_end_time" class="block mb-2 text-sm font-medium text-gray-900">End time:</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                                <input type="time" name = "event_end_time" id="end-time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="00:01" max="18:00" value="00:00" required />
+                                <input type="time" name = "event_end_time" id="end-time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" min="00:01" max="18:00" value="00:00" required />
                             </div>
                         </div>
                     </div>
@@ -94,9 +94,9 @@
                     </div>
                     <div id="event_image_input_container">
                         <label for="event_image_file_input"
-                            class="bg-white_1 dark:bg-dark_6 dark:border-gray_1 w-72 h-72 border border-black border-dashed flex flex-col gap-1 items-center justify-center text-[#82959B]">
+                            class="bg-white_1 w-72 h-72 border border-black border-dashed flex flex-col gap-1 items-center justify-center text-[#82959B]">
                             <svg width="45" height="45" viewBox="0 0 45 45" fill="none"
-                                class="stroke-black dark:stroke-white" xmlns="http://www.w3.org/2000/svg">
+                                class="stroke-black" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M40.9674 25.1327C40.7139 23.0959 39.7919 21.2008 38.3456 19.7445C36.8994 18.2882 35.0107 17.3529 32.976 17.0854C32.0986 14.6285 30.3855 12.5584 28.1364 11.2364C25.8873 9.91435 23.2451 9.42444 20.6715 9.85299C18.0981 10.2815 15.7571 11.6012 14.0577 13.5808C12.3583 15.5603 11.4088 18.0741 11.3749 20.6829C9.40789 20.6829 7.52144 21.4639 6.13054 22.8547C4.73963 24.2457 3.95825 26.1325 3.95825 28.0996C3.95825 30.0665 4.73963 31.9529 6.13054 33.3437C7.52144 34.7347 9.40789 35.5163 11.3749 35.5163H22.4999"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

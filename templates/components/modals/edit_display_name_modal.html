@@ -8,17 +8,17 @@
     <!-- Modal content -->
     <form action="{% url 'account:edit_display_name' %}" method="POST">
       {% csrf_token %}
-      <div class="relative rounded-lg bg-white shadow dark:bg-gray-700">
+      <div class="relative rounded-lg bg-white shadow">
         <!-- Modal header -->
         <div
-          class="flex items-center justify-between rounded-t border-b p-4 dark:border-gray-600 md:p-5"
+          class="flex items-center justify-between rounded-t border-b p-4 md:p-5"
         >
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          <h3 class="text-xl font-semibold text-gray-900">
             Display name
           </h3>
           <button
             type="button"
-            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
             data-modal-hide="edit-display-name-modal"
           >
             <svg
@@ -41,7 +41,7 @@
         </div>
         <!-- Modal body -->
         <div class="space-y-4 p-4 md:p-5">
-          <p class="text-base leading-relaxed dark:text-gray-400">
+          <p class="text-base leading-relaxed">
             Changing your display name won't change your username
           </p>
 
@@ -51,14 +51,14 @@
               name="display_name"
               id="display_name"
               value="{% if request.user.display_name %}{{ request.user.display_name }}{% endif %}"
-              class="border-1 dark:focus:border-blue-500 focus:border-blue-600 peer block w-full appearance-none rounded-lg border-gray-300 bg-white_1 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-dark_6 dark:text-white"
+              class="border-1 focus:border-blue-600 peer block w-full appearance-none rounded-lg border-gray-300 bg-white_1 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:outline-none focus:ring-0"
               placeholder=" "
               maxlength="64"
               required
             />
             <label
               for="display_name"
-              class="peer-focus:text-blue-600 peer-focus:dark:text-blue-500 absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm font-medium text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 dark:text-gray-400 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+              class="peer-focus:text-blue-600 peer-focus:dark:text-blue-500 absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm font-medium text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
               >Display Name</label
             >
           </div>
@@ -66,18 +66,18 @@
         <!-- Modal footer -->
 
         <div
-          class="flex flex-row items-end justify-end rounded-b p-4 dark:border-gray-600 md:p-5"
+          class="flex flex-row items-end justify-end rounded-b p-4 md:p-5"
         >
           <button
             type="button"
             data-modal-hide="edit-display-name-modal"
-            class="mb-2 me-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+            class="mb-2 me-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100"
           >
             Close
           </button>
           <button
             type="submit"
-            class="bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2 me-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
+            class="bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 mb-2 me-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
           >
             Save
           </button>

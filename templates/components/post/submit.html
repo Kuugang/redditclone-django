@@ -24,7 +24,7 @@
                 <h1 class="font-bold text-xl">Create Post</h1>
                 <div class="relative max-w-fit" id="custom-dropdown">
                     <div id="selected-community"
-                        class="dark:bg-[#1A1A1B] dark:text-white border border-black p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
+                        class="border p-2 cursor-pointer rounded-xl flex flex-row gap-2 items-center">
                         <div class="rounded-full w-[30px] h-[30px] border">
                             <img id="selected-avatar" src="" alt="Selected Community Avatar" class="w-full h-full rounded-full object-cover hidden" />
                         </div>
@@ -39,7 +39,7 @@
 
                     <div id="dropdown-options" class="absolute bg-[#1A1A1B] w-full mt-1 hidden z-10">
                         {% for community in user_communities %}
-                        <a href="{% url 'post:submit_with_community' community.name %}" class="bg-white dark:bg-dark_3 dropdown-item flex items-center p-2 hover:bg-white_1 dark:hover:bg-[#333] cursor-pointer"
+                        <a href="{% url 'post:submit_with_community' community.name %}" class="bg-white dropdown-item flex items-center p-2 hover:bg-white_1 cursor-pointer"
                             data-value="{{ community.id }}" data-avatar="{{ community.avatar }}">
                             <div class="rounded-full w-[30px] h-[30px]">
                                 {% if community.avatar|startswith:'https' %}
@@ -62,7 +62,7 @@
                 </select>
 
                 <input name="title" type="text" maxlength="300" placeholder="Title"
-                    class="border dark:border-[#ffffff33] dark:bg-[#1A1A1B] dark:text-white px-3 py-2 rounded-md " required />
+                    class="border px-3 py-2 rounded-md " required />
                 <div class="w-full">
                     {% include 'components/editor.html' %}
                 </div>

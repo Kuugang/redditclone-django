@@ -13,17 +13,17 @@
       enctype="multipart/form-data"
     >
       {% csrf_token %}
-      <div class="relative rounded-lg bg-white shadow dark:bg-gray-700">
+      <div class="relative rounded-lg bg-white shadow">
         <!-- Modal header -->
         <div
-          class="flex w-full items-center justify-between rounded-t border-b p-4 dark:border-gray-600 md:p-5"
+          class="flex w-full items-center justify-between rounded-t border-b p-4 md:p-5"
         >
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          <h3 class="text-xl font-semibold text-gray-900">
             Banner image
           </h3>
           <button
             type="button"
-            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
             data-modal-hide="edit-banner-modal"
           >
             <svg
@@ -82,7 +82,7 @@
             <div class="h-[120px] w-[300px]">
               <label
                 for="edit_banner_file_input"
-                class="{% if not user.banner %} {% endif %} flex h-full w-full flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-black bg-white_1 text-[#82959B] dark:border-gray_1 dark:bg-dark_6"
+                class="{% if not user.banner %} {% endif %} flex h-full w-full flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-black bg-white_1 text-[#82959B]"
               >
                 {% if user.banner%} {% if user.banner|startswith:'https' %}
                 <img
@@ -141,18 +141,18 @@
         </div>
         <!-- Modal footer -->
         <div
-          class="flex flex-row items-end justify-end rounded-b p-4 dark:border-gray-600 md:p-5"
+          class="flex flex-row items-end justify-end rounded-b p-4"
         >
           <button
             type="button"
             data-modal-hide="edit-banner-modal"
-            class="mb-2 me-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+            class="mb-2 me-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100" 
           >
             Close
           </button>
           <button
             type="submit"
-            class="bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2 me-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
+            class="bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 mb-2 me-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
           >
             Save
           </button>

@@ -1,7 +1,7 @@
 <div class="post-control">
     <button id="dropdownDefaultButton-{{post.id}}" onclick="event.stopPropagation()"
         data-dropdown-toggle="dropdown-{{post.id}}"
-        class="absolute top-5 right-5 hover:bg-button_gray_hover dark:hover:bg-dark_5 px-3 py-2 rounded-full">
+        class="absolute top-5 right-5 hover:bg-button_gray_hover px-3 py-2 rounded-full">
         <svg rpl="" fill="currentColor" height="16" icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16"
             xmlns="http://www.w3.org/2000/svg">
             <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z">
@@ -9,11 +9,11 @@
         </svg>
     </button>
     <div id="dropdown-{{post.id}}"
-        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton-{{post.id}}">
+        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton-{{post.id}}">
             {% if user.is_authenticated %}
             <li>
-                <button class = "flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-saved="{% if post in user_saved_posts %}1{% else %}0{% endif %}"
+                <button class = "flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100" data-saved="{% if post in user_saved_posts %}1{% else %}0{% endif %}"
                     onclick="event.stopPropagation(); this.dataset.saved == '0' ? savePost(this, '{{post.id}}') : unsavePost(this, '{{post.id}}')"
                     class="flex flex-row gap-2 px-3 py-1 rounded-xl bg-button_gray ">
                     {% if post in user_saved_posts %}
@@ -40,7 +40,7 @@
             {% if post.user == request.user %}
             <li>
                 <button
-                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
+                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100" 
                     onclick="event.stopPropagation(); window.location.href=`{% url 'post:edit_post' post.id %}`">
                     <svg rpl="" fill="currentColor" height="20" icon-name="edit-outline" viewBox="0 0 20 20" width="20"
                         xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +56,7 @@
             <li>
                 <button onclick="event.stopPropagation(); document.querySelector('#delete-post-modal').querySelector('input[name=post_id]').value = '{{post.id}}'"
                     data-modal-target="delete-post-modal" data-modal-toggle="delete-post-modal"
-                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100">
                     <svg rpl="" fill="currentColor" height="20" icon-name="delete-outline" viewBox="0 0 20 20" width="20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -74,7 +74,7 @@
             <li>
                 <button onclick="event.stopPropagation(); document.querySelector('#report-post-modal').querySelector('input[name=post_id]').value = '{{post.id}}'"
                     data-modal-target="report-post-modal" data-modal-toggle="report-post-modal"
-                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100">
                     <svg rpl="" fill="currentColor" height="20" icon-name="report-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.25 19.775H1V2.193l.353-.171a10.293 10.293 0 0 1 8.919 0 9.054 9.054 0 0 0 7.7.061l.309-.144.385.188a.715.715 0 0 1 .334.606V14.79l-.353.17a10.286 10.286 0 0 1-8.919 0 9.033 9.033 0 0 0-7.478-.16v4.975Zm3.562-6.956a10.23 10.23 0 0 1 4.46 1.016A9.04 9.04 0 0 0 17.75 14V3.531a10.17 10.17 0 0 1-8.022-.384 9.037 9.037 0 0 0-7.478-.162v10.468c1.14-.42 2.347-.635 3.562-.634Z"></path>
                         </svg>

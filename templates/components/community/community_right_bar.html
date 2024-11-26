@@ -1,9 +1,13 @@
 <div
-    class="inline-block flex flex-col gap-3 w-96 p-6 bg-bg_1 shadow-md rounded-lg dark:bg-dark_2 dark:border-gray-700 sticky top-[15vh] h-min max-h-[85vh] overflow-x-hidden border text-wrap break-words">
+    class="inline-block flex flex-col gap-3 w-96 p-6 bg-bg_1 shadow-md rounded-lg sticky top-[15vh] h-min max-h-[85vh] overflow-x-hidden border text-wrap break-words
+    [&::-webkit-scrollbar]:w-2
+    [&::-webkit-scrollbar-track]:bg-gray-100
+    [&::-webkit-scrollbar-thumb]:bg-gray-300
+    ">
     <div>
         <div class="flex flex-row justify-between">
             <h5
-                class="mb-2 text-md text-txt_color_2 font-bold tracking-tight text-gray-900 dark:text-white">
+                class="mb-2 text-md text-txt_color_2 font-bold tracking-tight text-gray-900">
                 <div class="flex flex-col gap-2">
                     <a href="{% url 'community:community' community.name %}" class="font-bold text-lg">
                         r/{{community.name}}
@@ -16,7 +20,7 @@
 
             {% if user_role == 'moderator' or user_role == 'admin'%}
                 <button data-modal-target="edit_community_detail" data-modal-toggle="edit_community_detail"
-                    class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center'>
+                    class='bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center'>
                         <svg rpl="" fill="currentColor" height="16" icon-name="edit-outline" viewBox="0 0 20 20"
                             width="16" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -27,7 +31,7 @@
             {% endif %}
         </div>
 
-        <p class="mb-3 text-txt_color_3 font-normal text-dark_2 dark:text-white_2">
+        <p class="mb-3 text-txt_color_3 font-normal text-dark_2">
             {{community.about}}
         </p>
 

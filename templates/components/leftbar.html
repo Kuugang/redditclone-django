@@ -3,16 +3,14 @@
 {% load utils %}
 
 <div
-    class="flex flex-col gap-2 overflow-auto p-3 left-0 text-sm top-[10vh] h-[90vh] w-[15%] fixed border-r dark:bg-dark_3 dark:border-gray_1 shadow-md 
+    class="flex flex-col gap-2 overflow-auto p-3 left-0 text-sm top-[10vh] h-[90vh] w-[15%] fixed border-r shadow-md 
     [&::-webkit-scrollbar]:w-2
     [&::-webkit-scrollbar-track]:bg-gray-100
     [&::-webkit-scrollbar-thumb]:bg-gray-300
-    dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
     ">
     <div>
         <a href="{% url 'account:dashboard' %}"
-            class="hover:bg-button_gray_hover dark:hover:bg-gray_1 flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full">
+            class="hover:bg-button_gray_hover flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full">
             <p>Home</p>
         </a>
 
@@ -29,7 +27,7 @@
         <input type="checkbox" id="toggle-communities" class="peer hidden" checked
             onchange="toggle_dropdown_cap(event)" />
         <label for="toggle-communities"
-            class="hover:bg-button_gray_hover dark:hover:bg-gray_1 flex flex-row justify-between items-center px-3 py-2 rounded-lg w-full cursor-pointer z-40">
+            class="hover:bg-button_gray_hover flex flex-row justify-between items-center px-3 py-2 rounded-lg w-full cursor-pointer z-40">
             <p>Communities</p>
             <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"
                 class="peer-checked:rotate-180 rotate-0 transition-transform">
@@ -42,7 +40,7 @@
         <div
             class="peer-checked:max-h-[1000px] peer-checked:opacity-100 max-h-0 opacity-0 transition-transform duration-300 overflow-hidden flex flex-col gap-2">
             <button
-                class="hover:bg-button_gray_hover dark:hover:bg-gray_1 flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full"
+                class="hover:bg-button_gray_hover  flex flex-row gap-3 justify-start items-center px-3 py-2 rounded-lg w-full"
                 data-modal-target="create_community_modal" data-modal-toggle="create_community_modal">
                 <svg fill="currentColor" height="20" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
@@ -52,7 +50,7 @@
 
             {% for community in user_communities%}
             <a href="{% url 'community:community' community.name %}"
-                class="hover:bg-button_gray_hover flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full dark:hover:bg-gray_1">
+                class="hover:bg-button_gray_hover flex flex-row gap-2 justify-start items-center px-3 py-1 rounded-lg w-full ">
                 <div class="rounded-full w-[30px] h-[30px] bg-gray-200 border border-black">
                     {% if community.avatar %}
                         {% if community.avatar|startswith:'https' %}

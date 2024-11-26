@@ -17,7 +17,7 @@
                     <div class="flex flex-row gap-4 max-w-2xl w-full">
                         <div class="flex flex-col gap-4">
                             <button onclick="history.back()" type="button"
-                                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                                class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                                 <svg pl="" fill="currentColor" height="16" icon-name="left-outline" viewBox="0 0 20 20"
                                     width="16" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -28,13 +28,13 @@
 
                             {% if request.user == post.user %}
                             <a href="{% url 'post:edit_post' post.id %}"
-                                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                                class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                                 {% include 'svg/pencil.html'%}
                             </a>
 
                             <button onclick="event.stopPropagation(); document.querySelector('#delete-post-modal').querySelector('input[name=post_id]').value = '{{post.id}}'"
                                 data-modal-target="delete-post-modal" data-modal-toggle="delete-post-modal"
-                                class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                                class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                                 {% include 'svg/trashcan.html'%}
                             </button>
 
@@ -72,15 +72,15 @@
                                 {% include 'components/post/comment_control.html' with content=post %}
                             </div>
 
-                            <div class="w-full mt-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <div class="w-full mt-2 border border-gray-300">
                                 <textarea id="commentBox" placeholder="Add a comment..."
-                                    class="w-full border-none outline-none p-6 min-h-12 shadow-none focus:ring-0 text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                    class="w-full border-none outline-none p-6 min-h-12 shadow-none focus:ring-0 text-gray-900"
                                     style="width: 100%; border: none; outline: none; padding: 10px; min-height: 80px; box-shadow: none;"
                                     onfocus="this.parentElement.classList.add('border-gray-500')"
                                     onblur="this.parentElement.classList.remove('border-gray-500');"></textarea>
 
                                 <div id="commentControl"
-                                    class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                                    class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right border-gray-300">
 
                                     <button
                                         style="padding: 5px 10px; border: none; background-color: #1a73e8; color: white; border-radius: 15px;"

@@ -10,7 +10,7 @@
     <form
       method="POST"
       action="{% url 'account:sign_in' %}"
-      class="dark:bg-dark_5 dark:text-white_1 flex flex-col justify-center gap-4 rounded-2xl bg-white px-16 py-10 text-black"
+      class="flex flex-col justify-center gap-4 rounded-2xl bg-white px-16 py-10 text-black"
     >
       {% csrf_token %}
       <h1 class="text-xl font-bold">Login</h1>
@@ -19,14 +19,14 @@
           <input
             name="email_or_username"
             id="sign_in_email_input"
-            class="border-1 bg-white_1 dark:bg-dark_6 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder=" "
             type="text"
             maxlength="320"
           />
           <label
             for="sign_in_email_input"
-            class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+            class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
             >Email or username</label
           >
         </div>
@@ -34,14 +34,14 @@
           <input
             id="sign_in_password"
             name="password"
-            class="border-1 bg-white_1 dark:bg-dark_6 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             type="password"
             placeholder=" "
             maxlength="128"
           />
           <label
             for="sign_in_password"
-            class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-blue-500"
+            class="absolute start-2.5 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
             >Password</label
           >
         </div>

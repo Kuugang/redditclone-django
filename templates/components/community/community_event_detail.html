@@ -14,7 +14,7 @@
                 <div class="flex flex-row gap-2">
                     <div class="flex flex-col gap-4">
                         <button onclick="history.back()" type="button"
-                            class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                            class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                             {% include 'svg/back.html'%}
                         </button>
                         
@@ -26,14 +26,14 @@
                                 modal.querySelector('input[name=event_id]').value = '{{event.id}}'; 
                                 modal.querySelector('input[name=event_name]').value = '{{event.name}}';
                             "
-                            class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center"
+                            class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center"
                             data-modal-target="delete_community_event" data-modal-toggle="delete_community_event"
                             >
                             {% include 'svg/trashcan.html'%}
                         </button>
 
                         <a href="{% url 'community:event' event.community.name %}?event_id={{event.id}}&edit=true"
-                            class="bg-button_gray hover:bg-button_gray_hover dark:bg-dark_2 dark:hover:bg-gray_2 rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
+                            class="bg-button_gray hover:bg-button_gray_hover rounded-full w-[40px] h-[40px] py-2 px-2 flex justify-center items-center">
                             {% include 'svg/pencil.html'%}
                         </a>
                         {% endif %}
@@ -79,7 +79,7 @@
 
                         <div class="flex flex-row items-center gap-2">
                             <div class="w-12 h-12 border rounded-md flex flex-col items-center justify-center shadow-md">
-                                <svg class="stroke-black dark:stroke-white" width="26" height="26" viewBox="0 0 16 16"
+                                <svg class="stroke-black" width="26" height="26" viewBox="0 0 16 16"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M2 6.854C2 11.02 7.04 15 8 15C8.96 15 14 11.02 14 6.854C14 3.621 11.314 1 8 1C4.686 1 2 3.62 2 6.854Z"
@@ -92,7 +92,7 @@
                             <p>{{event.location}}</p>
                         </div>
 
-                        <div class="flex flex-col gap-2 border-b dark:border-white_3 py-3">
+                        <div class="flex flex-col gap-2 border-b py-3">
                             <p class="font-medium text-sm">Hosted by</p>
                             <div class="flex flex-row gap-1">
                                 {%if event.host.avatar %}

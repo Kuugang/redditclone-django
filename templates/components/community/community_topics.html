@@ -7,7 +7,7 @@
     <div class="absolute bottom-[68%] right-[0%]">
         {% if user_role == 'moderator' or user_role == 'admin' %}
         <button data-modal-target="edit_community_topics" data-modal-toggle="edit_community_topics"
-            class='bg-button_gray hover:bg-button_gray_hover dark:bg-dark_1 dark:hover:bg-dark_2 shadow-md rounded-full p-2'
+            class='bg-button_gray hover:bg-button_gray_hover shadow-md rounded-full p-2'
             onclick="populate_edit_input_values('{{rule.name}}', '{{rule.description}}', '{{rule.id}}')">
             <svg rpl="" fill="currentColor" height="16" icon-name="edit-outline" viewBox="0 0 20 20" width="16"
                 xmlns="http://www.w3.org/2000/svg">

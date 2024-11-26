@@ -69,7 +69,7 @@
             <div class="flex flex-row gap-4 mt-4">
                 {% include 'components/post/vote_control.html' with content=comment.comment type='comment' %}
                     <button 
-                        class="flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-xl dark:bg-dark_3 border dark:border-white_3"
+                        class="flex flex-row gap-2 items-center justify-center px-2 py-1 rounded-xl"
                         {% if not user.is_authenticated %} 
                             data-modal-target="sign_in_modal"
                             data-modal-toggle="sign_in_modal"
@@ -94,12 +94,12 @@
                     </button>
 
                     <div id="dropdown-{{comment.comment.id}}"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton-{{comment.comment.id}}">
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownButton-{{comment.comment.id}}">
 
                             <li>
                                 <button onclick="event.stopPropagation();  showEditCommentTextArea('{{comment.comment.id}}');"
-                                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100">
                                     {% include 'svg/pencil.html'%}
                                     <p>
                                         Edit comment
@@ -110,7 +110,7 @@
                             <li>
                                 <button onclick="event.stopPropagation(); document.querySelector('#delete-comment-modal').querySelector('input[name=comment_id]').value = '{{comment.comment.id}}'"
                                     data-modal-target="delete-comment-modal" data-modal-toggle="delete-comment-modal"
-                                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    class="flex flex-row gap-2 px-4 py-2 w-full hover:bg-gray-100">
                                     <svg rpl="" fill="currentColor" height="20" icon-name="delete-outline" viewBox="0 0 20 20" width="20"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
