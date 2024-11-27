@@ -4,7 +4,7 @@
 
 {% if comment.comment.is_deleted and not comment.children|has_non_deleted_children %}
 {% else %}
-<div id = "comment-{{comment.comment.id}}" class="pl-{{ comment.depth|add:4 }} flex flex-col gap-4 border-l">
+<div id = "comment-{{comment.comment.id}}" class="pl-{{ comment.depth|add:4 }} flex flex-col gap-4 border-l break-words text-wrap">
     {% if comment.comment.is_deleted %}
         <div class="flex flex-row gap-2 items-start relative">
             <div class="w-[30px] h-[30px] rounded-full relative">

@@ -96,14 +96,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
-            document.querySelectorAll(".img-modal").forEach((img) => {
-                img.dataset.modalTarget = "image-modal";
-                img.dataset.modalToggle = "image-modal";
-
-                img.addEventListener("click", function(){
-                    document.getElementById("image-modal").querySelector("img").src = this.src;
-                })
-            });
 
             const createdAtElements =
                 document.querySelectorAll("[data-created-at]");
@@ -118,10 +110,19 @@
                 postContent.classList.add("line-clamp-50", "overflow-hidden", "text-ellipsis");
             });
 
-            const postImages = document.querySelectorAll(".post-content.post-item img");
-            postImages.forEach((postImage) => {
-                postImage.classList.add("max-w-[300px]");
+            const postItemImages = document.querySelectorAll(".post-content.post-item img");
+            postItemImages.forEach((postImage) => {
+                postImage.classList.add("w-64", "h-64", "object-cover", "rounded-lg");
+                postImage.classList.remove("img-modal");
+                delete postImage.dataset.modalTarget;
+                delete postImage.dataset.modalToggle;
             });
+
+            const postImages = document.querySelectorAll(".post-content img");
+            postImages.forEach((postImage) => {
+                postImage.classList.add("hover:cursor-pointer");
+            });
+
 
             const eventDescriptions = document.querySelectorAll(".event-description");
             eventDescriptions.forEach((eventDescription) => {
@@ -136,6 +137,16 @@
                     addRecentPostItem(post);
                 });
             }
+
+            document.querySelectorAll(".img-modal").forEach((img) => {
+                img.dataset.modalTarget = "image-modal";
+                img.dataset.modalToggle = "image-modal";
+
+                img.addEventListener("click", function(){
+                    document.getElementById("image-modal").querySelector("img").src = this.src;
+                })
+            });
+
         });
     </script>
 

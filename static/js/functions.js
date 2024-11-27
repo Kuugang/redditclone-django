@@ -274,6 +274,7 @@ function addRecentPost(post_id, post_title, post_content, community, communityAv
 
 function addRecentPostItem(post) {
     const recentPostsContainer = document.getElementById("recent_posts");
+    if(!recentPostsContainer)return;
     const recentPostItem = document.createElement("div");
     let postContent = post.post_content;
     const img = postContent.match(/<img[^>]*>/i);
@@ -446,7 +447,7 @@ async function submitComment(postId, parentId = null, commentBox = null){
         if (response.status == 200) {
             document.querySelector("#comment_count").textContent = parseInt(document.querySelector("#comment_count").textContent) + 1
             let comment = document.createElement('div');
-            comment.classList.add('pl-4', 'flex', 'flex-col', 'gap-4', 'border-l');
+            comment.classList.add('pl-4', 'flex', 'flex-col', 'gap-4', 'border-l', "break-words", 'text-wrap');
             comment.setAttribute("id", 'comment-'+ data.id)
             
             let profilePicture = document.querySelector("#btn_drop_down_profile").querySelector("img").src;            
@@ -567,7 +568,7 @@ function showCommentReplyBox(container, postId, commentId) {
     let textarea = `
             <div class="w-full rounded-lg border border-gray-300 bg-white-500 overflow-hidden">
                 <textarea class="w-full p-2 transition-all h-16 resize-none"
-                      style="border: none; outline: none; padding: 10px; resize: none; box-shadow: none;" placeholder="Add a reply..."></textarea>
+                      style="border: none; outline: none; padding: 10px; resize: none; box-shadow: none;" placeholder="Add a reply..." maxlength="2048"></textarea>
                 <div id="" class="justify-end p-2.5 border-t-none bg-white float-right">
                     <button class="cancel-button inline-flex items-center px-2 py-1 bg-gray-200 border border-gray-300 rounded-full hover:bg-gray-300 mr-2 text-sm">
                         Cancel

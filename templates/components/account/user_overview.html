@@ -9,52 +9,11 @@
         {% else %}
             onclick="window.location.href=`{% url 'post:post' content.id %}`"
         {% endif %}
-        class="flex flex-col border p-3 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+        class="break-words text-wrap flex flex-col border p-6 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
         id="{{content.id}}"
     >
         {% if content.post %}
-            <div class="flex flex-col gap-2 items-start">
-                <a
-                  href="{% url 'community:community' content.post.community.name %}"
-                  class="flex flex-row gap-1 items-end"
-                >
-                    {%if content.post.community.avatar|startswith:'https'%}
-                        <img
-                            class="w-7 h-7 rounded-full"
-                            src="{{content.post.community.avatar}}"
-                            alt="Community avatar"
-                        />
-                    {% else %}
-                        <img
-                            class="w-7 h-7 rounded-full"
-                            src="{{MEDIA_URL}}{{content.post.community.avatar }}"
-                            alt="Community avatar"
-                        />
-                    {% endif %} 
-                    <p>
-                        r/{{ content.post.community.name }}
-                    </p>
-                </a>
-                <div class="ml-10 flex flex-col gap-2 text-xs">
-                    <div class="flex flex-row gap-1 items-end">
-                        <p class="text-sm font-semibold">{{content.user}}</p>
-                        {% if content.post.user == user %}
-                        <p class="text-blue-600">OP</p>
-                        {% endif %}
-                        <p>commented</p>
-                        <p data-created-at="{{ content.created_at }}">{{ content.created_at }}</p>
-                    </div>
-                    <div class="text-sm">
-                        <span class = "post-content">{{ content.content }}</span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 mt-4">
-                    {% include 'components/post/vote_control.html' with content=content type='comment' %}
-                    {% include 'components/post/comment_control.html' with content=content %}
-                </div>
-
-            </div>
+            {% include 'components/post/comment_list_item.html' with comment=content%}
         {% else %}
             {% include 'components/post/post_item.html' with post=content%}
         {% endif %}

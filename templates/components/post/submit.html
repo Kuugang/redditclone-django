@@ -19,7 +19,7 @@
     {% include 'components/leftbar.html'%}
     <div class="p-10 relative left-[15%] w-[85%]">
         <div class = "flex flex-row justify-between w-full">
-            <form method="POST" {%if community%} action="{% url 'post:create_post' community.name %}" {%endif%} class="w-[50%] flex flex-col gap-3 relative">
+            <form id = "submit-post" method="POST" {%if community%} action="{% url 'post:create_post' community.name %}" {%endif%} class="w-[50%] flex flex-col gap-3 relative">
                 {% csrf_token %}
                 <h1 class="font-bold text-xl">Create Post</h1>
                 <div class="relative max-w-fit" id="custom-dropdown">
@@ -137,12 +137,16 @@
         }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById('submit-button').addEventListener('click', function () {
-            const editor_content = quill.root.innerHTML
-            document.getElementById('hidden_content').value = editor_content
-            document.querySelector('form').submit()
-        });
-    })
+    document.getElementById('submit-button').addEventListener('click', function () {
+        const editorContent = quill.root.innerHTML;
+        document.getElementById('hidden_content').value = editorContent;
+
+        const form = document.querySelector('#submit-post'); // Select the form
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    });
 </script>
 {% endblock %}

@@ -70,7 +70,7 @@
 
     const Delta = Quill.import("delta");
     let ongoingUploads = 0;
-
+    const limit = 10000;
     quill.on("text-change", function (delta, oldDelta, source) {
       let uploaded = false;
 
@@ -81,7 +81,9 @@
 
           const base64Pattern = /^data:image\/(png|jpg|jpeg);base64,/;
           if (base64Pattern.test(imageData)) {
-            image.classList.add("blur-sm");
+            image.classList.add("blur-sm", "img-modal");
+            image.dataset.modalTarget = "image-modal";
+            image.dataset.modalToggle = "image-modal";
             ongoingUploads++;
             const byteString = atob(imageData.split(",")[1]);
             const mimeString = imageData
@@ -126,6 +128,15 @@
                 }
               });
           }
+        }
+
+        if (quill.getLength() > limit) {
+            document.getElementById("submit-button").disabled = true;
+            quill.formatText(10000, 50000, {                   
+              'color': 'rgb(220, 20, 60)'
+            });
+        }else{
+            document.getElementById("submit-button").disabled = false;
         }
       });
     });

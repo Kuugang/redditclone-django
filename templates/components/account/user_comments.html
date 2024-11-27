@@ -5,51 +5,10 @@
     {% for comment in comments %}
     <div
         onclick="window.location.href=`{% url 'post:post' comment.post.id %}`"
-        class="flex flex-col border p-3 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+        class="break-words text-wrap flex flex-col border p-6 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
         id="{{comment.id}}"
     >
-        <div class="flex flex-col gap-2 items-start">
-            <a
-              href="{% url 'community:community' comment.post.community.name %}"
-              class="flex flex-row gap-1 items-end"
-            >
-                {%if comment.post.community.avatar|startswith:'https'%}
-                    <img
-                        class="w-7 h-7 rounded-full"
-                        src="{{comment.post.community.avatar}}"
-                        alt="Community avatar"
-                    />
-                {% else %}
-                    <img
-                        class="w-7 h-7 rounded-full"
-                        src="{{MEDIA_URL}}{{ comment.post.community.avatar }}"
-                        alt="Community avatar"
-                    />
-                {% endif %} 
-                <p>
-                    r/{{ comment.post.community.name }}
-                </p>
-            </a>
-            <div class="ml-10 flex flex-col gap-2 text-xs">
-                <div class="flex flex-row gap-1 items-end">
-                    <p class="text-sm font-semibold">{{comment.user}}</p>
-                    {% if comment.post.user == user %}
-                    <p class="text-blue-600">OP</p>
-                    {% endif %}
-                    <p>commented</p>
-                    <p data-created-at="{{ comment.created_at }}">{{ comment.created_at }}</p>
-                </div>
-
-                <div class="text-sm">
-                    <span class = "post-conten">{{ comment.content }}</span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 mt-4">
-                {% include 'components/post/vote_control.html' with content=comment type='comment' %}
-                {% include 'components/post/comment_control.html' with content=comment %}
-            </div>
-        </div>
+    {% include 'components/post/comment_list_item.html' %}
     </div>
     {% endfor %}
 </div>

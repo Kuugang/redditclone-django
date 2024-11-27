@@ -274,16 +274,16 @@
     document.getElementById(content).classList.remove("hidden");
   }
 
-  let containers = document.querySelectorAll(".post-item");
-  containers.forEach((container) => {
-    dropdown_id = uuidv4();
-    button = container.querySelector("button");
-    button.setAttribute("id", `dropdownDefaultButton-${dropdown_id}`);
-    button.setAttribute("data-dropdown-toggle", `dropdown-${dropdown_id}`);
-    dropdown = container.querySelector("div");
-    dropdown.setAttribute("id", `dropdown-${dropdown_id}`);
-    ul = dropdown.querySelector("ul");
-    ul.setAttribute("aria-labelledby", `dropdownDefaultButton-${dropdown_id}`);
-  });
+//   let containers = document.querySelectorAll(".post-item");
+//   containers.forEach((container) => {
+//     dropdown_id = uuidv4();
+//     button = container.querySelector("button");
+//     button.setAttribute("id", `dropdownDefaultButton-${dropdown_id}`);
+//     button.setAttribute("data-dropdown-toggle", `dropdown-${dropdown_id}`);
+//     dropdown = container.querySelector("div");
+//     dropdown.setAttribute("id", `dropdown-${dropdown_id}`);
+//     ul = dropdown.querySelector("ul");
+//     ul.setAttribute("aria-labelledby", `dropdownDefaultButton-${dropdown_id}`);
+//   });
 </script>
 {% endblock %}

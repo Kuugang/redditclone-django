@@ -41,7 +41,7 @@
                             {% endif %}
                         </div>
                         <div class="flex flex-col gap-6 w-full">
-                            <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-3 break-words text-wrap">
                                 <div class="flex flex-row items-center gap-2 w-full">
                                     <div class="rounded-full w-10 h-10 bg-gray-200">
                                         {% if post.community.avatar|startswith:'https'%}
@@ -77,7 +77,7 @@
                                     class="w-full border-none outline-none p-6 min-h-12 shadow-none focus:ring-0 text-gray-900"
                                     style="width: 100%; border: none; outline: none; padding: 10px; min-height: 80px; box-shadow: none;"
                                     onfocus="this.parentElement.classList.add('border-gray-500')"
-                                    onblur="this.parentElement.classList.remove('border-gray-500');"></textarea>
+                                    onblur="this.parentElement.classList.remove('border-gray-500');" maxlength="2048"></textarea>
 
                                 <div id="commentControl"
                                     class="transition-all peer  justify-end p-2.5 border-t-none bg-white transition-all float-right border-gray-300">

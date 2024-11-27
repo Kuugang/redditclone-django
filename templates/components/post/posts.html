@@ -18,7 +18,7 @@
 
               onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent, this.dataset.postCommunity, this.dataset.postCommunityAvatar, this.dataset.postVoteCount, this.dataset.postCommentCount);'
 
-              class="flex flex-col border p-3 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
+              class="break-words text-wrap flex flex-col border p-6 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
               id="{{post.id}}"
           >
               {% include 'components/post/post_item.html' with post=post %}
