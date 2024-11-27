@@ -252,39 +252,63 @@ function timeAgo(datetime) {
     }
 }
 
-function addRecentPost(post_id, post_title, post_content) {
-    // let recent_posts = localStorage.getItem("recent_posts");
-    // if (recent_posts == null) {
-    //     recent_posts = [];
-    // } else {
-    //     recent_posts = JSON.parse(recent_posts);
-    // }
-    // const postExists = recent_posts.some(post => post.post_id === post_id);
-    // if (!postExists) {
-    //     let post = { post_id, post_title, post_content };
-    //     recent_posts.unshift(post);
-    //     if (recent_posts.length > 10) {
-    //         recent_posts.pop();
-    //     }
-    //     localStorage.setItem("recent_posts", JSON.stringify(recent_posts));
-    //     addRecentPostItem(post);
-    // }
+function addRecentPost(post_id, post_title, post_content, community, communityAvatar, voteCount, commentCount) {
+    let recent_posts = localStorage.getItem("recent_posts");
+    if (recent_posts == null) {
+        recent_posts = [];
+    } else {
+        recent_posts = JSON.parse(recent_posts);
+    }
+    voteCount = parseInt(voteCount);
+    const postExists = recent_posts.some(post => post.post_id === post_id);
+    if (!postExists) {
+        let post = { post_id, post_title, post_content, community, communityAvatar, voteCount, commentCount };
+        recent_posts.unshift(post);
+        if (recent_posts.length > 10) {
+            recent_posts.pop();
+        }
+        localStorage.setItem("recent_posts", JSON.stringify(recent_posts));
+        addRecentPostItem(post);
+    }
 };
 
 function addRecentPostItem(post) {
-    // const recentPostsContainer = document.getElementById("recent_posts");
-    // const recentPostItem = document.createElement("div");
-    // recentPostItem.setAttribute("id", `recent_post_${post.post_id}`);
-    // recentPostItem.classList.add("recent_post_item", "max-h-[55px]", "line-clamp-2", "border-b", "border-gray-300", "py-2");
-    // recentPostItem.classList.add("recent_post_item");
-    // recentPostItem.innerHTML = `
-    //         <a href="/post/${post.post_id}">
-    //             <p class="font-bold">${post.post_title}</p>
-    //             ${post.post_content}
-    //         </a>
-    //     `;
-    // recentPostItem.querySelectorAll("p")[1].classList.add("text-xs", "line-clamp-1");
-    // recentPostsContainer.prepend(recentPostItem);
+    const recentPostsContainer = document.getElementById("recent_posts");
+    const recentPostItem = document.createElement("div");
+    let postContent = post.post_content;
+    const img = postContent.match(/<img[^>]*>/i);
+    const imgMatch = postContent.match(/<img[^>]*>/i);
+    let imgElement = null;
+    if (imgMatch) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(imgMatch[0], "text/html");
+        imgElement = doc.body.firstChild;
+        imgElement.classList.add("w-20", "h-20", "rounded-md");
+        imgElement.removeAttribute("style");
+    }
+
+    recentPostItem.setAttribute("id", `recent_post_${post.post_id}`);
+    recentPostItem.classList.add("recent_post_item", "border-b", "border-gray-300", "py-2", "flex", "flex-col", "gap-2", "break-words", "text-wrap");
+    recentPostItem.innerHTML = `
+        <div>
+            <a href = "/community/${post.community}" class='flex items-center gap-2 py-2 hover:underline'>
+                ${post.communityAvatar ? `
+                    <img src="${post.communityAvatar.startsWith('http') ? post.communityAvatar : '/media/' + post.communityAvatar}" class="w-6 h-6 rounded-full">` 
+                    : '<svg class = "w-6 h-6 rounded-full border border-black" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M30.8291 27.064C37.0423 27.064 42.0791 22.0272 42.0791 15.814C42.0791 9.60078 37.0423 4.56396 30.8291 4.56396C24.6159 4.56396 19.5791 9.60078 19.5791 15.814C19.5791 22.0272 24.6159 27.064 30.8291 27.064Z" fill="black"/><path d="M53.3291 45.814C53.3291 39.6006 48.2925 34.564 42.0791 34.564H19.5791C13.3659 34.564 8.3291 39.6006 8.3291 45.814V57.064H53.3291V45.814Z" fill="black"/></svg>'
+                }
+                <p class="font-semibold text-xs">r/${post.community}</p>
+            </a>
+        </div>
+        <div class = "flex flex-row justify-between gap-2 text-wrap break-words h-full hover:cursor-pointer" onclick = "window.location.href = '/post/${post.post_id}'">
+            <p class="font-bold text-base break-words text-wrap hover:underline">${post.post_title}</p>
+            ${imgElement ? `${imgElement.outerHTML}` : ""}
+        </div>
+        <div>
+            <p class="text-xs text-gray-700">${post.voteCount} ${post.voteCount < 0 ? 'downvotes' : 'upvotes'} • ${post.commentCount} comments</p>
+        </div>
+        `;
+    recentPostItem.querySelectorAll("p")[1].classList.add("text-xs", "line-clamp-1");
+    recentPostsContainer.prepend(recentPostItem);
 }
 
 function clearRecentPost() {

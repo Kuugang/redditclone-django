@@ -262,9 +262,9 @@ def search(request):
                 Q(visibility=Community.Visibility.PRIVATE) &
                 Q(communitymember__user=request.user)
             )
-            communities = public_communities | restricted_communities | private_communities
+            communities = (public_communities | restricted_communities | private_communities).distinct()
         else:
-            communities = public_communities | restricted_communities
+            communities = (public_communities | restricted_communities).distinct()
         
         # Users
         users = User.objects.filter(Q(username__icontains=query) | Q(display_name__icontains=query))
@@ -287,9 +287,9 @@ def search(request):
                 Q(community__visibility=Community.Visibility.PRIVATE) &
                 Q(community__communitymember__user=request.user)
             )
-            posts = public_posts | restricted_posts | private_posts
+            posts = (public_posts | restricted_posts | private_posts).distinct()
         else:
-            posts = public_posts | restricted_posts
+            posts = (public_posts | restricted_posts).distinct()
         
         # Serialize data
         user_data = serialize('json', users)

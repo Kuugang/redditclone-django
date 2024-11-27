@@ -1,3 +1,4 @@
+{% load utils %}
 <div class = "posts-container flex flex-col gap-4">
     {% if posts|length == 0 %}
         <div class="flex flex-col items-center justify-center">
@@ -10,8 +11,12 @@
               data-post-id = "{{post.id}}"
               data-post-title = "{{post.title}}"
               data-post-content = "{{post.content}}"
+              data-post-community = "{{post.community}}"
+              data-post-community-avatar = "{{post.community.avatar}}"
+              data-post-vote-count = "{{ post|get_post_vote_counts}}"
+              data-post-comment-count = "{{ post|get_comment_counts}}"
 
-              onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent);'
+              onclick='event.stopPropagation(); event.stopImmediatePropagation();  window.location.href=`{% url "post:post" post.id %}`; addRecentPost(this.dataset.postId, this.dataset.postTitle, this.dataset.postContent, this.dataset.postCommunity, this.dataset.postCommunityAvatar, this.dataset.postVoteCount, this.dataset.postCommentCount);'
 
               class="flex flex-col border p-3 max-h-[400px] rounded-2xl hover:bg-white_1 cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ease-in-out relative"
               id="{{post.id}}"

@@ -167,3 +167,5 @@ SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 LOGOUT_REDIRECT_URL = '/'
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
