@@ -253,10 +253,11 @@ def event(request, community_name):
             )
 
         event = models.CommunityEvent.objects.get(id=event_id)
+        participants = models.CommunityEventParticipant.objects.filter(event=event)
         return render(
             request,
             "components/community/community_event_detail.html",
-            {"event": event},
+            {"event": event, "participants": participants},
         )
 
     if request.method == "POST" and request.user.is_authenticated:
@@ -341,7 +342,21 @@ def event(request, community_name):
         event.save()
 
         return redirect("community:community", community_name=community.name)
+    
+def register_event(request, event_id):
+    event = models.CommunityEvent.objects.get(id=event_id)
+    participant = models.CommunityEventParticipant(
+        event=event, participant=request.user
+    )
+    participant.save()
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))
 
+def cancel_registration(request, event_id):
+    participant = models.CommunityEventParticipant.objects.get(
+        event_id=event_id, participant=request.user
+    )
+    participant.delete()
+    return redirect(request.META.get("HTTP_REFERER", "dashboard"))
 
 def community_event_detail(request, community_name, event_id):
     event = models.CommunityEvent.objects.get(id=event_id)

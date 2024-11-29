@@ -39,8 +39,7 @@
                         {% endif %}
                     </div>
                     <div class="flex flex-col gap-3">
-                        <div>
-
+                        <div class = "cursor-pointer">
                             {% if event.image|startswith:'https'%}
                             <img class="img-modal w-72 h-72 object-cover rounded-md shadow-md" src="{{ event.image }}"
                                 alt="Event image">
@@ -107,6 +106,38 @@
                                 <p>{{event.host.username}}</p>
                             </div>
                         </div>
+
+                        {% if participants %}
+                            <div class="flex flex-col gap-2 border-b py-3">
+                                <p class="font-medium text-sm">{{participants|length}} Going</p>
+                                <div class="flex flex-row -space-x-3">
+                                    {% for participant in participants|slice:":5" %}
+                                        {% with p=participant.participant %}
+                                            {% if p.avatar %}
+                                                {% if p.avatar|startswith:'https' %}
+                                                    <img class="w-7 h-7 rounded-full" src="{{ p.avatar }}" alt="">
+                                                {% else %}
+                                                    <img class="border border-2 w-7 h-7 rounded-full" src="{{ MEDIA_URL }}{{ p.avatar }}" alt="Host avatar">
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="w-7 h-7 bg-black rounded-full"></div>
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+
+                        {% if user.is_authenticated %}
+                            {% if event.host != request.user %}
+                                {% if event not in participated_events  %}
+                                    <a href = "{% url 'community:register_event' event.id %}" class="flex items-center justify-center bg-button_gray hover:bg-button_gray_hover py-2 px-2 rounded-md">Register</a>
+                                {% else %}
+                                    <p class="text-sm text-gray-700">No longer able to attend? You can opt out by <a href="{% url 'community:cancel_registration' event.id %}" class="underline text-red-400">cancelling your registration.</a></p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
 

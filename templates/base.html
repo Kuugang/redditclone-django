@@ -87,16 +87,24 @@
         [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:bg-gray-100
         [&::-webkit-scrollbar-thumb]:bg-gray-300
+        text-gray-700
     ">
     {% include 'components/navbar.html'%}
     {% include 'components/image_modal.html'%}
 
+
+
     {% block content %} {% endblock %}
 
     <script>
+        const postContents = document.querySelectorAll(".post-content");
+        postContents.forEach((postContent) => {
+            postContent.innerHTML = postContent.textContent;
+            postContent.classList.add("line-clamp-50", "overflow-hidden", "text-ellipsis");
+        });
+
+
         document.addEventListener("DOMContentLoaded", function () {
-
-
             const createdAtElements =
                 document.querySelectorAll("[data-created-at]");
             for (const createdAtElement of createdAtElements) {
@@ -104,11 +112,6 @@
                 createdAtElement.textContent = timeAgo(createdAt);
             }
 
-            const postContents = document.querySelectorAll(".post-content");
-            postContents.forEach((postContent) => {
-                postContent.innerHTML = postContent.textContent;
-                postContent.classList.add("line-clamp-50", "overflow-hidden", "text-ellipsis");
-            });
 
             const postItemImages = document.querySelectorAll(".post-content.post-item img");
             postItemImages.forEach((postImage) => {
@@ -127,6 +130,9 @@
             const eventDescriptions = document.querySelectorAll(".event-description");
             eventDescriptions.forEach((eventDescription) => {
                 eventDescription.innerHTML = eventDescription.textContent;
+                eventDescription.querySelectorAll("img").forEach((img) => {
+                    img.classList.add("cursor-pointer");
+                });
             });
 
             const recentPosts = localStorage.getItem("recent_posts");

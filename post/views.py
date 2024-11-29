@@ -87,7 +87,6 @@ def upload_post_image(request):
 
     return JsonResponse(response_data)
 
-#deo code
 
 def comment(request, post_id):
     post_instance = get_object_or_404(models.Post, id=post_id)
@@ -96,7 +95,7 @@ def comment(request, post_id):
 
 
     if(parent_id):
-        parent  = get_object_or_404(models.Comment, id=uuid.UUID(str(parent_id)), user = request.user)
+        parent  = get_object_or_404(models.Comment, id=uuid.UUID(str(parent_id)))
 
         comment = models.Comment.objects.create(
             user=request.user,

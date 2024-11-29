@@ -1,6 +1,5 @@
-from community.models import Community
-from post.models import Comment, PostVote, CommentVote
-from post.models import Post
+from community.models import Community, CommunityEvent, CommunityEventParticipant
+from post.models import Post, Comment, PostVote, CommentVote
 from account.models import Follower
 
 def context(request):
@@ -36,6 +35,10 @@ def context(request):
     user_following = Follower.objects.filter(follower=request.user.id).values_list('user', flat=True)
     user_followers = Follower.objects.filter(user=request.user.id).values_list('follower', flat=True)
 
+    participated_events = CommunityEvent.objects.filter(
+        id__in=CommunityEventParticipant.objects.filter(participant=request.user.id).values_list('event', flat=True)
+    )
+
     user_overview = sorted(
         list(user_posts) + list(user_comments),
         key=lambda x: x.created_at,
@@ -60,4 +63,6 @@ def context(request):
 
         'user_following' : user_following,
         'user_followers' : user_followers,
+
+        'participated_events' : participated_events
     }

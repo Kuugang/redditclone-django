@@ -305,7 +305,7 @@ function addRecentPostItem(post) {
             ${imgElement ? `${imgElement.outerHTML}` : ""}
         </div>
         <div>
-            <p class="text-xs text-gray-700">${post.voteCount} ${post.voteCount < 0 ? 'downvotes' : 'upvotes'} • ${post.commentCount} comments</p>
+            <p class="text-xs text-gray-700">${Math.abs(post.voteCount)} ${post.voteCount < 0 ? 'downvotes' : 'upvotes'} • ${post.commentCount} comments</p>
         </div>
         `;
     recentPostItem.querySelectorAll("p")[1].classList.add("text-xs", "line-clamp-1");

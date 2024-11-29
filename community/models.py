@@ -118,10 +118,16 @@ class CommunityEvent(models.Model):
 
 class CommunityEventParticipant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    event = models.ForeignKey(CommunityEvent, on_delete=models.CASCADE)
+    event = models.ForeignKey(CommunityEvent, on_delete=models.CASCADE, related_name='participants')
     participant = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('event', 'participant')
+        constraints = [
+            models.UniqueConstraint(fields=['event', 'participant'], name='unique_event_participant')
+        ]
 
 class CommunityPostReport(models.Model):
     class Status(models.TextChoices):

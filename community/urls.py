@@ -26,4 +26,7 @@ urlpatterns = [
     path('<str:community_name>/', views.community, name='community'),
 
     path('<str:community_name>/event', views.event , name='event'),
+    path('register_event/<uuid:event_id>', views.register_event , name='register_event'),
+    path('cancel_registration/<uuid:event_id>', views.cancel_registration , name='cancel_registration'),
+
 ]
