@@ -19,9 +19,9 @@
           <input
             name="email_or_username"
             id="sign_in_email_input"
-            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
+            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder=" "
-            type="text"
+            autocomplete="email"
             maxlength="320"
           />
           <label
@@ -34,7 +34,7 @@
           <input
             id="sign_in_password"
             name="password"
-            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border-gray-300 px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
+            class="border-1 bg-white_1 peer block w-full appearance-none rounded-lg border px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             type="password"
             placeholder=" "
             maxlength="128"
@@ -46,6 +46,9 @@
           >
         </div>
       </div>
+      <span class="flex flex-row gap-1 text-xs text-blue-500">
+        <a  href="{% url 'account:password_reset' %}">Forgot Password?</a>
+      </span>
       <span class="flex flex-row gap-1 text-xs">
         <p>Don't have an account?</p>
 
@@ -61,6 +64,9 @@
       </span>
 
       <div class="flex flex-col gap-4">
+        <div class="p-2 text-sm text-red-800 rounded-lg dark:text-red-500 hidden" role="alert">
+            <span class="font-medium">Login failed!</span> Invalid credentials.
+        </div>
         <button
           type="submit"
           class="font-md bg-button_red hover:bg-button_red_hover w-full rounded-3xl px-3 py-2 text-white transition-all duration-300 ease-in-out hover:text-white"
@@ -91,4 +97,28 @@
     </form>
   </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const signInModal = document.getElementById("sign_in_modal");
+        const signInForm = signInModal.querySelector("form");
 
+        signInForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = new FormData(signInForm);
+            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+            fetch(signInForm.action, {
+                method: "POST",
+                body: formData,
+            })
+                .then((response) => {
+                    if(response.ok) {
+                        window.location.href = response.url;
+                    }else{
+                        signInForm.querySelector("div[role='alert']").classList.remove("hidden");
+                        signInForm.querySelector("input[name='email_or_username']").classList.add("border-red-500");
+                        signInForm.querySelector("input[name='password']").classList.add("border-red-500");
+                    }
+                })
+        });
+    });
+</script>

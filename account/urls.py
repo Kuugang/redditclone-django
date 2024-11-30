@@ -26,6 +26,16 @@ urlpatterns = [
     path("unfollow/<str:user>", login_required(views.unfollow), name="unfollow"),
     path("search/", views.search, name="search"),
 
+    path('password-reset/', views.ResetPasswordView.as_view(), name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='components/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+    path('reset/done/', 
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='components/password_reset_complete.html'
+         ), 
+         name='password_reset_complete'),
+
     # Test view
     path('raise-500/', views.raise_500, name='raise_500'),
 ]

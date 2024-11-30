@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("account/", include("account.urls", namespace="account")),
+    path('account/', include('django.contrib.auth.urls')),
     path("community/", include("community.urls", namespace="community")),
     path("post/", include("post.urls", namespace="post")),
     path("", accounts_views.dashboard, name="dashboard"),

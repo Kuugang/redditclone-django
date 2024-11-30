@@ -7,6 +7,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Q
 from django.core.serializers import serialize
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 import json
 
 # Decorators
@@ -71,8 +74,7 @@ def sign_in(request):
         login(request, user)
         return redirect('dashboard')
     else:
-        messages.error(request, 'Invalid email or password')
-        return redirect('dashboard')
+        return JsonResponse({'error': 'Invalid credentials'}, status=400)
 
 @require_http_methods(["POST"])
 def sign_up(request):
@@ -102,8 +104,10 @@ def sign_up(request):
             user.avatar = avatar_public_URL
 
         user.save()
+        messages.success(request, 'Account created successfully')
         return redirect('dashboard')
     except IntegrityError:
+        messages.error(request, 'This email is already registered.')
         return redirect('dashboard')
 
 @require_http_methods(["GET"])
@@ -335,6 +339,17 @@ def search(request):
         return JsonResponse(response_data, safe=False)
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'components/password_reset.html'
+    email_template_name = 'components/password_reset_email.html'
+    subject_template_name = 'components/password_reset_subject.txt'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('dashboard')
+
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)

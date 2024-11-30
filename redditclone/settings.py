@@ -19,6 +19,25 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+def validate_env_vars(*env_vars):
+    for var_name in env_vars:
+        if not os.getenv(var_name):
+            raise ValueError(
+                f'{var_name} is missing. '
+                'Have you put it in a file at core/.env ?'
+            )
+
+
+validate_env_vars(
+    "DATABASE_NAME", 
+    "DATABASE_USER", 
+    "DATABASE_PASSWORD", 
+    "DATABASE_HOST", 
+    "DATABASE_PORT",
+    "GOOGLE_OAUTH_CLIENT_ID",
+    "EMAIL_HOST_USER",
+    "EMAIL_HOST_PASSWORD"
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -155,13 +174,13 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
 GOOGLE_OAUTH_CLIENT_ID = os.environ.get('GOOGLE_OAUTH_CLIENT_ID')
-print
-if not GOOGLE_OAUTH_CLIENT_ID:
-    raise ValueError(
-        'GOOGLE_OAUTH_CLIENT_ID is missing.' 
-        'Have you put it in a file at core/.env ?'
-    )
 
 SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
