@@ -673,3 +673,36 @@ function sucessToast(message){
     })
     document.body.appendChild(container)
 }
+
+changes = {
+
+}
+function changeRole(event, userId){
+    changes[userId] = event.target.value
+
+    let saveButton = document.getElementById("saveButton")
+
+    if(Object.keys(changes).length > 0){
+        saveButton.classList.remove("hidden")
+    }
+
+
+    saveButton.addEventListener("click", async () => {
+        let data = new FormData();
+        data.append("changes", JSON.stringify(changes));
+        data.append("community_id", saveButton.dataset.communityid);
+        await fetch(`/community/roles/`, {
+            method: "POST",
+            body: data,
+            headers: {
+                "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+        }).then(async (response) => {
+            const data = await response.json();
+            if (response.status == 200) {
+                window.location.reload()
+                changes = {}
+            }
+        });
+    })
+}

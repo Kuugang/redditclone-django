@@ -1,5 +1,4 @@
-import os
-import uuid
+import os, uuid, json
 from datetime import datetime
 
 from django.http import JsonResponse
@@ -37,6 +36,34 @@ def community(request, community_name):
     }
 
     return render(request, "community.html", context)
+
+def community_members(request, community_name):
+    community = get_object_or_404(models.Community, name=community_name)
+    member_ids = models.CommunityMember.objects.filter(community=community).values_list("user", flat=True)
+
+    admin = member_ids.filter(role="admin")
+    moderators = member_ids.filter(role="moderator")
+    members = member_ids.filter(role="member")
+
+    admin = User.objects.get(id=admin[0])
+    moderators = User.objects.filter(id__in=moderators)
+    members = User.objects.filter(id__in=members)
+
+    return render(request, "components/community/community_members.html", {"admin": admin, "moderators": moderators, "members": members, "community": community})
+
+def edit_roles(request):
+    data = dict(request.POST.items())
+    community_id = data.get("community_id")
+    community =  models.Community.objects.get(id=community_id)
+    changes = request.POST.getlist("changes")
+
+    for change in changes:
+        for key, value in json.loads(change).items():
+            member = models.CommunityMember.objects.get(community = community, user_id=key)
+            member.role = value
+            member.save()
+
+    return JsonResponse({"status": "success"}, status=200)
 
 
 @require_http_methods(["POST"])

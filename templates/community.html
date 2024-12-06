@@ -86,6 +86,7 @@
                     </div>
 
                     {% if user_role == 'moderator' or user_role == 'admin' %}
+
                     <div 
                         data-modal-target="invite_members" data-modal-toggle="invite_members"
                         class='bg-button_gray hover:bg-button_gray_hover flex flex-row gap-2 rounded-2xl border border-white px-3 py-2 items-center cursor-pointer'>
@@ -94,6 +95,13 @@
                             <path d="M19 9.375h-8.375V1h-1.25v8.375H1v1.25h8.375V19h1.25v-8.375H19v-1.25Z"></path>
                         </svg>
                         <p>Invite Members</p>
+                    </div>
+
+                    <div 
+                        onclick="window.location.href=`{% url 'community:community_members' community.name %}`";
+                        class='bg-button_gray hover:bg-button_gray_hover flex flex-row gap-2 rounded-2xl border border-white px-3 py-2 items-center cursor-pointer'>
+                        {% include 'svg/pencil.html'%}
+                        <p>Manage Roles</p>
                     </div>
                     {% endif %}
 

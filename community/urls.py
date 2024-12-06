@@ -23,6 +23,8 @@ urlpatterns = [
     path('delete_community_rule/', login_required(views.delete_community_rule), name='delete_community_rule'),
     path('edit_community_topics/', login_required(views.edit_community_topics), name='edit_community_topics'),
     path('check_community_name_availability/', views.check_community_name_availability, name='check_community_name_availability'),
+    path('<str:community_name>/members', views.community_members, name='community_members'),
+    path('roles/', views.edit_roles, name='edit_roles'),
     path('<str:community_name>/', views.community, name='community'),
 
     path('<str:community_name>/event', views.event , name='event'),
