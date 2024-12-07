@@ -10,14 +10,31 @@
 
 A Reddit-like web application built with Django, offering users the ability to create posts, comments, and interact within different subreddits.
 
+## [📝Functional Requirements ](https://github.com/Kuugang/redditclone-django/blob/main/REQUIREMENTS.md)
+- #### Post System
+- #### Comment System
+- #### Voting System
+- #### Messaging System
+- #### User Profile System
+- #### Community Creation and Management
+- #### Community Member Hierarchy and Permissions
+- #### Community Event Creation and Management
 
-📝 [Functional Requirements](https://github.com/Kuugang/redditclone-django/blob/main/REQUIREMENTS.md)
+## 📊 [Gantt Chart](https://cebuinstituteoftechnology-my.sharepoint.com/:x:/g/personal/jake_bajo_cit_edu/Ee29YTLKZ1pLtF9Xad1_AwoB7-jkcPAkn0pUXL2K43xK2A?e=ADtZYN)
 
-📊 [Gantt Chart](https://cebuinstituteoftechnology-my.sharepoint.com/:x:/g/personal/jake_bajo_cit_edu/Ee29YTLKZ1pLtF9Xad1_AwoB7-jkcPAkn0pUXL2K43xK2A?e=ADtZYN)
+![Gantt Chart](documentation/Images/GanttChart.jpg)
 
-🔗 [ERD](https://lucid.app/lucidchart/97505632-7c36-4a42-8e0b-0c35e601ae62/edit?viewport_loc=472%2C-102%2C3328%2C1664%2C0_0&invitationId=inv_464b9039-4bae-4303-9247-44c7dba671cd)
+## 🔗 [ERD](https://lucid.app/lucidchart/97505632-7c36-4a42-8e0b-0c35e601ae62/edit?viewport_loc=472%2C-102%2C3328%2C1664%2C0_0&invitationId=inv_464b9039-4bae-4303-9247-44c7dba671cd)
 
-🎨 [UI/UX](<https://www.figma.com/design/NGYo7aSrLyiRIMNURErlfU/Reddit-Material-Design-Redesign-(Community)?node-id=174-887&node-type=frame&t=mZZ28ghmMMy0gySY-0>)
+![ERD](documentation/Images/ERD.png)
+
+
+## 🎨 [UI/UX](<https://www.figma.com/design/NGYo7aSrLyiRIMNURErlfU/Reddit-Material-Design-Redesign-(Community)?node-id=174-887&node-type=frame&t=mZZ28ghmMMy0gySY-0>)
+
+![1](documentation/Images/1.png)
+![2](documentation/Images/2.png)
+![3](documentation/Images/3.png)
+![4](documentation/Images/4.png)
 
   
 
