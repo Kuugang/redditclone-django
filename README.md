@@ -10,7 +10,7 @@
 
 A Reddit-like web application built with Django, offering users the ability to create posts, comments, and interact within different subreddits.
 
-## [📝Functional Requirements ](https://github.com/Kuugang/redditclone-django/blob/main/REQUIREMENTS.md)
+## [📝Functional Requirements ](https://docs.google.com/document/d/1OBhGfcnl1p7q2mNk7ouD_MtqcvwcncpvMveAfiy7PMk/edit?tab=t.0)
 - #### Post System
 - #### Comment System
 - #### Voting System
