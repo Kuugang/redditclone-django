@@ -14,7 +14,6 @@ A Reddit-like web application built with Django, offering users the ability to c
 - #### Post System
 - #### Comment System
 - #### Voting System
-- #### Messaging System
 - #### User Profile System
 - #### Community Creation and Management
 - #### Community Member Hierarchy and Permissions
